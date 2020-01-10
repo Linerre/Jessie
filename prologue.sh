@@ -4,6 +4,7 @@
 #!/usr/bin/env bash
 
 
+# Need to change to DIR accordingly
 DIR="/Users/leon/Desktop/Homework-original"
 SUB="Submission attachment(s)"
 FED="Feedback Attachment(s)"
