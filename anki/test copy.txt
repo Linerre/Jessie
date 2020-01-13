@@ -1,0 +1,4 @@
+Q1,A. Mint/B. Ubuntu/C. Arch/D. Gentoo,D
+Q2,A. Fedora/B. Manjaro/C. Debian/D. Kali,B
+Q3,A. OpenSUSE/B. Puppy/C. Xubuntu/D. MX Linux,A
+Q4,A. Void/B. Parabola/C. Arch/D. Gentoo,C
