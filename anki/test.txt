@@ -1,4 +1,6 @@
-Q1,A. Mint<br>B. Ubuntu<br>C. Arch<br>D. Gentoo,D
-Q2,A. Fedora<br>B. Manjaro<br>C. Debian<br>D. Kali,B
-Q3,A. OpenSUSE<br>B. Puppy<br>C. Xubuntu<br>D. MX Linux,A
-Q4,A. Void<br>B. Parabola<br>C. Arch<br>D. Gentoo,C
+NYU上海HR兑现了入职时的哪项承诺？,节假日福利+礼品福利,丰富多彩的培训课程,美味的到校长每天都亲自来吃的食堂饭菜,以上皆为错误答案,以上皆为错误答案
+
+Leon 写代码时频繁被打脸还能坚持，是因为（ ）？,故意的，为了产生喜剧效果,脸皮厚、故不疼,热爱,无知者无畏,无知者无畏
+
+
+问,答案四,答案二,答案三,答案一,答案三
