@@ -10,14 +10,13 @@ with open('test.txt', 'r', encoding='utf-8') as f:
 
     # remove empty lines
     lines = [i for i in content if i != '\n']
-    # print(lines)
 
     for line in lines:
         QA_raw = line.split(',')
         QA = {
             'Question': QA_raw[0],
             'Options' : QA_raw[1:5],
-            'Answer'  : QA_raw[5]
+            'Answer'  : QA_raw[5].replace('\n', '') # replace \n if any so that line41 will work well
         }
 
         random.shuffle(QA['Options'])
@@ -35,19 +34,15 @@ with open('test.txt', 'r', encoding='utf-8') as f:
         # back side
         options_back = QA['Options'].copy()
 
-        # add A B C D to options
+        # add A B C D to options and mark up the anwser at the same time
         for opt in options_back: 
-            options_back[options_back.index(opt)] = order_list[options_back.index(opt)] + opt
-        print(options_back)
-
-        # mark up the answer
-        for opt in options_back: 
-            if QA['Answer'] in opt:
-                options_back[options_back.index(opt)] = '<span style="background-color: #ebcb8b">' + opt + '</span>'
-                print(options_back[options_back.index(opt)])
+            # if the answer, add option enumeration and mark it up 
+            if QA['Answer'] == opt:
+                options_back[options_back.index(opt)] = '<span style="background-color: #ebcb8b">' + order_list[options_back.index(opt)] + opt + '</span>'
+            # if not, just add enumeration
             else:
-                pass
-        print(options_back)
+                options_back[options_back.index(opt)] =  order_list[options_back.index(opt)] + opt
+        
 
         anki_notes_back = QA['Question'] + ',' + '<br>'.join(options_back)
 
@@ -56,6 +51,8 @@ with open('test.txt', 'r', encoding='utf-8') as f:
         
         # add each notes to a temporary container
         tmp.append(anki_notes)
+
+        print(tmp)
     
     # Done with all the notes; glue them into one piece
     anki_cards = '\n'.join(tmp)
