@@ -37,7 +37,7 @@ When adding a single question, please follow this format:
 
 In the above formula, the **正确答案** *must* be identical to one of the four options. Here is a real example:
 ```
-图书馆允许用户借阅的书籍数目上限是（ ）？／10本／20本／30本／没有限制,没有限制
+图书馆允许用户借阅的书籍数目上限是（ ）？／10本／20本／30本／没有限制／没有限制
 ```
 
 ### Line indicator
@@ -64,8 +64,8 @@ Above are three lines:
 
 The previous half-width comma `,` (i.e. the English comma) is a bad choice, for two reasons:
 
-#### 1. It can be a bug
-It will result in an alarming issue which conflicts with the Python code. Suppose we have the following `question + options + answer` line:
+#### 1. a potential source of bugs
+Suppose we have the following `question + options + answer` line:
 
 ```
 Three brothes-Bob, Tom, Peter-are in dispute with each other. Why?,reason1,reason2,reason3,reason4,reason3
@@ -73,7 +73,6 @@ Three brothes-Bob, Tom, Peter-are in dispute with each other. Why?,reason1,reaso
 
 The anki notes (take front side as example) are expected to be:
 ```
-Front:
 Three brothes-Bob, Tom, Peter-are in dispute with each other. Why?
 reason1
 reason2
@@ -81,7 +80,7 @@ reason3
 reason4
 ```
 
-Yet since the comma has been set to be the separator and the question itself contains commas, we will indeed get this:
+Yet since the `,` has been set to be the separator and the question itself contains `,`, we will indeed get this:
 ```
 Three brothes-
 Bob
@@ -92,15 +91,16 @@ Peter
 ...
 
 ```
-In fact, Python will just detect _Error_ when processing such lines. 
+In fact, Python will just complain when processing such lines. 
 
 #### 2. Not as convenient as expected
-When using the half-width comma `,` while all the questions are in Chinese, it is such a pain that we have to use `caps lock` key or `Ctrl/Option + Space` keys (on macOS) to _frequently_ switch between En input and Zh input. Can't we just stick to one single input all the time? Yes, we can:
+When using the half-width comma `,` while all the questions are in full-width Chinese characters and punctuation marks, it is such a pain that we have to use `caps lock` key or `Ctrl/Option + Space` keys (on macOS) to _frequently_ switch between En input and Zh input. Can't we just stick to one single input all the time? Yes, we can:
 
 1. switch to pinyin input
 2. type as uaual
 3. use `／` as the separator (the key is next to `>` or `shift` at the lower right on the keyboard)
-![the `／` key](mac_kb.jpg)
+
+![the `／` key](https://github.com/Linerre/Jessie/blob/master/anki/mac_kb.jpg)
 
 **NOTE**
 
