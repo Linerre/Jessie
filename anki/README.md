@@ -1,6 +1,6 @@
 # To Jessie
 
-_If you are not comfortable with the black-background version of this README, please read it on [GitHub](https://github.com/Linerre/Jessie/tree/master/anki)._
+_If not comfortable with reading the black-background version of this README in VS Code on your laptop, please read it on [GitHub](https://github.com/Linerre/Jessie/tree/master/anki)._
 
 In this directory **three** files are used together to make Anki notes.
 
@@ -12,7 +12,18 @@ This is the Python script that carries out the tasks. It works in this way:
 
 The two `.txt` files will be explained later. This section focuses on the script itself.
 
-The script should always be placed in the same directory as its targeted two `.txt` files. 
+The script should always be placed in the same directory as its targeted two `.txt` files.
+
+To use the script, first move to the directory. Open the terminal and type in:
+```
+cd Desktop/Jessie/anki
+```
+Then use `ls` command to see if you can see the three files. 
+
+Before running the script, the respective status of the three files should be:
+- `prepro.py` as it is
+- `questions.txt` contains questions, options, and answer, separated by `／`
+- `notes.txt` file is empty. Ready to hold formatted notes created by `prepro.py`
 
 ## The `questions.txt` file
 The `questions` file is for collecting multiple-choice(MC) questions ONLY. 
@@ -26,7 +37,7 @@ When adding a single question, please follow this format:
 
 In the above formula, the **正确答案** *must* be identical to one of the four options. Here is a real example:
 ```
-图书馆允许用户借阅的书籍数目上限是（ ）？,10本,20本,30本,没有限制,没有限制
+图书馆允许用户借阅的书籍数目上限是（ ）？／10本／20本／30本／没有限制,没有限制
 ```
 
 ### Line indicator
@@ -40,7 +51,7 @@ The above loooooooong `question + options + answer` line is in fact **one single
 The only character that defines a line is the newline string: `\n`. That is, every time when the `Enter` key or `Return` key  gets hit, a newline will be created right below:
 
 ```
-图书馆允许用户借阅的书籍数目上限是（ ）？,10本,20本,30本,没有限制,没有限制
+图书馆允许用户借阅的书籍数目上限是（ ）？／10本／20本／30本／没有限制／没有限制
 
 快要下班时已经又饿又困了，下列哪种情况算是雪上加霜（ ）？／去了趟洗手间，回来后发现显示器不见了！／刷新闻时看到回家的地铁线要停运半小时／外面突然开始下大雨／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了
 ```
@@ -84,5 +95,20 @@ Peter
 In fact, Python will just detect _Error_ when processing such lines. 
 
 #### 2. Not as convenient as expected
+When using the half-width comma `,` while all the questions are in Chinese, it is such a pain that we have to use `caps lock` key or `Ctrl/Option + Space` keys (on macOS) to _frequently_ switch between En input and Zh input. Can't we just stick to one single input all the time? Yes, we can:
+
+1. switch to pinyin input
+2. type as uaual
+3. use `／` as the separator (the key is next to `>` or `shift` at the lower right on the keyboard)
+![the `／` key](mac_kb.jpg)
+
+**NOTE**
+
+Type in every Chinese character, punctuation mark, separator in the pinyin mode. No need to switch to English input at all~!
 
 ## The `notes.txt` file
+Before the processing, this file will either be _empty_ or _contain_ the notes which was imported to Anki last time.
+
+Safely ignore it when working on collecting `question + options + answer`. The `prepro.py` will automatically seek for it when the processing starts. 
+
+Only when it is time to import notes to Anki will this file be needed. 
