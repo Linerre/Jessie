@@ -12,7 +12,7 @@ with open('test.txt', 'r', encoding='utf-8') as f:
     lines = [i for i in content if i != '\n']
 
     for line in lines:
-        QA_raw = line.split(',')
+        QA_raw = line.split('／')
         QA = {
             'Question': QA_raw[0],
             'Options' : QA_raw[1:5],
@@ -52,14 +52,13 @@ with open('test.txt', 'r', encoding='utf-8') as f:
         # add each notes to a temporary container
         tmp.append(anki_notes)
 
-        print(tmp)
     
     # Done with all the notes; glue them into one piece
-    anki_cards = '\n'.join(tmp)
+    anki_cards = '\n\n'.join(tmp)
 
 
 
-with open('test.txt', 'w', encoding='utf-8') as new_f:
+with open('test_notes.txt', 'w', encoding='utf-8') as new_f:
     new_f.write(anki_cards)
 
 print('Anki notes batch processing done! ^_^')
