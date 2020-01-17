@@ -3,8 +3,8 @@
 
 import random
 
-with open('test.txt', 'r', encoding='utf-8') as f:
-    content = f.readlines() # [1, 2, 3, ... , n]
+with open('questions.txt', 'r', encoding='utf-8') as f:
+    content = f.readlines() 
     order_list = ['A. ', 'B. ', 'C. ', 'D. ']
     tmp = []
 
