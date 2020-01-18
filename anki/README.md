@@ -3,7 +3,8 @@
 _If not comfortable with reading the black-background version of this README in VS Code on your laptop, please read it on [GitHub](https://github.com/Linerre/Jessie/tree/master/anki)._
 
 ## TO DO
-- [ ] solve the ambiguity caused by the use of `in` statement in matching and marking-up answers
+- [x] solve the ambiguity caused by the use of `in` statement in matching and marking-up answers
+- [x] add "page" and "analysis" fields
 - [ ] add error-detector to automatically find and skip errors in the raw data
 - [ ] display a friendier 'done' message: "Processed X card notes in total, Y error(s) (in Z seconds?).
 
@@ -39,18 +40,18 @@ The `questions` file is for collecting multiple-choice(MC) questions ONLY.
 When adding a single question, please follow this format:
 
 ```
-问题／选项一／选项二／选项三／选项四／正确答案
+问题／选项一／选项二／选项三／选项四／正确答案／页码 ／解释
 ```
 
 In the above formula, the **正确答案** *must* be identical to one of the four options. Here is a real example:
 ```
-图书馆允许用户借阅的书籍数目上限是（ ）？／10本／20本／30本／没有限制／没有限制
+图书馆允许用户借阅的书籍数目上限是（ ）？／10本／20本／30本／没有限制／没有限制／123／参考图书馆用户手册
 ```
 
 #### 2.2 Line indicator
 One question should take one line, even though it might be so long that the editor automatically wraps it:
 ```
-快要下班时已经又饿又困了，下列哪种情况算是雪上加霜（ ）？／去了趟洗手间，回来后发现显示器不见了！／刷新闻时看到回家的地铁线要停运半小时／外面突然开始下大雨／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了
+快要下班时已经又饿又困了，下列哪种情况算是雪上加霜（ ）？／去了趟洗手间，回来后发现显示器不见了！／刷新闻时看到回家的地铁线要停运半小时／外面突然开始下大雨／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了／
 ```
 
 The above loooooooong `question + options + answer` line is in fact **one single** line.
@@ -58,9 +59,9 @@ The above loooooooong `question + options + answer` line is in fact **one single
 The only character that defines a line is the newline string: `\n`. That is, every time when the `Enter` key or `Return` key  gets hit, a newline will be created right below:
 
 ```
-图书馆允许用户借阅的书籍数目上限是（ ）？／10本／20本／30本／没有限制／没有限制
+图书馆允许用户借阅的书籍数目上限是（ ）？／10本／20本／30本／没有限制／没有限制／123／参考图书馆用户手册
 
-快要下班时已经又饿又困了，下列哪种情况算是雪上加霜（ ）？／去了趟洗手间，回来后发现显示器不见了！／刷新闻时看到回家的地铁线要停运半小时／外面突然开始下大雨／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了
+快要下班时已经又饿又困了，下列哪种情况算是雪上加霜（ ）？／去了趟洗手间，回来后发现显示器不见了！／刷新闻时看到回家的地铁线要停运半小时／外面突然开始下大雨／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了／催命鬼一样的 Leon 又来用花言巧语骗我去学编程了／34 ／ Leon 真的像讨债的催命鬼一样哦，躲都躲不掉
 ```
 Above are three lines: 
 1. a `question + options + answer` line 
