@@ -58,7 +58,7 @@ with open('questions.txt', 'r', encoding='utf-8') as f:
 
 
 
-with open('test_notes.txt', 'w', encoding='utf-8') as new_f:
+with open('notes.txt', 'w', encoding='utf-8') as new_f:
     new_f.write(anki_cards)
 
 print('Anki notes batch processing done! ^_^')
