@@ -21,9 +21,9 @@ with open('questions.txt', 'r', encoding='utf-8') as f:
         QA = {
             'Question': QA_raw[0],
             'Options' : QA_raw[1:5],
-            'Answer'  : QA_raw[5].replace('\n', ''),  # replace \n if any so that line41 will work well
+            'Answer'  : QA_raw[5],
             'Pages'   : QA_raw[6],
-            'Analysis': QA_raw[7]
+            'Analysis': QA_raw[7].replace('\n', '')  # replace \n if any so that line 48 will work well
         }
 
         random.shuffle(QA['Options'])
