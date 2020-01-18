@@ -36,7 +36,7 @@ with open('questions.txt', 'r', encoding='utf-8') as f:
         for opt in options_front: 
             options_front[options_front.index(opt)] = order_list[options_front.index(opt)] + opt
     
-        anki_notes_front = QA['Question'] + ',' + '<br>'.join(options_front) + QA['Pages'] + QA['Analysis']
+        anki_notes_front = QA['Question'] + ',' + '<br>'.join(options_front) + ',' + QA['Pages'] + ',' + QA['Analysis']
         
         # back side
         options_back = QA['Options'].copy()
@@ -51,7 +51,7 @@ with open('questions.txt', 'r', encoding='utf-8') as f:
                 options_back[options_back.index(opt)] =  order_list[options_back.index(opt)] + opt
         
 
-        anki_notes_back = QA['Question'] + ',' + '<br>'.join(options_back) + QA['Pages'] + QA['Analysis']
+        anki_notes_back = QA['Question'] + ',' + '<br>'.join(options_back) + ',' + QA['Pages'] + ',' + QA['Analysis']
 
         # use ',' to separate front and back
         anki_notes = anki_notes_front + ',' + anki_notes_back 
