@@ -5,8 +5,13 @@ _If not comfortable with reading the black-background version of this README in 
 ## TO DO
 - [x] solve the ambiguity caused by `in` statement in matching and marking up answers
 - [x] add "pages" and "analysis" fields
-- [x] add an error detector to automatically catch and skip errors met in the raw data
-- [x] display a friendlier 'done' message like "Processed X card notes in total, Y error(s) [in Z seconds?].
+- [ ] add an error detector to automatically catch and skip errors met in the raw data
+    - [x] can detect the wrong number of separator `／`
+    - [ ] can detect unnecessary white space
+- [ ] display a friendlier 'done' message like "Processed X card notes in total, Y error(s) [in Z seconds?].
+    - [x] "Processed X card notes in total
+    - [x] "Error occurred in Y card notes. 
+    - [ ] "Processing time: Z seconds.
 - [ ] design card style
 
 ## Guide on use
