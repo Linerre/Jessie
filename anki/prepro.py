@@ -15,9 +15,22 @@ with open('questions.txt', 'r', encoding='utf-8') as f:
 
     # get the number of questions
     number_of_q = len(lines)
+    number_of_e = 0
 
     for line in lines:
         QA_raw = line.split('／')
+        
+        # catch any separator error before the processing
+        try:
+            if len(QA_raw) == 8:
+                pass
+            else:
+                raise IndexError
+        except IndexError:
+            number_of_e += 1
+            continue
+
+
         QA = {
             'Question': QA_raw[0],
             'Options' : QA_raw[1:5],
@@ -68,5 +81,7 @@ with open('questions.txt', 'r', encoding='utf-8') as f:
 with open('notes.txt', 'w', encoding='utf-8') as new_f:
     new_f.write(anki_cards)
 
-print('Anki notes batch processing done! ^_^')
-print(f'Processed {number_of_q} card notes in total.')
+print('Anki notes batch processing done! ^_^\n')
+print(f'Processed {number_of_q} card notes in total.\n')
+print(f'{number_of_q - number_of_e} succeeded.\n')
+print(f'Error occured in {number_of_e} card notes.')
