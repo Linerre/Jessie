@@ -84,4 +84,4 @@ with open('notes.txt', 'w', encoding='utf-8') as new_f:
 print('Anki notes batch processing done! ^_^\n')
 print(f'Processed {number_of_q} card notes in total.\n')
 print(f'{number_of_q - number_of_e} succeeded.\n')
-print(f'Error occured in {number_of_e} card notes.')
+print(f'Error occurred in {number_of_e} card notes.')
