@@ -4,14 +4,14 @@
 import random
 
 with open('questions.txt', 'r', encoding='utf-8') as f:
-    content = f.readlines() 
+    # content = f.readlines() 
     order_list = ['A. ', 'B. ', 'C. ', 'D. ']
     tmp = []
     left_mark = '<span style="background-color: #ebcb8b">'
     right_mark = '</span>'
 
     # remove empty lines
-    lines = [i for i in content if i != '\n']
+    lines = [i for i in f if i != '\n']
 
     # get the number of questions
     number_of_q = len(lines)
