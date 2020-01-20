@@ -10,6 +10,7 @@ _If not comfortable with reading the black-background version of this README in 
     - [ ] can detect unnecessary white space
 - [ ] display a friendlier 'done' message like "Processed X card notes in total, Y error(s) [in Z seconds?].
     - [x] "Processed X card notes in total
+    - [x] "W card notes succeeded."
     - [x] "Error occurred in Y card notes. 
     - [ ] "Processing time: Z seconds.
 - [ ] design card style
