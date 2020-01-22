@@ -1,11 +1,11 @@
-以下哪种评论比较适宜？,A. 文明回复<br>B. 发广告<br>C. 进行人身攻击<br>D. 钓鱼引战,71,因为我们都是文明人,以下哪种评论比较适宜？,<span style="background-color: #ebcb8b">A. 文明回复</span><br>B. 发广告<br>C. 进行人身攻击<br>D. 钓鱼引战,71,因为我们都是文明人
+以下哪种评论比较适宜？,A. 发广告<br>B. 文明回复<br>C. 进行人身攻击<br>D. 钓鱼引战,71,因为我们都是文明人,以下哪种评论比较适宜？,A. 发广告<br><span style="background-color:#ebcb8b>B. 文明回复</span><br>C. 进行人身攻击<br>D. 钓鱼引战,71,因为我们都是文明人
 
-USB3.0 的插口通常为何种颜色？,A. 蓝色<br>B. 橙色<br>C. 黑色<br>D. 紫色,10,用多了就知道了,USB3.0 的插口通常为何种颜色？,<span style="background-color: #ebcb8b">A. 蓝色</span><br>B. 橙色<br>C. 黑色<br>D. 紫色,10,用多了就知道了
+USB3.0 的插口通常为何种颜色？,A. 黑色<br>B. 紫色<br>C. 蓝色<br>D. 橙色,10,用多了就知道了,USB3.0 的插口通常为何种颜色？,A. 黑色<br>B. 紫色<br><span style="background-color:#ebcb8b>C. 蓝色</span><br>D. 橙色,10,用多了就知道了
 
-Bilibili视频缓冲的时候会看到一个抖动的（ ）？,A. 电脑<br>B. 电扇<br>C. 电冰箱<br>D. 电视,19,看到了就记住了,Bilibili视频缓冲的时候会看到一个抖动的（ ）？,A. 电脑<br>B. 电扇<br>C. 电冰箱<br><span style="background-color: #ebcb8b">D. 电视</span>,19,看到了就记住了
+Bilibili视频缓冲的时候会看到一个抖动的（ ）？,A. 电冰箱<br>B. 电脑<br>C. 电扇<br>D. 电视,19,看到了就记住了,Bilibili视频缓冲的时候会看到一个抖动的（ ）？,A. 电冰箱<br>B. 电脑<br>C. 电扇<br><span style="background-color:#ebcb8b>D. 电视</span>,19,看到了就记住了
 
-被称为“生化危机之父”的人是？,A. 三下真司<br>B. 三左真司<br>C. 三右真司<br>D. 三上真司,111 ,这不是小儿科么？,被称为“生化危机之父”的人是？,A. 三下真司<br>B. 三左真司<br>C. 三右真司<br><span style="background-color: #ebcb8b">D. 三上真司</span>,111 ,这不是小儿科么？
+被称为“生化危机之父”的人是？,A. 三左真司<br>B. 三下真司<br>C. 三右真司<br>D. 三上真司,111 ,这不是小儿科么？,被称为“生化危机之父”的人是？,A. 三左真司<br>B. 三下真司<br>C. 三右真司<br><span style="background-color:#ebcb8b>D. 三上真司</span>,111 ,这不是小儿科么？
 
-以下哪项不属于诺贝尔奖的范畴？,A. 数学<br>B. 物理<br>C. 化学<br>D. 医学,890 ,数学是菲什么德尔滋奖章,以下哪项不属于诺贝尔奖的范畴？,<span style="background-color: #ebcb8b">A. 数学</span><br>B. 物理<br>C. 化学<br>D. 医学,890 ,数学是菲什么德尔滋奖章
+以下哪项不属于诺贝尔奖的范畴？,A. 数学<br>B. 医学<br>C. 物理<br>D. 化学,890 ,数学是菲什么德尔滋奖章,以下哪项不属于诺贝尔奖的范畴？,<span style="background-color:#ebcb8b>A. 数学</span><br>B. 医学<br>C. 物理<br>D. 化学,890 ,数学是菲什么德尔滋奖章
 
-《蜡笔小新》中的阿呆喜欢什么东西？,A. 鞋子<br>B. 石头<br>C. 汽水<br>D. 植物,32 , 这我还真是第一次知道,《蜡笔小新》中的阿呆喜欢什么东西？,A. 鞋子<br><span style="background-color: #ebcb8b">B. 石头</span><br>C. 汽水<br>D. 植物,32 , 这我还真是第一次知道
+《蜡笔小新》中的阿呆喜欢什么东西？,A. 汽水<br>B. 石头<br>C. 植物<br>D. 鞋子,32 , 这我还真是第一次知道,《蜡笔小新》中的阿呆喜欢什么东西？,A. 汽水<br><span style="background-color:#ebcb8b>B. 石头</span><br>C. 植物<br>D. 鞋子,32 , 这我还真是第一次知道

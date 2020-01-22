@@ -7,7 +7,9 @@ with open('questions.txt', 'r', encoding='utf-8') as f:
     # content = f.readlines() 
     order_list = ['A. ', 'B. ', 'C. ', 'D. ']
     tmp = []
-    left_mark = '<span style="background-color: #ebcb8b">'
+    style = 'style="background-color:'
+    bg_color = '#ebcb8b'
+    left_mark = '<span {}>'.format(style+bg_color)
     right_mark = '</span>'
 
     # remove empty lines
@@ -81,7 +83,7 @@ with open('questions.txt', 'r', encoding='utf-8') as f:
 with open('notes.txt', 'w', encoding='utf-8') as new_f:
     new_f.write(anki_cards)
 
-print('Anki notes batch processing done! ^_^\n')
-print(f'Processed {number_of_q} card notes in total.\n')
-print(f'{number_of_q - number_of_e} succeeded.\n')
-print(f'Error occurred in {number_of_e} card notes.')
+print('Anki notes batch processing done!\n')
+print(f'😎  Processed {number_of_q} card notes in total.\n')
+print(f'😊  {number_of_q - number_of_e} succeeded.\n')
+print(f'😱  {number_of_e} failed.')
