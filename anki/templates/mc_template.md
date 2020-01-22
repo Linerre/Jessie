@@ -49,6 +49,11 @@ color: #C594C5;
 font-size: 14px;
 color: #5FB3B3;
 }
+
+.als a {
+font-size: 14px;
+color: #5FB3B3;
+}
 ```
 
 ## Back Template
