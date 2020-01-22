@@ -1,6 +1,6 @@
 # Preview
 At the moment, a card with multiple-choice (MC) notes looks like this:
-![mc notes template]()
+![mc notes template](https://github.com/Linerre/Jessie/blob/master/anki/templates/mc_temp1.jpg)
 
 On the left, there are **3** fields:
 1. Front Template
