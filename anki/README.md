@@ -13,7 +13,7 @@ _If not comfortable with reading the black-background version of this README in 
     - [x] "W card notes succeeded."
     - [x] "Error occurred in Y card notes. 
     - [ ] "Processing time: Z seconds.
-- [ ] design card style
+- [x] design card style
 
 ## Guide on use
 
@@ -115,7 +115,7 @@ When using the half-width comma `,` while all the questions are in full-width Ch
 2. type in Chinese as uaual
 3. use `／` as the separator (next to `>` or `shift` at the bottom right on the keyboard)
 
-![the `／` key](https://github.com/Linerre/Jessie/blob/master/anki/mac_kb.jpg)
+![the `／` key](https://github.com/Linerre/Jessie/blob/master/anki/images/mac_kb.jpg)
 
 **NOTE**
 
