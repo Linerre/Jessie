@@ -1,7 +1,9 @@
-# Preview
+# Mutiple Choice Question Notes Explained
+
+## Preview
 At the moment, a card with multiple-choice (MC) notes looks like this:
-![mc notes template fileds](https://github.com/Linerre/Jessie/blob/master/anki/templates/mc_temp2.jpg)
-![mc notes template](https://github.com/Linerre/Jessie/blob/master/anki/templates/mc_temp1.jpg)
+![mc notes template fileds](https://github.com/Linerre/Jessie/blob/master/anki/images/mc_temp1.jpg)
+![mc notes template](https://github.com/Linerre/Jessie/blob/master/anki/images/mc_temp2.jpg)
 
 
 On the left, there are **3** fields:
@@ -10,8 +12,9 @@ On the left, there are **3** fields:
 3. Back Template
 
 The content in these fields are shown belown in the respetive sections.
+**NOTE**: _All the settings are subject to change in the future since this is a work in progress._
 
-# Front Template
+## Front Template
 Code for **Front Template** field:
 ```
 <span class="q">题目</span>
@@ -21,7 +24,7 @@ Code for **Front Template** field:
 <div class="opt">{{Options}}</div>
 ```
 
-# Styling (shared between cards)
+## Styling (shared between cards)
 ```css
 .card {
  font-family: arial;
@@ -58,7 +61,7 @@ color: #5FB3B3;
 }
 ```
 
-# Back Template
+## Back Template
 ```
 <div class="opt">{{Answer}}</div><br>
 
