@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Users/leon/anaconda3/bin/python
 # -*- coding:utf-8 -*-
 
 import random
