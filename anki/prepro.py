@@ -85,10 +85,12 @@ with open('questions.txt', 'r', encoding='utf-8') as f:
 with open('notes.txt', 'w', encoding='utf-8') as new_f:
     new_f.write(anki_cards)
 
+print('-' * 40)
 print('Anki notes batch processing done!')
 print(f'😎  Processed {number_of_q} card notes in total.')
 print(f'😊  {number_of_q - number_of_e} succeeded.')
-print(f'😱  {number_of_e} failed: \n')
+print(f'😱  {number_of_e} failed.')
 
-for e in tags_of_e:
-    print(e, end='\n') 
+if number_of_e != 0:
+    for e in tags_of_e:
+        print(f'Error occurred in {e}') 
