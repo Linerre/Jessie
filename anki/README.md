@@ -123,9 +123,9 @@ Type in every Chinese character, punctuation mark, separator in the pinyin mode.
 
 ### 3 The `notes.txt` file
 Before the processing, this file:
-1. is an _empty_ `.txt` file
-2. is a `.txt` file _containing_ the notes created last time
-3. does not exist at all and will be created automatically once the `prepro.py` runs.
+1. can be an _empty_ `.txt` file
+2. can be a `.txt` file _containing_ the notes created last time
+3. may not exist at all and will be created automatically once the `prepro.py` runs.
 
 Safely ignore it when working on collecting `question + options + answer`. The `prepro.py` will automatically seek it during the processing or if it is not there it will be created. 
 
