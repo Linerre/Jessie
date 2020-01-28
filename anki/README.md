@@ -122,8 +122,11 @@ When using the half-width comma `,` while all the questions are in full-width Ch
 Type in every Chinese character, punctuation mark, separator in the pinyin mode. No need to switch to English input mode at all~!
 
 ### 3 The `notes.txt` file
-Before the processing, this file will either be _empty_ or _contain_ the notes imported to Anki last time.
+Before the processing, this file:
+1. is an _empty_ `.txt` file
+2. is a `.txt` file _containing_ the notes created last time
+3. does not exist at all and will be created automatically once the `prepro.py` runs.
 
-Safely ignore it when working on collecting `question + options + answer`. The `prepro.py` will automatically seek it during the processing. 
+Safely ignore it when working on collecting `question + options + answer`. The `prepro.py` will automatically seek it during the processing or if it is not there it will be created. 
 
 Only when it is time to import notes to Anki will this file be needed. 
