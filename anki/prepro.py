@@ -89,8 +89,10 @@ print('-' * 40)
 print('Anki notes batch processing done!')
 print(f'😎  Processed {number_of_q} card notes in total.')
 print(f'😊  {number_of_q - number_of_e} succeeded.')
-print(f'😱  {number_of_e} failed.')
 
 if number_of_e != 0:
+    print(f'😱  {number_of_e} failed:')
     for e in tags_of_e:
         print(f'Error occurred in {e}') 
+
+
