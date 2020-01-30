@@ -4,7 +4,7 @@
 #!/usr/bin/env bash
 
 
-# Need to change to DIR accordingly
+# Need to change to your directory accordingly
 DIR="/Users/leon/Desktop/Homework-original"
 SUB="Submission attachment(s)"
 FED="Feedback Attachment(s)"
@@ -12,14 +12,14 @@ cd ${DIR}
 
 for item in *; do
   if [ -d "$item" ]; then
-    # need to deal with .DS_STORE!q
+    # need to deal with .DS_STORE!
     if [ "$(ls -A "$item"/"$SUB" | wc -l)" -gt 1 ]; then
       # or
       # [ $(ls -A "$item"/"$SUB") == ".DS_Store"]
       
       #echo "Copying student" "$item" "'s submussion to feedback folder"
-      #cp "$item"/"$SUB"/* "$item"/"$FED"/
-      echo "$item"/"$SUB" "is not empty."
+      cp "$item"/"$SUB"/* "$item"/"$FED"/
+      # echo "$item"/"$SUB" "is not empty."
     else
       echo "$item" "has an empty directory!"
     fi
