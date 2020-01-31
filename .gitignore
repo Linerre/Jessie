@@ -3,3 +3,6 @@
 
 # ignore the .DS_Store file
 .DS_Store
+
+# ignore the note.txt
+anki/note.txt
