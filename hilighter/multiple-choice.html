@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My First Webpage</title>
+        <style>
+            .k {
+                color: #C594C5;
+            }
+
+            .kc, .mi {
+                color: #F99157;
+            }
+
+            .n {
+                color: #D8DEE9;
+            }
+
+            .o, .ow, p {
+                color: #5FB3B3;
+            }
+
+            .s {
+                color: #EC5f67;
+                /* color: #99C794; */
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <p class="code">awk '{print $4 "\t" $3 \n}'</p>
+    <script>
+        let code = document.querySelector('p.code');
+        let target = code.textContent;
+        let str = /'.*'/;
+        // alert(target.match(str)[0]);
+
+        // prepare the marks
+        let strMark = document.createElement("span");
+        strMark.classList.add('s');
+
+        // string to be marked
+        let marked = document.createTextNode(target.match(str)[0]); // '{print $4 "\t" $3 \n}'
+        
+        // mark it
+        strMark.appendChild(marked); // <span class="s">'{print $4 "\t" $3 \n}'</span>
+        
+        // replace the old with the marked
+        let parentP = code.parentNode;
+        parentP.replaceChild(strMark, code);
+        // strMark.appendChild
+    </script>
+    </body>
+    
+</html>
