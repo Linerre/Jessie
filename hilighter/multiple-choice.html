@@ -28,18 +28,16 @@
     </head>
 
     <body>
-        <p class="code">awk '{print $4 "\t" $3 \n}'</p>
+        <p class="code">awk '{print $4 "\t" $3 \n}' -f command.awk marks.txt</p>
     <script>
-
-        let code = document.querySelector('p.code');
-        let target = code.textContent;
-        let str = /(\w+)|('.*')/g;
-        
+        let code = document.querySelector('.code'),
+            target = code.textContent,
+            str = /\w+\W|'.*'|\W-f|\W\w+(\.\w+)?/g;
 
         // prepare the marks
-        let strMark = document.createElement("span");
+        let strMark = document.createElement('span');
         strMark.classList.add('s');
-
+        
         // string to be marked
         let toMark = document.createTextNode(target.match(str)[1]); // '{print $4 "\t" $3 \n}'
         
@@ -49,6 +47,7 @@
         // assemble the marked with the normal string
         code.innerText = target.match(str)[0];
         code.appendChild(strMark);
+        code.insertAdjacentText('beforeend', target.match(str)[2]+target.match(str)[3]+target.match(str)[4]);
     </script>
     </body>
     
