@@ -1,0 +1,57 @@
+body {
+    font-family: arial;
+    font-size: 16px;
+    text-align: left;
+    background-color: #D8DEE9;
+    color: #343D46;
+}
+
+.language {
+    display: none;
+}
+
+pre code {
+    display: block;
+    font-family: Monaco, Menlo;
+    background-color: #343D46;
+    color: #D8DEE9;
+    margin: 1px 1px;
+    padding: 1px 1px;
+}
+/* .card {
+    font-family: arial;
+    font-size: 16px;
+    text-align: left;
+    color: #D8DEE9;
+    background-color: #343D46;
+} */
+
+/* .code {}  */
+
+a {
+    color: #6699CC;
+    text-decoration: none;
+    border-bottom: 2px solid #6699CC;
+}
+
+.k {
+color: #C594C5;
+}
+
+.kc, .mi {
+color: #F99157;
+}
+
+.n {
+color: #D8DEE9;
+}
+
+.o, .ow, p {
+color: #5FB3B3;
+}
+
+
+.s {
+    color: #99C794;
+}
+
