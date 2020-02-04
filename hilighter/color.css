@@ -14,7 +14,7 @@ pre code {
     display: block;
     font-family: Monaco, Menlo;
     background-color: #343D46;
-    color: #D8DEE9;
+    color: #D8DEE9; /* foreground color */
     margin: 1px 1px;
     padding: 1px 1px;
 }
@@ -26,32 +26,32 @@ pre code {
     background-color: #343D46;
 } */
 
-/* .code {}  */
-
 a {
     color: #6699CC;
     text-decoration: none;
     border-bottom: 2px solid #6699CC;
 }
 
-.k {
-color: #C594C5;
-}
+/* Oceanic Colorscheme */
+/* base08 */
+.vr, .mp, .tg {color: #EC5f67;}
 
-.kc, .mi {
-color: #F99157;
-}
+/* base09 */
+.it, .bl {color: #F99157;}
 
-.n {
-color: #D8DEE9;
-}
+/* base0A */
+.cl {color: #FAC863;}
 
-.o, .ow, p {
-color: #5FB3B3;
-}
+/* base0B */
+.st {color: #99C794;}
+
+/* base0C */
+.re, .esc, .quo {color: #5FB3B3;}
+
+/* base0D */
+.fun, .att, .met {color: #6699CC;}
+
+.kw, .sel {color: #C594C5;}
 
 
-.s {
-    color: #99C794;
-}
 
