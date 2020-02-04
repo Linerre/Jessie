@@ -6,3 +6,6 @@
 
 # ignore the note.txt
 anki/notes.txt
+
+# ignore any byproduct file
+kws.txt
