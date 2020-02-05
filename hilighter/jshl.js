@@ -1,15 +1,5 @@
-// alert(code);
-
-// detect the language
-var lan = document.querySelector('.language').textContent;
-if (lan=='js') {
-    // highlight();
-} else {
-    // return undefined;
-}
-
 // JavaScript Keywords
-keywords = [
+let keywords = [
     'abstract', 'arguments', 'await', 'boolean',
     'break', 'byte', 'case', 'catch', 
     'char', 'class', 'const', 'continue', 
@@ -26,16 +16,16 @@ keywords = [
     'throw', 'throws', 'transient', 'true', 
     'try', 'typeof', 'var', 'void', 
     'volatile', 'while', 'with', 'yield'
-]
+]; 
 
-constants = [
+let constants = [
     'undefined',
     'null',
     'true',
     'false'
-]
+];
 
-operaters = [
+let operaters = [
     '=', 
     // Comparison
     '==', '===', '!=', '!==', '>', '<', '>=', '<=',
@@ -51,31 +41,56 @@ operaters = [
 
     // Others
     '?'
-]
+];
 
-braces =[
+let braces =[
     '(', ')', 
     '{', '}',
     '[', ']'
-]
+];
 
-patterns = {
-    numbers: /[-+]?[0-9]+/g,
-    strings: /'(.*?)'|"(.*?)"/g,
-    methods: /.\w+/g,
-    funName: /function \w+/g,
-    clsName: /class \w+/g,
-    varName: /(let|var|const) \w+/g,
-    // whitesp: /[ \]
+// patterns
+let numbers = /([0-9]+)/gm,
+    strings = /'(.*?)'|"(.*?)"/gm,
+    methods = /.\w+/g,
+    funName = /function \w+/g,
+    clsName = /class \w+/g,
+    varName = /(let|var|const) \w+/g;
+
+
+let styles = {
+    variables: '<span class="vr">',
+    markup   : '<span class="mp">',
+    tags     : '<span class="tg">',
+    integers : '<span class="it">',
+    boolean  : '<span class="bl">',
+    class    : '<span class="cl">',
+    string   : '<span class="st">',
+    regexp   : '<span class="re">',
+    escaped  : '<span class="esc">',
+    qoutes   : '<span class="quo">',
+    function : '<span class="fun">',
+    attribute: '<span class="att">',
+    method   : '<span class="met">',
+    keyword  : '<span class="kw">',
+    selector : '<span class="sel">',
+    comment  : '<span class="cm">',
+    close    : '</span>'
+};
+
+// alert(styles.comment);
+
+function highlights() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    data = data.replace(numbers, styles.integers+'$1'+styles.close);
+    codeblock.innerHTML = data;
+}
+// window.addEventListener("load", highlights);
+// detect the language and hightlight
+var lan = document.querySelector('.language').textContent;
+if (lan=='js') {
+    highlights();
 }
 
 
-
-// function highlight(codeblock) {
-//     // first, search for kw
-//     for (let kw of keywords) {
-//         if (codeblock.search(kw) {
-
-//         }
-//     }
-// }
