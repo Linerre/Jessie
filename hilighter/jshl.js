@@ -1,31 +1,39 @@
-// JavaScript Keywords
-let keywords = [
-    'abstract', 'arguments', 'await', 'boolean',
-    'break', 'byte', 'case', 'catch', 
-    'char', 'class', 'const', 'continue', 
-    'debugger', 'default', 'delete', 'do', 
-    'double', 'else', 'enum', 'eval', 
-    'export', 'extends', 'false', 'final', 
-    'finally', 'float', 'for', 'function', 
-    'goto', 'if', 'implements', 'import', 
-    'in', 'instanceof', 'int', 'interface', 
-    'let', 'long', 'native', 'new', 
-    'null', 'package', 'private', 'protected', 
-    'public', 'return', 'short', 'static', 
-    'super', 'switch', 'synchronized', 'this', 
-    'throw', 'throws', 'transient', 'true', 
-    'try', 'typeof', 'var', 'void', 
-    'volatile', 'while', 'with', 'yield'
-]; 
 
-let constants = [
+// JavaScript Keywords
+// Reserved keywords as of ECMAScript 2015
+let STATEMENTS = [
+    '^[ \t]*break( [\\w\\d]+)?;$', 'case ', 'catch ', 
+    'class ', 'const ', '^[ \t]*continue;', 
+    '^[ \t]*debugger;$', 'default', 'delete ', 'do', 
+    'else( )*', 'enum', 'eval', 
+    'export', 'extends', 'final', 
+    'finally( )*(?=\\{)', 'for( )*(?=\\()', 'function (?=\\w+)' , 
+    'goto', 'if( )*(?=\\()', 'implements', 'import ', 
+    ' in ', 'instanceof ', 'interface', 
+    'let ', 'new ', 
+    'package', 'private', 'protected', 
+    'return ', 'static', 
+    'super', 'switch', 'this', 
+    'throw ',
+    'try( )*(?=\{)', 'typeof ', 'var ', 'void ', 
+    'while( )*(?=\\()', 'with', 'yield '
+],
+
+kw = new RegExp(keywords.join('|'), 'gm'); 
+
+
+let CONSTANTS = [
     'undefined',
     'null',
     'true',
-    'false'
-];
+    'false',
+    'NaN',
+    'Infinity'
+],
 
-let operaters = [
+cst = new RegExp(constants.join('|'), 'mg');
+
+let OPERATORS = [
     '=', 
     // Comparison
     '==', '===', '!=', '!==', '>', '<', '>=', '<=',
@@ -43,49 +51,79 @@ let operaters = [
     '?'
 ];
 
-let braces =[
-    '(', ')', 
-    '{', '}',
-    '[', ']'
-];
+// let braces =[
+//     '(', ')', 
+//     '{', '}',
+//     '[', ']'
+// ];
 
 // patterns
-let numbers = /([0-9]+)/gm,
-    strings = /'(.*?)'|"(.*?)"/gm,
-    methods = /.\w+/g,
-    funName = /function \w+/g,
-    clsName = /class \w+/g,
-    varName = /(let|var|const) \w+/g;
+let PATTERNS = [
+    /'(.*?)'/gm,                // 0 string1
+    /"(.*)"/gm,                 // 1 string2
+    /\d+(\.\d*)?/gm,            // 2 numbers
+    /\.\w+/g,                   // 3 methods
+    /function \w+/g,            // 4 funName
+    /class \w+/g,               // 5 clsName 
+    /(let|var|const) \w+/g,     // 6 varName 
+    /\(|\)|\[|\]|\{|\}/g,       // 7 braces
+    /,|\.|;/g                   // 8 separator
+    // new RegExp(keywords.join('|'), 'i')
+];
 
+// let tok_regex = patterns.join('|');
 
-let styles = {
-    variables: '<span class="vr">',
+let STYLES = {
+    string1  : '<span class="st">',     //0
+    string2  : '<span class="st">',     //1
+    integers : '<span class="it">',     //2
+    method   : '<span class="met">',    //3
+    function : '<span class="fun">',    //4
+    class    : '<span class="cl">',     //5
+    variables: '<span class="vr">',     //6
+    qoutes   : '<span class="quo">',    //7
+    punc     : '<span class="pun">',    //8
     markup   : '<span class="mp">',
     tags     : '<span class="tg">',
-    integers : '<span class="it">',
     boolean  : '<span class="bl">',
-    class    : '<span class="cl">',
-    string   : '<span class="st">',
     regexp   : '<span class="re">',
     escaped  : '<span class="esc">',
-    qoutes   : '<span class="quo">',
-    function : '<span class="fun">',
     attribute: '<span class="att">',
-    method   : '<span class="met">',
     keyword  : '<span class="kw">',
     selector : '<span class="sel">',
     comment  : '<span class="cm">',
     close    : '</span>'
 };
 
-// alert(styles.comment);
+
 
 function highlights() {
     let codeblock = document.querySelector('.code');
-    let data = codeblock.innerHTML;
-    data = data.replace(numbers, styles.integers+'$1'+styles.close);
-    codeblock.innerHTML = data;
-}
+    let data = codeblock.textContent; 
+    
+    let matches = {};
+    for (let pattern of PATTERNS) {
+        if (data.match(pattern)) {
+            matches[PATTERNS.indexOf(pattern)] = data.match(pattern);
+        }
+    }
+    
+    for (let match in matches) { // must use obj[prop]; not obj.prop
+        for (let i = 0; i < matches[match].length; i++) {
+            matches[match][i] = STYLES[Object.keys(STYLES)[match*1]]+matches[match][i]+STYLES.close; // mark them all!
+        }     
+    }                  
+    console.log(matches);
+}                    
+// keep a copy of the raw data;
+// parse/analyze it as much as possible
+// mark the recognized patterns/lexemes
+// replace the original data lexeme by lexeme 
+
+// data = data.replace(patterns.string1, styles.string+'&apos;$1&apos;'+styles.close);
+// data = data.replace(patterns.numbers, styles.integers+'$1'+styles.close);
+// codeblock.innerHTML = data;
+
 // window.addEventListener("load", highlights);
 // detect the language and hightlight
 var lan = document.querySelector('.language').textContent;
