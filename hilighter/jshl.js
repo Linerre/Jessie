@@ -44,7 +44,9 @@ let STYLES = {
 
 function highlights() {
     let codeblock = document.querySelector('.code');
-    let data = codeblock.textContent;
+    let data = codeblock.textContent; 
+    // textContent will return whitespaces as well! 
+    // This will affect index accuracy!
     
     let matches = data.match(kw),
         marks = [];
@@ -52,14 +54,15 @@ function highlights() {
     for (let i = 0; i < matches.length; i++) {
         marks[i] = STYLES.keyword+matches[i]+STYLES.close;
     }
-    console.log(matches);
+    // console.log(matches);
     console.log(marks);
     let position = 0;
     for (let i = 0; i < matches.length; i++) {
-        // let index = 0;
         if (data.includes(matches[i], position)) {
             data = data.replace(matches[i], marks[i]);
-            position += marks[i].length+1;
+            console.log(position);
+            console.log(data.indexOf(marks[i]));
+            // console.log(position);
             /*
             By this way, the next search start will be at the end of the 
             new element which's just replaced the old.
