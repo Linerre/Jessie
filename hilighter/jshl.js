@@ -1,26 +1,36 @@
 
-// JavaScript Keywords
 // Reserved keywords as of ECMAScript 2015
 let STATEMENTS = [
-    '^[ \t]*break( [\\w\\d]+)?;$', 'case ', 'catch ', 
-    'class ', 'const ', '^[ \t]*continue;', 
-    '^[ \t]*debugger;$', 'default', 'delete ', 'do', 
-    'else( )*', 'enum', 'eval', 
+    'break(?=( [\\w\\d]+)?;)( )*', 'case(?= )', 'catch ', 
+    'class(?= )', 'const(?= )', 'continue(?=;)', 
+    '^[ \t]*debugger;( )*$', 'default:(?=( )*)', 'delete(?= )', 'do', 
+    'else(?=( )*\\{|\\w+)',  
     'export', 'extends', 'final', 
-    'finally( )*(?=\\{)', 'for( )*(?=\\()', 'function (?=\\w+)' , 
-    'goto', 'if( )*(?=\\()', 'implements', 'import ', 
-    ' in ', 'instanceof ', 'interface', 
-    'let ', 'new ', 
-    'package', 'private', 'protected', 
-    'return ', 'static', 
-    'super', 'switch', 'this', 
-    'throw ',
-    'try( )*(?=\{)', 'typeof ', 'var ', 'void ', 
-    'while( )*(?=\\()', 'with', 'yield '
+    'finally( )*(?=\\{)', 'for(?=( )*\\()', 'function(?=( )\\w+)' , 
+    'if(?= \\()', '^import(?= )', 
+    '()+in()+', 'instanceof(?= )', 
+    'let(?= +)', 'new(?= )', 
+    'return(?= (\\w+);)', 
+    'super', 'switch(?=( )*\\()', 
+    'throw(?= )',
+    'try(?=( )*\{)', 'typeof(?= )', 'var(?= +)', 
+    'while(?=( )*\\()', 'with', 'yield '
 ],
+// 'void' is special
 
-kw = new RegExp(keywords.join('|'), 'gm'); 
+kw = new RegExp(STATEMENTS.join('|'), 'gm'); 
 
+function highlights() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.textContent; 
+    console.log(data.match(kw));
+}
+
+//
+
+let JSKEYWORDS = [
+    'this'
+];
 
 let CONSTANTS = [
     'undefined',
@@ -31,7 +41,7 @@ let CONSTANTS = [
     'Infinity'
 ],
 
-cst = new RegExp(constants.join('|'), 'mg');
+cst = new RegExp(CONSTANTS.join('|'), 'mg');
 
 let OPERATORS = [
     '=', 
@@ -97,34 +107,32 @@ let STYLES = {
 
 
 
-function highlights() {
-    let codeblock = document.querySelector('.code');
-    let data = codeblock.textContent; 
+// function highlights() {
+//     let codeblock = document.querySelector('.code');
+//     let data = codeblock.textContent; 
     
-    let matches = {};
-    for (let pattern of PATTERNS) {
-        if (data.match(pattern)) {
-            matches[PATTERNS.indexOf(pattern)] = data.match(pattern);
-        }
-    }
+//     let matches = {};
+//     for (let pattern of PATTERNS) {
+//         if (data.match(pattern)) {
+//             matches[PATTERNS.indexOf(pattern)] = data.match(pattern);
+//         }
+//     }
     
-    for (let match in matches) { // must use obj[prop]; not obj.prop
-        for (let i = 0; i < matches[match].length; i++) {
-            matches[match][i] = STYLES[Object.keys(STYLES)[match*1]]+matches[match][i]+STYLES.close; // mark them all!
-        }     
-    }                  
-    console.log(matches);
-}                    
+//     for (let match in matches) { // must use obj[prop]; not obj.prop
+//         for (let i = 0; i < matches[match].length; i++) {
+//             matches[match][i] = STYLES[Object.keys(STYLES)[match*1]]+matches[match][i]+STYLES.close; // mark them all!
+//         }     
+//     }                  
+//     console.log(matches);
+// }                    
 // keep a copy of the raw data;
 // parse/analyze it as much as possible
 // mark the recognized patterns/lexemes
 // replace the original data lexeme by lexeme 
 
-// data = data.replace(patterns.string1, styles.string+'&apos;$1&apos;'+styles.close);
-// data = data.replace(patterns.numbers, styles.integers+'$1'+styles.close);
-// codeblock.innerHTML = data;
 
-// window.addEventListener("load", highlights);
+
+
 // detect the language and hightlight
 var lan = document.querySelector('.language').textContent;
 if (lan=='js') {
