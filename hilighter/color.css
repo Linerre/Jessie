@@ -15,8 +15,8 @@ pre code {
     font-family: Monaco, Menlo;
     background-color: #343D46;
     color: #D8DEE9; /* foreground color */
-    margin: 1px 1px;
-    padding: 1px 1px;
+    margin: 2px 2px;
+    padding: 2px 5px;
 }
 /* .card {
     font-family: arial;
