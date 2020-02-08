@@ -3,7 +3,7 @@
 let STATEMENTS = [
     'break(?=( [\\w\\d]+)?;)( )*', 'case(?= )', 'catch ', 
     'class(?= )', 'const(?= )', 'continue(?=;)', 
-    '^[ \t]*debugger;( )*$', 'default:(?=( )*)', 'delete(?= )', 'do', 
+    '^[ \t]*debugger;( )*$', 'default(?=:( )*)', 'delete(?= )', 'do', 
     'else(?=( )*\\{|\\w+)',  
     'export', 'extends', 'final', 
     'finally( )*(?=\\{)', 'for(?=( )*\\()', 'function(?=( )\\w+)' , 
@@ -17,8 +17,12 @@ let STATEMENTS = [
     'while(?=( )*\\()', 'with', 'yield '
 ],
 // 'void' is special
-
 kw = new RegExp(STATEMENTS.join('|'), 'gm'); 
+
+// let test = {
+//     break: /break(?=( [\\w\\d]+)?;)( )*/gm,
+// };
+
 
 let STYLES = {
     string1  : '<span class="st">',     //0
@@ -45,9 +49,6 @@ let STYLES = {
 function highlights() {
     let codeblock = document.querySelector('.code');
     let data = codeblock.textContent;
-    // console.log(data); 
-    // textContent will return whitespaces as well! 
-    // This will affect index accuracy!
     
     let matches = data.match(kw),
         marks = [];
@@ -57,33 +58,27 @@ function highlights() {
     }
     // console.log(matches);
     // console.log(marks);
-    let position = 0;
-    for (let i = 0; i < matches.length; i++) {
-        if (data.includes(matches[i], position)) {
-            console.log('seaerch start:', position)
+    // let position = 0;
+    for (let i = 0; i < STATEMENTS.length; i++) {
+        // get a pattern first
+        let re = new RegExp(STATEMENTS[i], 'gm');
 
-            // replace
-            // In this case, using string as the pattern,
-            // .replace() will only replace the first occurance!
-            // meaning that if duplicates appear, only the first one
-            // will be replaced repeatedly! 
-            data = data.replace(matches[i], marks[i]);
+        // test it
+        if (re.test(data)) {
+            
+            // if true, use regex to replace all at one time
+            data = data.replace(re, STYLES.keyword+'$&'+STYLES.close);
 
-            console.log('finish replacing:\n', data);
-            // console.log('Match:', matches[i]);
-            // console.log('replace:', marks[i]);
-            // console.log('position:', position);
-            // console.log('1st occurance:', data.indexOf(marks[i]));
-            // console.log('expected:', data.indexOf(marks[i], position));
-            // console.log('length:', marks[i].length);
+            // console.log('finish replacing:\n', data);
+        
 
-            position = data.indexOf(marks[i], position)+marks[i].length; // why -1 + 27
-            console.log('new position:', position);
+            // position = data.indexOf(marks[i], position)+marks[i].length; // why -1 + 27
+            // console.log('new position:', position);
             // console.log(data.slice(position, position+5));
-        } else {console.log(false)}
+        } else continue;
     }
-    // codeblock.innerHTML = ata;
-    // console.log(data);
+    console.log(data);
+    codeblock.innerHTML = data;
 }
 
 //
