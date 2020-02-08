@@ -46,12 +46,18 @@ a {
 .st {color: #99C794;}
 
 /* base0C */
-.re, .esc, .quo {color: #5FB3B3;}
+.re, .ecs, .quo, .pun {color: #5FB3B3;}
 
 /* base0D */
 .fun, .att, .met {color: #6699CC;}
 
+/* base0E */
 .kw, .sel {color: #C594C5;}
+
+/* comment base03 */
+.cm {color: #65737E;}
+
+
 
 
 
