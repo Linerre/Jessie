@@ -44,7 +44,8 @@ let STYLES = {
 
 function highlights() {
     let codeblock = document.querySelector('.code');
-    let data = codeblock.textContent; 
+    let data = codeblock.textContent;
+    // console.log(data); 
     // textContent will return whitespaces as well! 
     // This will affect index accuracy!
     
@@ -55,26 +56,34 @@ function highlights() {
         marks[i] = STYLES.keyword+matches[i]+STYLES.close;
     }
     // console.log(matches);
-    console.log(marks);
+    // console.log(marks);
     let position = 0;
     for (let i = 0; i < matches.length; i++) {
         if (data.includes(matches[i], position)) {
+            console.log('seaerch start:', position)
+
+            // replace
+            // In this case, using string as the pattern,
+            // .replace() will only replace the first occurance!
+            // meaning that if duplicates appear, only the first one
+            // will be replaced repeatedly! 
             data = data.replace(matches[i], marks[i]);
-            console.log(position);
-            console.log(data.indexOf(marks[i]));
-            // console.log(position);
-            /*
-            By this way, the next search start will be at the end of the 
-            new element which's just replaced the old.
-            The problem is, between this start and next start, there might be 
-            many many the same words!
-            Therefore, if next start still falls behind one of the same words,
-            some will be marked at least twice!
-            */
-        }
+
+            console.log('finish replacing:\n', data);
+            // console.log('Match:', matches[i]);
+            // console.log('replace:', marks[i]);
+            // console.log('position:', position);
+            // console.log('1st occurance:', data.indexOf(marks[i]));
+            // console.log('expected:', data.indexOf(marks[i], position));
+            // console.log('length:', marks[i].length);
+
+            position = data.indexOf(marks[i], position)+marks[i].length; // why -1 + 27
+            console.log('new position:', position);
+            // console.log(data.slice(position, position+5));
+        } else {console.log(false)}
     }
     // codeblock.innerHTML = ata;
-    console.log(data);
+    // console.log(data);
 }
 
 //
