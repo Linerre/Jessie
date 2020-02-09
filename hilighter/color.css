@@ -34,28 +34,28 @@ a {
 
 /* Oceanic Colorscheme */
 /* base08 */
-.vr, .mp, .tg {color: #EC5f67;}
+.red {color: #EC5f67; font-style: italic;}
 
 /* base09 */
-.it, .bl {color: #F99157;}
+.orange {color: #F99157;}
 
 /* base0A */
-.cl {color: #FAC863;}
+.yellow {color: #FAC863; font-weight: bold;}
 
 /* base0B */
-.st {color: #99C794;}
+.green {color: #99C794;}
 
 /* base0C */
-.re, .ecs, .quo, .pun {color: #5FB3B3;}
+.cyan {color: #5FB3B3;}
 
 /* base0D */
-.fun, .att, .met {color: #6699CC;}
+.blue {color: #6699CC;}
 
 /* base0E */
-.kw, .sel {color: #C594C5;}
+.magenta {color: #C594C5;}
 
 /* comment base03 */
-.cm {color: #65737E;}
+.grey {color: #65737E;}
 
 
 

@@ -1,73 +1,162 @@
 
-// Reserved keywords as of ECMAScript 2015
-let STATEMENTS = [
-    'break(?=( [\\w\\d]+)?;)( )*', 'case(?= )', 'catch ', 
-    'class(?= )', 'const(?= )', 'continue(?=;)', 
-    '^[ \t]*debugger;( )*$', 'default(?=:( )*)', 'delete(?= )', 'do', 
-    'else(?=( )*\\{|\\w+)',  
-    'export', 'extends', 'final', 
-    'finally( )*(?=\\{)', 'for(?=( )*\\()', 'function(?=( )\\w+)' , 
-    'if(?= \\()', '^import(?= )', 
-    '()+in()+', 'instanceof(?= )', 
-    'let(?= +)', 'new(?= )', 
-    'return(?= (\\w+);)', 
-    'super', 'switch(?=( )*\\()', 
-    'throw(?= )',
-    'try(?=( )*\{)', 'typeof(?= )', 'var(?= +)', 
-    'while(?=( )*\\()', 'with', 'yield '
+// In the colorscheme order
+
+// A few speical words: base08:red + italic
+let RED = [
+    /this(?=(\.\w+)?)/,
+    /arguments/,
+    /super/
 ],
-// 'void' is special
-kw = new RegExp(STATEMENTS.join('|'), 'gm'); 
 
-// let test = {
-//     break: /break(?=( [\\w\\d]+)?;)( )*/gm,
-// };
+// Integers and Boolean values: base09: orange
+ORANGE = [
+    // Need to include more exceptions
+    /\d+(\.\d*)?/,
+
+    /true/, /false/,
+
+    /undefined/, /null/,
+
+    /NaN/,
+
+    /Infinity/
+],
+
+// Classes: base0A: yellow + bold;
+YELLOW = [
+    // use $1 to refer to this group
+    /(console(?=\.\w+))/,
+    /(Object(?=\.\w+))/,
+    /(RegExp(?= *\())/,
+
+    // class Name (often user-defined)
+    /class +(\w+(?= *\())/,
 
 
+],
+
+// Strings: base0B: green
+GREEN = [
+    /'([^'\\])'/,
+    /"([^"\\])"/
+],
+
+// Re, punctuations, etc: base0C: cyan
+CYAN = [
+    // new
+    /new(?= +\w+)/,
+
+    // in
+    / +in(?= +\w+)/,
+
+    // void
+
+    // punctuations
+    /[\.,!@$\^;:"'\?\\\|]/,
+
+    // braces
+    /\(|\)|\{|\}|\[|\]/,
+
+    // operaters
+    /\+|\-|\*|\/|%/,
+
+    /=|==|===|!=|!==|>=|<=|>|</,
+
+    /\+=|-=|\*=|\/=/,
+
+    /\+\+|--|/,
+
+    /\|\||&&/,
+
+    // regular expressions
+    /\/.*\//
+];
+
+
+// Functions, Methods, Attribute IDs, Headings: base0D: blue
+BLUE = [
+    // use $1 to refer to this group
+
+    // method name
+    /(\.(\w+)(?= *\())/,
+
+    // function name (user), same as class name
+    /function +(\w+(?= *\())/
+],
+
+// Keywords, Storage, Selector, Markup Italic, Diff Changed: base0E
+// Reserved keywords as of ECMAScript 2015
+MAGENTA = [
+    /break(?=( [\w\d]+)?;)( )*/, /case(?= )/, /catch /, 
+
+    /class(?= +)/, /const(?= +)/, /continue(?=;)/, 
+
+    /debugger;( )*/, /default(?=: *)/, /delete(?= +)/, 
+
+    /do(?= +\{)/, /else(?= +\{|\w+)/,  /export /, 
+
+    /extends/, /final/, /finally(?= *\{)/, 
+
+    /for(?= *\()/, /function(?= +\w+)/,
+
+    /if(?= \()/, /import(?= +\w+)/, 
+
+    / +in +/, /instanceof(?= )/, 
+
+    /let(?= +)/, /new(?= )/, 
+
+    /return(?= (\w+);)/, /switch(?= *\()/, 
+
+    /throw(?= )/, /try(?= *\{)/, 
+        
+    /typeof(?= )/, /var(?= +)/, 
+
+    /while(?= *\()/, /with/, /yield(?= )/
+],
+
+// Comments, Invisibles, Line Highlighting: base03
+GREY = [
+    /\/\/(?=[^\n])/ 
+];
+
+
+
+
+// user color instead of names
 let STYLES = {
-    string1  : '<span class="st">',     //0
-    string2  : '<span class="st">',     //1
-    integers : '<span class="it">',     //2
-    method   : '<span class="met">',    //3
-    function : '<span class="fun">',    //4
-    class    : '<span class="cl">',     //5
-    variables: '<span class="vr">',     //6
-    qoutes   : '<span class="quo">',    //7
-    punc     : '<span class="pun">',    //8
-    markup   : '<span class="mp">',
-    tags     : '<span class="tg">',
-    boolean  : '<span class="bl">',
-    regexp   : '<span class="re">',
-    escaped  : '<span class="esc">',
-    attribute: '<span class="att">',
-    keyword  : '<span class="kw">',
-    selector : '<span class="sel">',
-    comment  : '<span class="cm">',
-    close    : '</span>'
+    red     : '<span class="red">',        //0
+    orange  : '<span class="orange">',     //1
+    yellow  : '<span class="yellow">',     //2
+    green   : '<span class="green">',      //3
+    cyan    : '<span class="cyan">',       //4
+    blue    : '<span class="blue">',       //5
+    magenta : '<span class="magenta">',    //6
+    grey    : '<span class="grey">',       //7
+    close   : '</span>'
 };
 
 function highlights() {
     let codeblock = document.querySelector('.code');
     let data = codeblock.textContent;
     
-    let matches = data.match(kw),
-        marks = [];
-    // mark all keywords
-    for (let i = 0; i < matches.length; i++) {
-        marks[i] = STYLES.keyword+matches[i]+STYLES.close;
-    }
+    // let matches = data.match(kw),
+    //     marks = [];
+    // // mark all keywords
+    // for (let i = 0; i < matches.length; i++) {
+    //     marks[i] = STYLES.megenta+matches[i]+STYLES.close;
+    // }
     // console.log(matches);
     // console.log(marks);
     // let position = 0;
-    for (let i = 0; i < STATEMENTS.length; i++) {
+    for (let i = 0; i < MAGENTA.length; i++) {
         // get a pattern first
-        let re = new RegExp(STATEMENTS[i], 'gm');
+        let re = new RegExp(MAGENTA[i], 'gm');
 
         // test it
         if (re.test(data)) {
             
             // if true, use regex to replace all at one time
-            data = data.replace(re, STYLES.keyword+'$&'+STYLES.close);
+            data = data.replace(re, STYLES.magenta+'$&'+STYLES.close);
 
             // console.log('finish replacing:\n', data);
         
@@ -80,63 +169,6 @@ function highlights() {
     console.log(data);
     codeblock.innerHTML = data;
 }
-
-//
-
-let JSKEYWORDS = [
-    'this'
-];
-
-let CONSTANTS = [
-    'undefined',
-    'null',
-    'true',
-    'false',
-    'NaN',
-    'Infinity'
-],
-
-cst = new RegExp(CONSTANTS.join('|'), 'mg');
-
-let OPERATORS = [
-    '=', 
-    // Comparison
-    '==', '===', '!=', '!==', '>', '<', '>=', '<=',
-
-    // Arithmetic
-    '+', '-', '*', '/', '%', '**', 
-    
-    // In-place
-    '++', '--', '+=', '-=', '*=', '/=', '**=', '%=',
-
-    // Logical
-    '&&', '||', '!',
-
-    // Others
-    '?'
-];
-
-// let braces =[
-//     '(', ')', 
-//     '{', '}',
-//     '[', ']'
-// ];
-
-// patterns
-let PATTERNS = [
-    /'(.*?)'/gm,                // 0 string1
-    /"(.*)"/gm,                 // 1 string2
-    /\d+(\.\d*)?/gm,            // 2 numbers
-    /\.\w+/g,                   // 3 methods
-    /function \w+/g,            // 4 funName
-    /class \w+/g,               // 5 clsName 
-    /(let|var|const) \w+/g,     // 6 varName 
-    /\(|\)|\[|\]|\{|\}/g,       // 7 braces
-    /,|\.|;/g                   // 8 separator
-    // new RegExp(keywords.join('|'), 'i')
-];
-
-// let tok_regex = patterns.join('|');
 
 
 
