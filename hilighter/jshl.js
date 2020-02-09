@@ -1,15 +1,17 @@
 
 // In the colorscheme order
 
+// Lookforward pattern
+let  LKFW= {
+// Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
 // A few speical words: base08:red + italic
-let RED = [
-    /this(?=(\.\w+)?)/,
-    /arguments/,
-    /super/
-],
-
+// RED: [
+//     /this(?=(\.\w+)?)/,
+//     /arguments/,
+//     /super/
+// ],
 // Integers and Boolean values: base09: orange
-ORANGE = [
+ORANGE: [
     // Need to include more exceptions
     /\d+(\.\d*)?/,
 
@@ -21,28 +23,14 @@ ORANGE = [
 
     /Infinity/
 ],
-
-// Classes: base0A: yellow + bold;
-YELLOW = [
-    // use $1 to refer to this group
-    /(console(?=\.\w+))/,
-    /(Object(?=\.\w+))/,
-    /(RegExp(?= *\())/,
-
-    // class Name (often user-defined)
-    /class +(\w+(?= *\())/,
-
-
-],
-
 // Strings: base0B: green
-GREEN = [
-    /'([^'\\])'/,
-    /"([^"\\])"/
+GREEN: [
+    /'([^\\]*)'/,
+    /"(.*)"(?!>)/
 ],
-
+//red|orange|yellow|green|cyan||magenta|grey)
 // Re, punctuations, etc: base0C: cyan
-CYAN = [
+CYAN: [
     // new
     /new(?= +\w+)/,
 
@@ -58,35 +46,22 @@ CYAN = [
     /\(|\)|\{|\}|\[|\]/,
 
     // operaters
-    /\+|\-|\*|\/|%/,
+    /\+|-|\*|\/|%/,
 
-    /=|==|===|!=|!==|>=|<=|>|</,
+    /={1,3}|!={1,2}|>=|<=|>|</,
 
     /\+=|-=|\*=|\/=/,
 
-    /\+\+|--|/,
+    /\+{2}|-{2}|/,
 
     /\|\||&&/,
 
     // regular expressions
     /\/.*\//
-];
-
-
-// Functions, Methods, Attribute IDs, Headings: base0D: blue
-BLUE = [
-    // use $1 to refer to this group
-
-    // method name
-    /(\.(\w+)(?= *\())/,
-
-    // function name (user), same as class name
-    /function +(\w+(?= *\())/
 ],
-
 // Keywords, Storage, Selector, Markup Italic, Diff Changed: base0E
 // Reserved keywords as of ECMAScript 2015
-MAGENTA = [
+MAGENTA: [
     /break(?=( [\w\d]+)?;)( )*/, /case(?= )/, /catch /, 
 
     /class(?= +)/, /const(?= +)/, /continue(?=;)/, 
@@ -95,115 +70,139 @@ MAGENTA = [
 
     /do(?= +\{)/, /else(?= +\{|\w+)/,  /export /, 
 
-    /extends/, /final/, /finally(?= *\{)/, 
+    /extends/, /finally(?= *<span)/, 
 
-    /for(?= *\()/, /function(?= +\w+)/,
+    /for(?= *)/, /function(?= +)/,
 
-    /if(?= \()/, /import(?= +\w+)/, 
+    /if(?= *)/, /import(?= +\w+)/, 
 
-    / +in +/, /instanceof(?= )/, 
+    / +in +/, /instanceof(?= *)/, 
 
     /let(?= +)/, /new(?= )/, 
 
-    /return(?= (\w+);)/, /switch(?= *\()/, 
+    /return(?= ;)/, /switch(?= *\()/, 
 
     /throw(?= )/, /try(?= *\{)/, 
         
     /typeof(?= )/, /var(?= +)/, 
 
-    /while(?= *\()/, /with/, /yield(?= )/
+    /while(?= *\()/, /with/, /yield(?= +)/
 ],
 
 // Comments, Invisibles, Line Highlighting: base03
-GREY = [
-    /\/\/(?=[^\n])/ 
-];
-
-
-
-
-// user color instead of names
-let STYLES = {
-    red     : '<span class="red">',        //0
-    orange  : '<span class="orange">',     //1
-    yellow  : '<span class="yellow">',     //2
-    green   : '<span class="green">',      //3
-    cyan    : '<span class="cyan">',       //4
-    blue    : '<span class="blue">',       //5
-    magenta : '<span class="magenta">',    //6
-    grey    : '<span class="grey">',       //7
-    close   : '</span>'
+GREY: [
+    /\/\/.*/ 
+]
 };
 
-function highlights() {
-    let codeblock = document.querySelector('.code');
-    let data = codeblock.textContent;
-    
-    // let matches = data.match(kw),
-    //     marks = [];
-    // // mark all keywords
-    // for (let i = 0; i < matches.length; i++) {
-    //     marks[i] = STYLES.megenta+matches[i]+STYLES.close;
-    // }
-    // console.log(matches);
-    // console.log(marks);
-    // let position = 0;
-    for (let i = 0; i < MAGENTA.length; i++) {
-        // get a pattern first
-        let re = new RegExp(MAGENTA[i], 'gm');
+// lookbehind patterns
+let LKBH = {
+// Classes: base0A: yellow + bold;
+YELLOW: [
+    // use $1 to refer to this group
+    /console(?=\.\w+)/,
+    /Object(?=\.\w+)/,
+    /RegExp(?= *\()/,
+    /String(?= *\()/,
 
+    // class Name (often user-defined)
+    /[A-Z]\w+(?= *\()/,
+],
+
+// Functions, Methods, Attribute IDs, Headings: base0D: blue
+// use $1 to refer to this group
+BLUE: [
+    // method name
+    /\.(\w+(?= *\())/,
+
+    // function name (user), same as class name
+    /\w+(?= *\()/
+]
+};
+
+
+
+// use color instead of names
+let STYLES = {
+    RED     : '<span class="red">',        //0
+    ORANGE  : '<span class="orange">',     //1
+    YELLOW  : '<span class="yellow">',     //2
+    GREEN   : '<span class="green">',      //3
+    CYAN    : '<span class="cyan">',       //4
+    BLUE    : '<span class="blue">',       //5
+    MAGENTA : '<span class="magenta">',    //6
+    GREY    : '<span class="grey">',       //7
+    CLOSE   : '</span>'
+};
+
+// get the textContent and replace targets with marked ones
+// function behindHighlights() {
+//     let codeblock = document.querySelector('.code');
+//     let data = codeblock.textContent;
+//     for (pattern in LKBH) {
+//         for (let i = 0 ; i < LKBH[pattern].length; i++) {
+//             // get a pattern first
+//             let re = new RegExp(LKBH[pattern][i], 'gm');
+//             // test it
+//             if (re.test(data)) {
+//                 // if true, use regex to replace all at one time
+//                 data = data.replace(re, STYLES[pattern]+'$&'+STYLES.CLOSE)
+//                 // data = data.replace(re, (p1, p2)=> {
+//                 //     if (p1 && p2) {
+//                 //         console.log(p1, p2);
+//                 //         return p1+STYLES[pattern]+p2+STYLES.CLOSE
+//                 //     } else {
+//                 //         return STYLES[pattern]+p1+STYLES.CLOSE;
+//                 //     };
+//                 // })
+                
+//             } else continue;
+//         // console.log(LKFW[pattern].length);
+//         }
+//     }
+//     console.log(data);
+//     codeblock.innerHTML = data;
+// }
+
+
+function forwardHighlights() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    // console.log(LKFW.ORANGE);
+    
+    for (let i = 0 ; i < LKFW.CYAN.length; i++) {
+        // get a pattern first
+        let re = new RegExp(LKFW.CYAN[i], 'gm');
         // test it
         if (re.test(data)) {
-            
             // if true, use regex to replace all at one time
-            data = data.replace(re, STYLES.magenta+'$&'+STYLES.close);
-
-            // console.log('finish replacing:\n', data);
-        
-
-            // position = data.indexOf(marks[i], position)+marks[i].length; // why -1 + 27
-            // console.log('new position:', position);
-            // console.log(data.slice(position, position+5));
+            data = data.replace(re, STYLES.CYAN+'$&'+STYLES.CLOSE);
         } else continue;
+    // console.log(LKFW[pattern].length);
     }
     console.log(data);
     codeblock.innerHTML = data;
 }
 
-
-
-
-
-// function highlights() {
-//     let codeblock = document.querySelector('.code');
-//     let data = codeblock.textContent; 
+    // for (pattern in LKFW) {
+    //     for (let i = 0 ; i < LKFW[pattern].length; i++) {
+    //         // get a pattern first
+    //         let re = new RegExp(LKFW[pattern][i], 'gm');
+    //         // test it
+    //         if (re.test(data)) {
+    //             // if true, use regex to replace all at one time
+    //             data = data.replace(re, STYLES[pattern]+'$&'+STYLES.CLOSE);
+    //         } else continue;
+    //     // console.log(LKFW[pattern].length);
+    //     }
+    // }
     
-//     let matches = {};
-//     for (let pattern of PATTERNS) {
-//         if (data.match(pattern)) {
-//             matches[PATTERNS.indexOf(pattern)] = data.match(pattern);
-//         }
-//     }
-    
-//     for (let match in matches) { // must use obj[prop]; not obj.prop
-//         for (let i = 0; i < matches[match].length; i++) {
-//             matches[match][i] = STYLES[Object.keys(STYLES)[match*1]]+matches[match][i]+STYLES.close; // mark them all!
-//         }     
-//     }                  
-//     console.log(matches);
-// }                    
-// keep a copy of the raw data;
-// parse/analyze it as much as possible
-// mark the recognized patterns/lexemes
-// replace the original data lexeme by lexeme 
-
-
-
 
 // detect the language and hightlight
 var lan = document.querySelector('.language').textContent;
 if (lan=='js') {
-    highlights();
+    // behindHighlights();
+    forwardHighlights();
 }
 
 
