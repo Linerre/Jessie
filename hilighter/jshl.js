@@ -120,7 +120,7 @@ BLUE: [
 ]
 };
 
-
+let test = /[\.,!@$\^;:"'\?\\\|]|\(|\)|\{|\}|\[|\]|\+|-|\*|\/|%|={1,3}|!={1,2}|>=|<=|>|</gm;
 
 // use color instead of names
 let STYLES = {
@@ -134,6 +134,13 @@ let STYLES = {
     GREY    : '<span class="grey">',       //7
     CLOSE   : '</span>'
 };
+
+let codeblock = document.querySelector('.code');
+let data = codeblock.innerHTML;
+
+data = data.replace(test, STYLES.CYAN+'$&'+STYLES.CLOSE);
+codeblock.innerHTML = data;
+
 
 // get the textContent and replace targets with marked ones
 // function behindHighlights() {
@@ -165,24 +172,24 @@ let STYLES = {
 // }
 
 
-function forwardHighlights() {
-    let codeblock = document.querySelector('.code');
-    let data = codeblock.innerHTML;
-    // console.log(LKFW.ORANGE);
+// function forwardHighlights() {
+//     let codeblock = document.querySelector('.code');
+//     let data = codeblock.innerHTML;
+//     // console.log(LKFW.ORANGE);
     
-    for (let i = 0 ; i < LKFW.CYAN.length; i++) {
-        // get a pattern first
-        let re = new RegExp(LKFW.CYAN[i], 'gm');
-        // test it
-        if (re.test(data)) {
-            // if true, use regex to replace all at one time
-            data = data.replace(re, STYLES.CYAN+'$&'+STYLES.CLOSE);
-        } else continue;
-    // console.log(LKFW[pattern].length);
-    }
-    console.log(data);
-    codeblock.innerHTML = data;
-}
+//     for (let i = 0 ; i < LKFW.CYAN.length; i++) {
+//         // get a pattern first
+//         let re = new RegExp(LKFW.CYAN[i], 'gm');
+//         // test it
+//         if (re.test(data)) {
+//             // if true, use regex to replace all at one time
+//             data = data.replace(re, STYLES.CYAN+'$&'+STYLES.CLOSE);
+//         } else continue;
+//     // console.log(LKFW[pattern].length);
+//     }
+//     console.log(data);
+//     codeblock.innerHTML = data;
+// }
 
     // for (pattern in LKFW) {
     //     for (let i = 0 ; i < LKFW[pattern].length; i++) {
@@ -199,10 +206,10 @@ function forwardHighlights() {
     
 
 // detect the language and hightlight
-var lan = document.querySelector('.language').textContent;
-if (lan=='js') {
-    // behindHighlights();
-    forwardHighlights();
-}
+// var lan = document.querySelector('.language').textContent;
+// if (lan=='js') {
+//     // behindHighlights();
+//     forwardHighlights();
+// }
 
 
