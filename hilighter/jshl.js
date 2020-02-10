@@ -1,126 +1,118 @@
 
 // In the colorscheme order
 
-// Lookforward pattern
-let  LKFW= {
 // Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
 // A few speical words: base08:red + italic
-// RED: [
-//     /this(?=(\.\w+)?)/,
-//     /arguments/,
-//     /super/
-// ],
-// Integers and Boolean values: base09: orange
-ORANGE: [
-    // Need to include more exceptions
-    /\d+(\.\d*)?/,
-
-    /true/, /false/,
-
-    /undefined/, /null/,
-
-    /NaN/,
-
-    /Infinity/
+let 
+// Comments, Invisibles, Line Highlighting: base03
+// #1 mark up this
+GREY= [
+    /\/\/[^\/]*<br>/gm
 ],
+
 // Strings: base0B: green
-GREEN: [
-    /'([^\\]*)'/,
-    /"(.*)"(?!>)/
+// #2
+GREEN = [
+    // String Single
+    // /'[^']*'/,
+    // String Double
+    // /"([^"]*)"/
+    // /"([^"]*)"(?!>)/
 ],
-//red|orange|yellow|green|cyan||magenta|grey)
+
+RED = [
+    /\bthis\b(?=(\.\w+)?)/,
+    /\barguments/,
+    /\bsuper/
+],
+// Integers and Boolean values: base09: orange
+ORANGE = [
+// Need to include more exceptions
+    /\d+(\.\d*)?/,
+    /\btrue\b|\bfalse\b/, 
+    /\bundefined\b|\bnull\b|\bNaN\b|\bInfinity\b/
+],
+
+
+
 // Re, punctuations, etc: base0C: cyan
-CYAN: [
-    // new
-    /new(?= +\w+)/,
-
-    // in
-    / +in(?= +\w+)/,
-
-    // void
+CYAN= [
+    // new and in
+    /\bnew\b(?= +\w+)|\bin\b(?= +\w+)|\binstanceof\b(?= +\w+)/,
 
     // punctuations
-    /[\.,!@$\^;:"'\?\\\|]/,
+    // /[\.,!@$\^;:"'\?\\\|]/,
 
-    // braces
-    /\(|\)|\{|\}|\[|\]/,
+    // // braces
+    // /\(|\)|\{|\}|\[|\]/,
 
-    // operaters
-    /\+|-|\*|\/|%/,
+    // // operaters
+    // /[\+\*%\/-](?= *\d+)|\/.+\/(?=[gmis]?)/,
 
-    /={1,3}|!={1,2}|>=|<=|>|</,
+    // /={1,3}|!={1,2}|>=|<=|>|</,
 
-    /\+=|-=|\*=|\/=/,
+    // /\+=|-=|\*=|\/=/,
 
-    /\+{2}|-{2}|/,
+    // /\+{2}|-{2}|/,
 
-    /\|\||&&/,
+    // /\|\||&&/,
 
     // regular expressions
-    /\/.*\//
+    //
 ],
 // Keywords, Storage, Selector, Markup Italic, Diff Changed: base0E
 // Reserved keywords as of ECMAScript 2015
-MAGENTA: [
-    /break(?=( [\w\d]+)?;)( )*/, /case(?= )/, /catch /, 
+MAGENTA= [
+    /\bbreak\b(?=( [\w\d]+)?;)( )*/, /\bcase\b(?= )/, 
+    
+    /\bcatch\b(?= *)/, 
 
-    /class(?= +)/, /const(?= +)/, /continue(?=;)/, 
+    /\bclass\b(?= +)/, /\bconst\b(?= +)/, /\bcontinue(?=;)/, 
 
-    /debugger;( )*/, /default(?=: *)/, /delete(?= +)/, 
+    /\bdebugger;/, /\bdefault(?=:)/, /delete(?= +)/, 
 
-    /do(?= +\{)/, /else(?= +\{|\w+)/,  /export /, 
+    /\bdo(?= +\{)/, /else(?= +\{|\w+)/,  /export /, 
 
-    /extends/, /finally(?= *<span)/, 
+    /\bextends\b(?= *)/, /\bfinally\b(?= *)/, 
 
-    /for(?= *)/, /function(?= +)/,
+    /\bfor(?= *)/, /\bfunction\b(?= +)/,
 
-    /if(?= *)/, /import(?= +\w+)/, 
+    /\bif(?= *)/, /import(?= +)/, 
 
-    / +in +/, /instanceof(?= *)/, 
+    /\blet(?= +)/, 
 
-    /let(?= +)/, /new(?= )/, 
+    /\breturn(?= ;)/, /\bswitch(?= *)/, 
 
-    /return(?= ;)/, /switch(?= *\()/, 
-
-    /throw(?= )/, /try(?= *\{)/, 
+    /\bthrow(?= *)/, /\btry(?= *)/, 
         
-    /typeof(?= )/, /var(?= +)/, 
+    /\btypeof(?= +)/, /\bvar(?= +)/, 
 
-    /while(?= *\()/, /with/, /yield(?= +)/
+    /\bwhile(?= *)/, /\bwith/, /\byield(?= +)/,
 ],
 
-// Comments, Invisibles, Line Highlighting: base03
-GREY: [
-    /\/\/.*/ 
-]
-};
 
-// lookbehind patterns
-let LKBH = {
 // Classes: base0A: yellow + bold;
-YELLOW: [
-    // use $1 to refer to this group
-    /console(?=\.\w+)/,
-    /Object(?=\.\w+)/,
-    /RegExp(?= *\()/,
-    /String(?= *\()/,
+YELLOW= [
+    /\bconsole\b/,
+    /\bObject\b/,
+    /\bRegExp\b/,
+    /\bString\b/,
+    /\bDate\b/,
+    /\bArray\b/,
 
     // class Name (often user-defined)
-    /[A-Z]\w+(?= *\()/,
+    /\b[A-Z]\w+\b/
 ],
 
 // Functions, Methods, Attribute IDs, Headings: base0D: blue
-// use $1 to refer to this group
-BLUE: [
+BLUE= [
     // method name
     /\.(\w+(?= *\())/,
 
     // function name (user), same as class name
     /\w+(?= *\()/
 ]
-};
 
-let test = /[\.,!@$\^;:"'\?\\\|]|\(|\)|\{|\}|\[|\]|\+|-|\*|\/|%|={1,3}|!={1,2}|>=|<=|>|</gm;
 
 // use color instead of names
 let STYLES = {
@@ -137,9 +129,26 @@ let STYLES = {
 
 let codeblock = document.querySelector('.code');
 let data = codeblock.innerHTML;
+console.log(data.match(/^( )*function.*/gm));
 
-data = data.replace(test, STYLES.CYAN+'$&'+STYLES.CLOSE);
-codeblock.innerHTML = data;
+// =================== mark-up functions ================
+function markComment() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    data = data.replace(GREY[0], STYLES.GREY+'$&'+STYLES.CLOSE);
+    codeblock.innerHTML = data;
+}
+
+function markString() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    for (let pattern of GREEN) {
+        data = data.replace(new RegExp(pattern, 'mg'), STYLES.GREEN+'$&'+STYLES.CLOSE);
+    }
+    codeblock.innerHTML = data;
+}
+
+
 
 
 // get the textContent and replace targets with marked ones
@@ -206,10 +215,12 @@ codeblock.innerHTML = data;
     
 
 // detect the language and hightlight
-// var lan = document.querySelector('.language').textContent;
-// if (lan=='js') {
+var lan = document.querySelector('.language').textContent;
+if (lan=='js') {
+    markComment();
+    markString();
 //     // behindHighlights();
 //     forwardHighlights();
-// }
+}
 
 
