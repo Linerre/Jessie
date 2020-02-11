@@ -54,31 +54,25 @@ CYAN = [
 
     // 3 punctuations
     // $ is special
-    /;(?=[\n ]+)/,
-
-
+    /;(?=\n( )*)/,
 
     // 4 braces
     /\(|\)|\{|\}|\[|\]/,
 
-    // 5 +-*/%
-    /([-%\+\*\/\.,!@\^:\?\\\|])#/,
+    // 5 +-*/%?!:
+    /([-&%\+\*\/\.,!@\^:\?\\])#/,
+
+    // 6 boolean operator || 
+    / \|\| /,
+
+    // 7 boolean operator &&
+    / &amp;&amp; /,
 
 
-    // 6 " '
-    // /&quot;|&apos;/,
 
     // new and in
     /\bnew\b(?= +\w+)|\bin\b(?= +\w+)|\binstanceof\b(?= +\w+)/,
 
-
-    // /={3}|!={2}|>=|<=|>|</,
-
-    // /\+=|-=|\*=|\/=/,
-
-    // /\+{2}|-{2}|/,
-
-    // /\|\||&&/,
 ],
 
 // Keywords, Storage, Selector, Markup Italic, Diff Changed: base0E
@@ -206,15 +200,22 @@ function markOperator() {
     '$&'+
     STYLES.CLOSE);
 
-    // +-*%/
+    // 5 +-*/%?!:
     data = data.replace(new RegExp(CYAN[5], 'g'), STYLES.CYAN+
     '$1'+
     STYLES.CLOSE);
 
-    // // quotes
-    // data = data.replace(new RegExp(CYAN[6], 'g'), STYLES.CYAN+
-    // '$&'+
-    // STYLES.CLOSE);
+    // boolean operator ||
+    data = data.replace(new RegExp(CYAN[6], 'g'), STYLES.CYAN+
+    '$&'+
+    STYLES.CLOSE);
+
+    // boolean operator ||
+    data = data.replace(new RegExp(CYAN[7], 'g'), STYLES.CYAN+
+    '$&'+
+    STYLES.CLOSE);
+
+
     
     console.log(data);
     
