@@ -7,17 +7,22 @@ let
 // Comments, Invisibles, Line Highlighting: base03
 // #1 mark up this
 GREY= [
-    /\/\/[^\/]*<br>/gm
+    
+    /\/\/[^\/]*<br>/gm //consider using # to help
 ],
 
 // Strings: base0B: green
 // #2
 GREEN = [
-    // String Single
-    // /'[^']*'/,
     // String Double
-    // /"([^"]*)"/
-    // /"([^"]*)"(?!>)/
+    // replace this first to avoid class="xxx" trouble
+    /"([^"]*)"/,
+
+    // String Single
+    // Not allow 'My name is "Peter"!'
+    /'([^'"]*)'/
+
+    
 ],
 
 RED = [
@@ -36,33 +41,42 @@ ORANGE = [
 
 
 // Re, punctuations, etc: base0C: cyan
-CYAN= [
+// To make things easier, let's use #
+CYAN = [
+    // 0 match let|var|const xxx "=""
+    /(let|var|const)([\w ]+)(=)/,
+    
+    // 1 match =|+=|-=|*=|/=|%=|==|===|!=|!==; using # to assist
+    /([\+\*\/!%-]?={1,3})#/,
+    
+    // 2 match >=|<=|>|<; Note the html symbol
+    /&gt;=|&lt;=|&gt;|&lt;/,
+
+    // 3 punctuations
+    // $ is special
+    /[\.,!@\^:\?\\\|]|;(?=[\n ]+)/,
+
+    // 4 braces
+    /\(|\)|\{|\}|\[|\]/,
+
     // new and in
     /\bnew\b(?= +\w+)|\bin\b(?= +\w+)|\binstanceof\b(?= +\w+)/,
-
-    // punctuations
-    // /[\.,!@$\^;:"'\?\\\|]/,
-
-    // // braces
-    // /\(|\)|\{|\}|\[|\]/,
 
     // // operaters
     // /[\+\*%\/-](?= *\d+)|\/.+\/(?=[gmis]?)/,
 
-    // /={1,3}|!={1,2}|>=|<=|>|</,
+    // /={3}|!={2}|>=|<=|>|</,
 
     // /\+=|-=|\*=|\/=/,
 
     // /\+{2}|-{2}|/,
 
     // /\|\||&&/,
-
-    // regular expressions
-    //
 ],
+
 // Keywords, Storage, Selector, Markup Italic, Diff Changed: base0E
 // Reserved keywords as of ECMAScript 2015
-MAGENTA= [
+MAGENTA = [
     /\bbreak\b(?=( [\w\d]+)?;)( )*/, /\bcase\b(?= )/, 
     
     /\bcatch\b(?= *)/, 
@@ -92,7 +106,7 @@ MAGENTA= [
 
 
 // Classes: base0A: yellow + bold;
-YELLOW= [
+YELLOW = [
     /\bconsole\b/,
     /\bObject\b/,
     /\bRegExp\b/,
@@ -105,7 +119,7 @@ YELLOW= [
 ],
 
 // Functions, Methods, Attribute IDs, Headings: base0D: blue
-BLUE= [
+BLUE = [
     // method name
     /\.(\w+(?= *\())/,
 
@@ -127,28 +141,65 @@ let STYLES = {
     CLOSE   : '</span>'
 };
 
-let codeblock = document.querySelector('.code');
-let data = codeblock.innerHTML;
-console.log(data.match(/^( )*function.*/gm));
 
 // =================== mark-up functions ================
 function markComment() {
     let codeblock = document.querySelector('.code');
     let data = codeblock.innerHTML;
-    data = data.replace(GREY[0], STYLES.GREY+'$&'+STYLES.CLOSE);
+    data = data.replace(GREY[0], (match)=>{
+        return STYLES.GREY+match.slice(0, -4)+STYLES.CLOSE});
     codeblock.innerHTML = data;
 }
 
 function markString() {
     let codeblock = document.querySelector('.code');
     let data = codeblock.innerHTML;
-    for (let pattern of GREEN) {
-        data = data.replace(new RegExp(pattern, 'mg'), STYLES.GREEN+'$&'+STYLES.CLOSE);
-    }
+    // first replace stringD
+    data = data.replace(new RegExp(GREEN[0], 'g'), '"'+STYLES.GREEN+
+        '$1'+
+        STYLES.CLOSE+'"');
+
+    // then replace stringS
+    data = data.replace(new RegExp(GREEN[1], 'g'), '\''+STYLES.GREEN+
+        '$1'+
+        STYLES.CLOSE+'\'');
+    
     codeblock.innerHTML = data;
+
 }
 
+function markOperator() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    // mark let|var|const declarations
+    data = data.replace(new RegExp(CYAN[0], 'g'), '$1'+'$2'+
+    STYLES.CYAN+
+    '$3'+
+    STYLES.CLOSE);
+    
+    // =|+=|-=|*=|/=|%=|==|===|!=|!==
+    data = data.replace(new RegExp(CYAN[1], 'g'), STYLES.CYAN+
+    '$1'+
+    STYLES.CLOSE);
+    
+    // >=|<=|>|<
+    data = data.replace(new RegExp(CYAN[2], 'g'), STYLES.CYAN+
+    '$&'+
+    STYLES.CLOSE);
+    
+    // punctuations
+    data = data.replace(new RegExp(CYAN[3], 'g'), STYLES.CYAN+
+    '$&'+
+    STYLES.CLOSE);
 
+    data = data.replace(new RegExp(CYAN[4], 'g'), STYLES.CYAN+
+    '$&'+
+    STYLES.CLOSE);
+    
+    console.log(data);
+    
+    codeblock.innerHTML = data;
+}
 
 
 // get the textContent and replace targets with marked ones
@@ -217,10 +268,10 @@ function markString() {
 // detect the language and hightlight
 var lan = document.querySelector('.language').textContent;
 if (lan=='js') {
+    markString(); // to avoid any class="xxx" trouble!
     markComment();
-    markString();
-//     // behindHighlights();
-//     forwardHighlights();
+    markOperator();
+
 }
 
 
