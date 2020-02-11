@@ -32,9 +32,11 @@ RED = [
 ],
 // Integers and Boolean values: base09: orange
 ORANGE = [
-// Need to include more exceptions
-    /\d+(\.\d*)?/,
-    /\btrue\b|\bfalse\b/, 
+    // use # to assist
+    /(\d+)#/,
+
+    /\btrue(?=(<span)?)|\bfalse\b/, 
+
     /\bundefined\b|\bnull\b|\bNaN\b|\bInfinity\b/
 ],
 
@@ -45,22 +47,22 @@ ORANGE = [
 CYAN = [
     // 0 match let|var|const xxx "=""
     /(let|var|const)([\w ]+)(=)/,
+
+    // 1 punctuations
+    // $ is special
+    /;(?=\n+)/, // no tracing whitespaces at the end of a line!
     
-    // 1 match =|+=|-=|*=|/=|%=|==|===|!=|!==; using # to assist
-    /([\+\*\/!%-]?={1,3})#/,
-    
-    // 2 match >=|<=|>|<; Note the html symbol
+    // 2 >=|<=|>|<; Note the html symbol
     /&gt;=|&lt;=|&gt;|&lt;/,
 
-    // 3 punctuations
-    // $ is special
-    /;(?=\n( )*)/,
+    // 3 =|+=|-=|*=|/=|%=|==|===|!=|!==; using # to assist
+    /([\+\*\/!%-]?={1,3})#/,
 
     // 4 braces
     /\(|\)|\{|\}|\[|\]/,
 
-    // 5 +-*/%?!:
-    /([-&%\+\*\/\.,!@\^:\?\\])#/,
+    // 5 +-*/%?!:    using # to assist
+    /([-&%\+\*\/\.,!@\^:\?\\]{1,2})#/,
 
     // 6 boolean operator || 
     / \|\| /,
@@ -68,9 +70,7 @@ CYAN = [
     // 7 boolean operator &&
     / &amp;&amp; /,
 
-
-
-    // new and in
+    // 8 new and in
     /\bnew\b(?= +\w+)|\bin\b(?= +\w+)|\binstanceof\b(?= +\w+)/,
 
 ],
@@ -78,7 +78,7 @@ CYAN = [
 // Keywords, Storage, Selector, Markup Italic, Diff Changed: base0E
 // Reserved keywords as of ECMAScript 2015
 MAGENTA = [
-    /\bbreak\b(?=( [\w\d]+)?;)( )*/, /\bcase\b(?= )/, 
+    /break/, /\bcase\b(?= )/, 
     
     /\bcatch\b(?= *)/, 
 
@@ -90,42 +90,40 @@ MAGENTA = [
 
     /\bextends\b(?= *)/, /\bfinally\b(?= *)/, 
 
-    /\bfor(?= *)/, /\bfunction\b(?= +)/,
+    /\bfor(?= *<span)/, /\bfunction\b(?= +)/,
 
     /\bif(?= *)/, /import(?= +)/, 
 
     /\blet(?= +)/, 
 
-    /\breturn(?= ;)/, /\bswitch(?= *)/, 
+    /\breturn/, /\bswitch(?= *)/, 
 
     /\bthrow(?= *)/, /\btry(?= *)/, 
         
     /\btypeof(?= +)/, /\bvar(?= +)/, 
 
-    /\bwhile(?= *)/, /\bwith/, /\byield(?= +)/,
+    /\bwhile(?= *)/, /\bwith/, /\byield(?= +)/
 ],
 
 
 // Classes: base0A: yellow + bold;
 YELLOW = [
-    /\bconsole\b/,
-    /\bObject\b/,
-    /\bRegExp\b/,
-    /\bString\b/,
-    /\bDate\b/,
-    /\bArray\b/,
+    /console(?=<span)/,     //console.
+    /Object(?= *<span)/,    //Object()
+    /RegExp(?= *<span)/,
+    /String(?= *<span)/,
+    /Date(?= *<span)/,
+    /Array(?= *<span)/,
 
     // class Name (often user-defined)
-    /\b[A-Z]\w+\b/
+    /\b[A-Z]\w+\b(?=<span)/
 ],
 
 // Functions, Methods, Attribute IDs, Headings: base0D: blue
 BLUE = [
-    // method name
-    /\.(\w+(?= *\())/,
-
-    // function name (user), same as class name
-    /\w+(?= *\()/
+    // method and function name
+    // <span class="cyan">\.<\/span>
+    /[a-zA-Z]+(?= *<span)/,
 ]
 
 
@@ -179,20 +177,20 @@ function markOperator() {
     STYLES.CYAN+
     '$3'+
     STYLES.CLOSE);
-    
-    // =|+=|-=|*=|/=|%=|==|===|!=|!==
+
+    // ;
     data = data.replace(new RegExp(CYAN[1], 'g'), STYLES.CYAN+
-    '$1'+
+    '$&'+
     STYLES.CLOSE);
     
     // >=|<=|>|<
     data = data.replace(new RegExp(CYAN[2], 'g'), STYLES.CYAN+
     '$&'+
     STYLES.CLOSE);
-    
-    // punctuations
+
+    // =|+=|-=|*=|/=|%=|==|===|!=|!==
     data = data.replace(new RegExp(CYAN[3], 'g'), STYLES.CYAN+
-    '$&'.slice(0)+
+    '$1'+
     STYLES.CLOSE);
 
     // braces
@@ -215,75 +213,59 @@ function markOperator() {
     '$&'+
     STYLES.CLOSE);
 
-
-    
-    console.log(data);
+    // new, in, instanceof
+    data = data.replace(new RegExp(CYAN[8], 'g'), STYLES.CYAN+
+    '$&'+
+    STYLES.CLOSE);
+    // console.log(data);
     
     codeblock.innerHTML = data;
 }
 
+function markKeywords() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    for (let pattern of MAGENTA) {
+        if (pattern.test(data)) {
+            data = data.replace(new RegExp(pattern, 'g'), STYLES.MAGENTA+
+            '$&'+STYLES.CLOSE);
+        } else continue;
+    }
+    codeblock.innerHTML = data;
+}
 
-// get the textContent and replace targets with marked ones
-// function behindHighlights() {
-//     let codeblock = document.querySelector('.code');
-//     let data = codeblock.textContent;
-//     for (pattern in LKBH) {
-//         for (let i = 0 ; i < LKBH[pattern].length; i++) {
-//             // get a pattern first
-//             let re = new RegExp(LKBH[pattern][i], 'gm');
-//             // test it
-//             if (re.test(data)) {
-//                 // if true, use regex to replace all at one time
-//                 data = data.replace(re, STYLES[pattern]+'$&'+STYLES.CLOSE)
-//                 // data = data.replace(re, (p1, p2)=> {
-//                 //     if (p1 && p2) {
-//                 //         console.log(p1, p2);
-//                 //         return p1+STYLES[pattern]+p2+STYLES.CLOSE
-//                 //     } else {
-//                 //         return STYLES[pattern]+p1+STYLES.CLOSE;
-//                 //     };
-//                 // })
-                
-//             } else continue;
-//         // console.log(LKFW[pattern].length);
-//         }
-//     }
-//     console.log(data);
-//     codeblock.innerHTML = data;
-// }
+function markObjects() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    for (let pattern of YELLOW) {
+        if (pattern.test(data)) {
+            data = data.replace(new RegExp(pattern, 'g'), STYLES.YELLOW+
+            '$&'+STYLES.CLOSE);
+        } else continue;
+    }
+    codeblock.innerHTML = data;
+}
+function markMethods() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    for (let pattern of BLUE) {
+        if (pattern.test(data)) {
+            data = data.replace(new RegExp(pattern, 'g'), 
+            STYLES.BLUE+'$&'+STYLES.CLOSE)
+        } else continue;
+    }
+    codeblock.innerHTML = data;
+}
 
-
-// function forwardHighlights() {
-//     let codeblock = document.querySelector('.code');
-//     let data = codeblock.innerHTML;
-//     // console.log(LKFW.ORANGE);
+function markNumbers() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    data = data.replace(new RegExp(ORANGE[0], 'g'), STYLES.ORANGE+
+    '$1'+
+    STYLES.CLOSE); 
     
-//     for (let i = 0 ; i < LKFW.CYAN.length; i++) {
-//         // get a pattern first
-//         let re = new RegExp(LKFW.CYAN[i], 'gm');
-//         // test it
-//         if (re.test(data)) {
-//             // if true, use regex to replace all at one time
-//             data = data.replace(re, STYLES.CYAN+'$&'+STYLES.CLOSE);
-//         } else continue;
-//     // console.log(LKFW[pattern].length);
-//     }
-//     console.log(data);
-//     codeblock.innerHTML = data;
-// }
-
-    // for (pattern in LKFW) {
-    //     for (let i = 0 ; i < LKFW[pattern].length; i++) {
-    //         // get a pattern first
-    //         let re = new RegExp(LKFW[pattern][i], 'gm');
-    //         // test it
-    //         if (re.test(data)) {
-    //             // if true, use regex to replace all at one time
-    //             data = data.replace(re, STYLES[pattern]+'$&'+STYLES.CLOSE);
-    //         } else continue;
-    //     // console.log(LKFW[pattern].length);
-    //     }
-    // }
+    codeblock.innerHTML =data;
+}
     
 
 // detect the language and hightlight
@@ -292,7 +274,10 @@ if (lan=='js') {
     markString(); // to avoid any class="xxx" trouble!
     markComment();
     markOperator();
-
+    markKeywords();
+    markObjects();
+    markMethods();
+    markNumbers();
 }
 
 
