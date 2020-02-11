@@ -54,16 +54,23 @@ CYAN = [
 
     // 3 punctuations
     // $ is special
-    /[\.,!@\^:\?\\\|]|;(?=[\n ]+)/,
+    /;(?=[\n ]+)/,
+
+
 
     // 4 braces
     /\(|\)|\{|\}|\[|\]/,
 
+    // 5 +-*/%
+    /([-%\+\*\/\.,!@\^:\?\\\|])#/,
+
+
+    // 6 " '
+    // /&quot;|&apos;/,
+
     // new and in
     /\bnew\b(?= +\w+)|\bin\b(?= +\w+)|\binstanceof\b(?= +\w+)/,
 
-    // // operaters
-    // /[\+\*%\/-](?= *\d+)|\/.+\/(?=[gmis]?)/,
 
     // /={3}|!={2}|>=|<=|>|</,
 
@@ -155,14 +162,16 @@ function markString() {
     let codeblock = document.querySelector('.code');
     let data = codeblock.innerHTML;
     // first replace stringD
-    data = data.replace(new RegExp(GREEN[0], 'g'), '"'+STYLES.GREEN+
-        '$1'+
-        STYLES.CLOSE+'"');
+    data = data.replace(new RegExp(GREEN[0], 'g'), 
+    STYLES.CYAN+'"'+STYLES.CLOSE+
+    STYLES.GREEN+'$1'+STYLES.CLOSE+
+    STYLES.CYAN+'"'+STYLES.CLOSE);
 
     // then replace stringS
-    data = data.replace(new RegExp(GREEN[1], 'g'), '\''+STYLES.GREEN+
-        '$1'+
-        STYLES.CLOSE+'\'');
+    data = data.replace(new RegExp(GREEN[1], 'g'), 
+    STYLES.CYAN+'\''+STYLES.CLOSE+
+    STYLES.GREEN+'$1'+STYLES.CLOSE+
+    STYLES.CYAN+'\''+STYLES.CLOSE);
     
     codeblock.innerHTML = data;
 
@@ -189,12 +198,23 @@ function markOperator() {
     
     // punctuations
     data = data.replace(new RegExp(CYAN[3], 'g'), STYLES.CYAN+
-    '$&'+
+    '$&'.slice(0)+
     STYLES.CLOSE);
 
+    // braces
     data = data.replace(new RegExp(CYAN[4], 'g'), STYLES.CYAN+
     '$&'+
     STYLES.CLOSE);
+
+    // +-*%/
+    data = data.replace(new RegExp(CYAN[5], 'g'), STYLES.CYAN+
+    '$1'+
+    STYLES.CLOSE);
+
+    // // quotes
+    // data = data.replace(new RegExp(CYAN[6], 'g'), STYLES.CYAN+
+    // '$&'+
+    // STYLES.CLOSE);
     
     console.log(data);
     
