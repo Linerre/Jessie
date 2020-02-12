@@ -49,11 +49,10 @@ CYAN = [
 
     // 1 punctuations
     // $ is special
-    /;(?=[\n ]+)/, // if no tracing whitespaces at the end of a line!
-                   // then for (let i = 0;) will fail!
+    /;(?= *\n)(?![=\d])/,  // not allow = followed to avoid marking
+                             // the below 3
     
     // 2 >=|<=|>|<; Note the html symbol
-    // FIXME
     /&gt;=|&lt;=|&gt;|&lt;/,
 
     // 3 =|+=|-=|*=|/=|%=|==|===|!=|!==; using # to assist
@@ -73,6 +72,9 @@ CYAN = [
 
     // 8 new and in
     /\bnew\b(?= +\w+)|\bin\b(?= +\w+)|\binstanceof\b(?= +\w+)/,
+
+    // 9 regualr expressions
+    /(\/(?!span>)[^\/]+\/)([gmiyu]+)/
 
 ],
 
@@ -272,6 +274,15 @@ function markNumbers() {
     codeblock.innerHTML =data;
 }
 
+function markRegExp() {
+    let codeblock = document.querySelector('.code');
+    let data = codeblock.innerHTML;
+    data = data.replace(new RegExp(CYAN[9], 'g'), 
+    STYLES.CYAN+'$1'+STYLES.CLOSE+
+    STYLES.MAGENTA+'$2'+STYLES.CLOSE); 
+
+    codeblock.innerHTML =data;
+}
 
     
 
@@ -285,6 +296,8 @@ if (lan=='js') {
     markObjects();
     markMethods();
     markNumbers();
+    markRegExp();
+    
 }
 
 
