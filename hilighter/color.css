@@ -16,7 +16,7 @@ pre code {
     background-color: #343D46;
     color: #D8DEE9; /* foreground color */
     /* margin: 2px 2px; */
-    padding: 2px 5px 2px 10px;
+    padding: 0 5px 0 2em;
 }
 /* .card {
     font-family: arial;
