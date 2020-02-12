@@ -1,8 +1,7 @@
 
 // In the colorscheme order
 
-// Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-// A few speical words: base08:red + italic
+
 let 
 // Comments, Invisibles, Line Highlighting: base03
 // #1 mark up this
@@ -25,6 +24,8 @@ GREEN = [
     
 ],
 
+// Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
+// A few speical words: base08:red + italic
 RED = [
     /\bthis\b(?=(\.\w+)?)/,
     /\barguments/,
@@ -35,9 +36,7 @@ ORANGE = [
     // use # to assist
     /(\d+)#/,
 
-    /\btrue(?=(<span)?)|\bfalse\b/, 
-
-    /\bundefined\b|\bnull\b|\bNaN\b|\bInfinity\b/
+    /true|false|undefined|null|NaN|Infinity/
 ],
 
 
@@ -50,9 +49,11 @@ CYAN = [
 
     // 1 punctuations
     // $ is special
-    /;(?=\n+)/, // no tracing whitespaces at the end of a line!
+    /;(?=[\n ]+)/, // if no tracing whitespaces at the end of a line!
+                   // then for (let i = 0;) will fail!
     
     // 2 >=|<=|>|<; Note the html symbol
+    // FIXME
     /&gt;=|&lt;=|&gt;|&lt;/,
 
     // 3 =|+=|-=|*=|/=|%=|==|===|!=|!==; using # to assist
@@ -123,7 +124,7 @@ YELLOW = [
 BLUE = [
     // method and function name
     // <span class="cyan">\.<\/span>
-    /[a-zA-Z]+(?= *<span)/,
+    /[a-z][a-zA-Z0-9]+(?= *<span class="cyan">\()/,
 ]
 
 
@@ -263,9 +264,15 @@ function markNumbers() {
     data = data.replace(new RegExp(ORANGE[0], 'g'), STYLES.ORANGE+
     '$1'+
     STYLES.CLOSE); 
+
+    data = data.replace(new RegExp(ORANGE[1], 'g'), STYLES.ORANGE+
+    '$&'+
+    STYLES.CLOSE);
     
     codeblock.innerHTML =data;
 }
+
+
     
 
 // detect the language and hightlight
