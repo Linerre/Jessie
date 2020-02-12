@@ -89,7 +89,7 @@ MAGENTA = [
 
     /\bdebugger;/, /\bdefault(?=:)/, /delete(?= +)/, 
 
-    /\bdo(?= +\{)/, /else(?= +\{|\w+)/,  /export /, 
+    /\bdo(?= +\{)/, /else(?= +)/,  /export /, 
 
     /\bextends\b(?= *)/, /\bfinally\b(?= *)/, 
 
@@ -296,8 +296,7 @@ if (lan=='js') {
     markObjects();
     markMethods();
     markNumbers();
-    markRegExp();
-    
+    markRegExp();  
 }
 
 
