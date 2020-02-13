@@ -9,7 +9,6 @@ GREY = [
 ],
 
 // Strings: base0B: green
-// #2
 GREEN = [
     // String Double
     // replace this first to avoid class="xxx" trouble
@@ -18,7 +17,7 @@ GREEN = [
     // String Single
     // Not allow 'My name is "Peter"!'
     /'([^'"]*)'/
-];
+],
 
 // Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
 // A few speical words: base08:red + italic
@@ -121,7 +120,7 @@ BLUE = [
     // method and function name
     // <span class="cyan">\.<\/span>
     /[a-z][a-zA-Z0-9]+(?= *<span class="cyan">\()/,
-]
+];
 
 // color schemes
 let STYLES = {
@@ -136,7 +135,6 @@ let STYLES = {
     CLOSE   : '</span>'
 };
 
-// data = data.replace(comment, '<span class="grey">'+'$&'+'</span>');
 
 // ============== highlight string
 // stringD
@@ -154,7 +152,7 @@ data = data.replace(new RegExp(GREEN[1], 'g'),
 data = data.replace(GREY[0], (match)=>{
     return STYLES.GREY+match.slice(0, -4)+STYLES.CLOSE});
 
-// Operators
+// =============== highlight Operators
 data = data.replace(new RegExp(CYAN[0], 'g'), '$1'+'$2'+
     STYLES.CYAN+
     '$3'+
