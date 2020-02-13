@@ -1,0 +1,63 @@
+.card {
+    font-family: arial;
+    font-size: 16px;
+    text-align: left;
+    background-color: #D8DEE9;
+    color: #343D46;
+}
+
+.language {
+    display: none;
+}
+
+pre code {
+    display: block;
+    font-family: Monaco, Menlo;
+    background-color: #343D46;
+    color: #D8DEE9; /* foreground color */
+    /* margin: 2px 2px; */
+    padding: 0 5px 0 2em;
+}
+/* .card {
+    font-family: arial;
+    font-size: 16px;
+    text-align: left;
+    color: #D8DEE9;
+    background-color: #343D46;
+} */
+
+a {
+    color: #6699CC;
+    text-decoration: none;
+    border-bottom: 2px solid #6699CC;
+}
+
+/* Oceanic Colorscheme */
+/* base08 */
+.red {color: #EC5f67; font-style: italic;}
+
+/* base09 */
+.orange {color: #F99157;}
+
+/* base0A */
+.yellow {color: #FAC863; font-weight: 400;}
+
+/* base0B */
+.green {color: #99C794;}
+
+/* base0C */
+.cyan {color: #5FB3B3;}
+
+/* base0D */
+.blue {color: #6699CC;}
+
+/* base0E */
+.magenta {color: #C594C5;}
+
+/* comment base03 */
+.grey {color: #65737E;}
+
+
+
+
+
