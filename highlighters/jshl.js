@@ -1,4 +1,4 @@
-let codeblock = document.querySelector('code');
+let codeblock = document.querySelector('code.code');
 let data = codeblock.innerHTML;
 
 let 
@@ -135,7 +135,7 @@ let STYLES = {
     CLOSE   : '</span>'
 };
 
-
+function highlight() {
 // ============== highlight string
 // stringD
 data = data.replace(new RegExp(GREEN[0], 'g'), 
@@ -232,4 +232,9 @@ data = data.replace(new RegExp(ORANGE[1], 'g'), STYLES.ORANGE+
     STYLES.CLOSE);
 
 codeblock.innerHTML = data;
+};
 
+let lan = document.getElementsByClassName('lang')[0];
+if (lan.textContent =='js') {
+    highlight();
+}
