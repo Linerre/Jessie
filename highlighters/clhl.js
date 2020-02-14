@@ -15,9 +15,9 @@ BLUE = [
 
     /u?mount(?= )/, /fdisk(?= )/, 
     
-    /find(?= )/, /locate(?= )/, /touch(?= )/, /stat(?= ?)/,
+    /find(?= <span)/, /locate(?= )/, /touch(?= )/, /stat(?= ?)/,
 
-    /grep(?= )/, /awk(?= )/,
+    /grep(?= <span)/, /awk(?= )/,
 
     /tar(?= )/, /gzip(?= )/
 ],
@@ -36,10 +36,21 @@ GREEN = [
 MAGENTA = [
     /for(?= +)/, /(?: +)in(?= +)/,
 
-   /do(?= ?)/, /if(?= +)/, /then(?= ?)/, /else(?= ?)/,
+   /do(?=\n)/, /if(?= +<span)/, /then(?= ?)/, /else(?=\n)/,
 
-   /fi(?= ?)/, /done/
+   /fi(?=\n)/, /done\n/
+],
+
+CYAN = [
+    /\||;/,
+    /-/,
+    /&gt;|&lt;/
+],
+
+ORANGE = [
+    /(-)(\w+)/
 ];
+
 
 let STYLES = {
     RED     : '<span class="red">',        //0
@@ -72,6 +83,34 @@ function highlight() {
     command = command.replace(new RegExp(GREY[0], 'g'), 
         STYLES.GREY+'$&'+STYLES.CLOSE);
     
+    // ====== highlight options
+    command = command.replace(new RegExp(ORANGE[0], 'g'), 
+    '$1'+STYLES.ORANGE+'$2'+STYLES.CLOSE);
+
+    // ====== highlight Operators
+    for (let op of CYAN) {
+        if (op.test(command)) {
+            command = command.replace(new RegExp(op, 'g'), 
+            STYLES.CYAN+'$&'+STYLES.CLOSE);
+        } 
+    }
+
+    // ====== highlight Keywords (if, done, etc)
+     for (let kw of MAGENTA) {
+        if (kw.test(command)) {
+            command = command.replace(new RegExp(kw, 'g'), 
+            STYLES.MAGENTA+'$&'+STYLES.CLOSE);
+        } 
+    }
+
+    // ====== highlight Commands
+    for (let cm of BLUE) {
+        if (cm.test(command)) {
+            command = command.replace(new RegExp(cm, 'g'), 
+            STYLES.BLUE+'$&'+STYLES.CLOSE);
+        } 
+    }
+
     codeblock.innerHTML = command;
     console.log(command);
 }
