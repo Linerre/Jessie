@@ -1,15 +1,17 @@
-let codeblock = document.querySelector('code.code');
-let data = codeblock.innerHTML;
+import {STYLES as st} from "./styles.js";
 
-let 
+export let jsCode = document.querySelector('code');
+export let data = jsCode.innerHTML;
+
+export let 
 // Comments, Invisibles, Line Highlighting: base03
 // #1 mark up this
-GREY = [
+JSGREY = [
     /\/\/[^\/]*<br>/gm //consider using # to help
 ],
 
-// Strings: base0B: green
-GREEN = [
+// Strings: base0B: JSgreen
+JSGREEN = [
     // String Double
     // replace this first to avoid class="xxx" trouble
     /"([^"]*)"/,
@@ -21,13 +23,13 @@ GREEN = [
 
 // Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
 // A few speical words: base08:red + italic
-RED = [
+JSRED = [
     /\bthis\b(?=(\.\w+)?)/,
     /\barguments/,
     /\bsuper/
 ],
 // Integers and Boolean values: base09: orange
-ORANGE = [
+JSORANGE = [
     // use # to assist
     /(\d+)#/,
 
@@ -37,7 +39,7 @@ ORANGE = [
 
 // Re, punctuations, etc: base0C: cyan
 // To make things easier, let's use #
-CYAN = [
+JSCYAN = [
     // 0 match let|var|const xxx "=""
     /(let|var|const)([\w ]+)(=)/,
 
@@ -74,7 +76,7 @@ CYAN = [
 
 // Keywords, Storage, Selector, Markup Italic, Diff Changed: base0E
 // Reserved keywords as of ECMAScript 2015
-MAGENTA = [
+JSMAGENTA = [
     /break/, /\bcase\b(?= )/, 
     
     /\bcatch\b(?= *)/, 
@@ -103,7 +105,7 @@ MAGENTA = [
 ],
 
 // Classes: base0A: yellow + bold;
-YELLOW = [
+JSYELLOW = [
     /console(?=<span)/,     //console.
     /Object(?= *<span)/,    //Object()
     /RegExp(?= *<span)/,
@@ -116,122 +118,110 @@ YELLOW = [
 ],
 
 // Functions, Methods, Attribute IDs, Headings: base0D: blue
-BLUE = [
+JSBLUE = [
     // method and function name
     // <span class="cyan">\.<\/span>
     /[a-z][a-zA-Z0-9]+(?= *<span class="cyan">\()/,
 ];
 
-// color schemes
-let STYLES = {
-    RED     : '<span class="red">',        //0
-    ORANGE  : '<span class="orange">',     //1
-    YELLOW  : '<span class="yellow">',     //2
-    GREEN   : '<span class="green">',      //3
-    CYAN    : '<span class="cyan">',       //4
-    BLUE    : '<span class="blue">',       //5
-    MAGENTA : '<span class="magenta">',    //6
-    GREY    : '<span class="grey">',       //7
-    CLOSE   : '</span>'
-};
 
 function highlight() {
 // ============== highlight string
 // stringD
-data = data.replace(new RegExp(GREEN[0], 'g'), 
-    STYLES.CYAN+'"'+STYLES.CLOSE+
-    STYLES.GREEN+'$1'+STYLES.CLOSE+
-    STYLES.CYAN+'"'+STYLES.CLOSE);
+data = data.replace(new RegExp(JSGREEN[0], 'g'), 
+    st.JSCYAN+'"'+st.CLOSE+
+    st.JSGREEN+'$1'+st.CLOSE+
+    st.JSCYAN+'"'+st.CLOSE);
 // stringS
-data = data.replace(new RegExp(GREEN[1], 'g'), 
-    STYLES.CYAN+'\''+STYLES.CLOSE+
-    STYLES.GREEN+'$1'+STYLES.CLOSE+
-    STYLES.CYAN+'\''+STYLES.CLOSE);
+data = data.replace(new RegExp(JSGREEN[1], 'g'), 
+    st.JSCYAN+'\''+st.CLOSE+
+    st.JSGREEN+'$1'+st.CLOSE+
+    st.JSCYAN+'\''+st.CLOSE);
 
 // =============== highlight conmment
-data = data.replace(GREY[0], (match)=>{
-    return STYLES.GREY+match.slice(0, -4)+STYLES.CLOSE});
+data = data.replace(JSGREY[0], (match)=>{
+    return st.JSGREY+match.slice(0, -4)+st.CLOSE});
 
 // =============== highlight Operators
-data = data.replace(new RegExp(CYAN[0], 'g'), '$1'+'$2'+
-    STYLES.CYAN+
+data = data.replace(new RegExp(JSCYAN[0], 'g'), '$1'+'$2'+
+    st.JSCYAN+
     '$3'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
     // ;
-data = data.replace(new RegExp(CYAN[1], 'g'), STYLES.CYAN+
+data = data.replace(new RegExp(JSCYAN[1], 'g'), st.JSCYAN+
     '$&'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
 // >=|<=|>|<
-data = data.replace(new RegExp(CYAN[2], 'g'), STYLES.CYAN+
+data = data.replace(new RegExp(JSCYAN[2], 'g'), st.JSCYAN+
     '$&'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
 // =|+=|-=|*=|/=|%=|==|===|!=|!==
-data = data.replace(new RegExp(CYAN[3], 'g'), STYLES.CYAN+
+data = data.replace(new RegExp(JSCYAN[3], 'g'), st.JSCYAN+
     '$1'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
 // braces
-data = data.replace(new RegExp(CYAN[4], 'g'), STYLES.CYAN+
+data = data.replace(new RegExp(JSCYAN[4], 'g'), st.JSCYAN+
     '$&'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
 // 5 +-*/%?!:
-data = data.replace(new RegExp(CYAN[5], 'g'), STYLES.CYAN+
+data = data.replace(new RegExp(JSCYAN[5], 'g'), st.JSCYAN+
     '$1'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
 // boolean operator ||
-data = data.replace(new RegExp(CYAN[6], 'g'), STYLES.CYAN+
+data = data.replace(new RegExp(JSCYAN[6], 'g'), st.JSCYAN+
     '$&'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
 // boolean operator ||
-data = data.replace(new RegExp(CYAN[7], 'g'), STYLES.CYAN+
+data = data.replace(new RegExp(JSCYAN[7], 'g'), st.JSCYAN+
     '$&'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
 // new, in, instanceof
-data = data.replace(new RegExp(CYAN[8], 'g'), STYLES.CYAN+
+data = data.replace(new RegExp(JSCYAN[8], 'g'), st.JSCYAN+
     '$&'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
 // ================ highlight keywords
-for (let pattern of MAGENTA) {
+for (let pattern of JSMAGENTA) {
     if (pattern.test(data)) {
-        data = data.replace(new RegExp(pattern, 'g'), STYLES.MAGENTA+
-        '$&'+STYLES.CLOSE);
+        data = data.replace(new RegExp(pattern, 'g'), st.JSMAGENTA+
+        '$&'+st.CLOSE);
     } else continue;
 }
 
 // ================= highlight Objects
-for (let pattern of YELLOW) {
+for (let pattern of JSYELLOW) {
     if (pattern.test(data)) {
-        data = data.replace(new RegExp(pattern, 'g'), STYLES.YELLOW+
-        '$&'+STYLES.CLOSE);
+        data = data.replace(new RegExp(pattern, 'g'), st.JSYELLOW+
+        '$&'+st.CLOSE);
     } else continue;
 }
 
 // ================= highlight methods
-for (let pattern of BLUE) {
+for (let pattern of JSBLUE) {
     if (pattern.test(data)) {
         data = data.replace(new RegExp(pattern, 'g'), 
-        STYLES.BLUE+'$&'+STYLES.CLOSE)
+        st.JSBLUE+'$&'+st.CLOSE)
     } else continue;
 }
 
 // ================= highlight numbers, boolean values
-data = data.replace(new RegExp(ORANGE[0], 'g'), STYLES.ORANGE+
+data = data.replace(new RegExp(JSORANGE[0], 'g'), st.JSORANGE+
     '$1'+
-    STYLES.CLOSE); 
+    st.CLOSE); 
 
-data = data.replace(new RegExp(ORANGE[1], 'g'), STYLES.ORANGE+
+data = data.replace(new RegExp(JSORANGE[1], 'g'), st.JSORANGE+
     '$&'+
-    STYLES.CLOSE);
+    st.CLOSE);
 
-codeblock.innerHTML = data;
+jsCode.innerHTML = data;
 };
 
 let lan = document.getElementsByClassName('lang')[0];

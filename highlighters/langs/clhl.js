@@ -1,12 +1,9 @@
 // This file highlights the syntax of command lines on *nix systems
 // Linux and macOS in particular
+import {STYLES as st} from "./styles.js";
 
-let codeblock = document.querySelector('code');
-let command = codeblock.innerHTML;
-
-let 
 // Commands, i.e. the programmes frequently used in a terminal
-BLUE = [
+export let SHBLUE = [
     /ls(?= ?)/, /cd(?= ?)/, /cp(?= ?)/, /mv(?= )/,
 
     /rm(?= )/, /echo(?= ?)/, /printf(?= ?)/, /cat(?= )/,
@@ -22,18 +19,18 @@ BLUE = [
     /tar(?= )/, /gzip(?= )/
 ],
 
-GREY = [
+SHGREY = [
     /(#[^#]+)(<br>)/
 ],
 
-GREEN = [
+SHGREEN = [
     /"([^"]*)"/,
 
     /'([^'"]*)'/
 ],
 
 
-MAGENTA = [
+SHMAGENTA = [
     /for(?= +)/, /(?: +)in(?= +)/,
 
    /do(?=\n)/, /if(?= +<span)/, /then(?= ?)/, /else(?=\n)/,
@@ -41,100 +38,81 @@ MAGENTA = [
    /fi(?=\n)/, /done\n/
 ],
 
-CYAN = [
+SHCYAN = [
     /\||;/,
     /-/,
     /&gt;|&lt;/
 ],
 
-ORANGE = [
+SHORANGE = [
     /(-)(\w+)/
 ];
 
 
-// let STYLES = {
-//     RED     : '<span class="red">',        //0
-//     ORANGE  : '<span class="orange">',     //1
-//     YELLOW  : '<span class="yellow">',     //2
-//     GREEN   : '<span class="green">',      //3
-//     CYAN    : '<span class="cyan">',       //4
-//     BLUE    : '<span class="blue">',       //5
-//     MAGENTA : '<span class="magenta">',    //6
-//     GREY    : '<span class="grey">',       //7
-//     CLOSE   : '</span>'
-// };
 
-
-function highlight() {
+export function highlight(command) {
     // always first highlight strings to avoid class="XXX" error
     // first replace stringD
-    command = command.replace(new RegExp(GREEN[0], 'g'), 
+    command = command.replace(new RegExp(SHGREEN[0], 'g'), 
     st.CYAN+'"'+st.CLOSE+
-    STYLES.GREEN+'$1'+STYLES.CLOSE+
-    STYLES.CYAN+'"'+STYLES.CLOSE);
+    st.GREEN+'$1'+st.CLOSE+
+    st.CYAN+'"'+st.CLOSE);
 
     // then replace stringS
-    command = command.replace(new RegExp(GREEN[1], 'g'), 
-    STYLES.CYAN+'\''+STYLES.CLOSE+
-    STYLES.GREEN+'$1'+STYLES.CLOSE+
-    STYLES.CYAN+'\''+STYLES.CLOSE);
+    command = command.replace(new RegExp(SHGREEN[1], 'g'), 
+    st.CYAN+'\''+st.CLOSE+
+    st.GREEN+'$1'+st.CLOSE+
+    st.CYAN+'\''+st.CLOSE);
 
     // ====== highlight comment
-    command = command.replace(new RegExp(GREY[0], 'g'), 
-        STYLES.GREY+'$1'+STYLES.CLOSE);
+    command = command.replace(new RegExp(SHGREY[0], 'g'), 
+        st.GREY+'$1'+st.CLOSE);
     
     // ====== highlight options
-    command = command.replace(new RegExp(ORANGE[0], 'g'), 
-    '$1'+STYLES.ORANGE+'$2'+STYLES.CLOSE);
+    command = command.replace(new RegExp(SHORANGE[0], 'g'), 
+    '$1'+st.ORANGE+'$2'+st.CLOSE);
 
     // ====== highlight Operators
-    for (let op of CYAN) {
+    for (let op of SHCYAN) {
         if (op.test(command)) {
             command = command.replace(new RegExp(op, 'g'), 
-            STYLES.CYAN+'$&'+STYLES.CLOSE);
+            st.CYAN+'$&'+st.CLOSE);
         } 
     }
 
     // ====== highlight Keywords (if, done, etc)
-     for (let kw of MAGENTA) {
+     for (let kw of SHMAGENTA) {
         if (kw.test(command)) {
             command = command.replace(new RegExp(kw, 'g'), 
-            STYLES.MAGENTA+'$&'+STYLES.CLOSE);
+            st.MAGENTA+'$&'+st.CLOSE);
         } 
     }
 
     // ====== highlight Commands
-    for (let cm of BLUE) {
+    for (let cm of SHBLUE) {
         if (cm.test(command)) {
             command = command.replace(new RegExp(cm, 'g'), 
-            STYLES.BLUE+'$&'+STYLES.CLOSE);
+            st.BLUE+'$&'+st.CLOSE);
         } 
     }
-
-    codeblock.innerHTML = command;
-    
+    return command;
 }
 
-function addLineNumber() {
+export function addLineNumber(command) {
     let re = /.+\n/g;
     let newCommand = '';
     let lines = command.match(re);
-    console.log(lines);
+    // console.log(lines);
     for (let i = 0; i < lines.length; i++) {
         lines[i] = String(i+1) + lines[i];
         newCommand += lines[i];
     }
-    codeblock.innerHTML = newCommand;
-    console.log(newCommand);
+    return newCommand;
 }
 
 
 
-let lan = document.getElementsByClassName('lang')[0];
-if (lan.textContent == 'Linux') {
-    highlight();
-    addLineNumber();
-}
+
 
 
 
