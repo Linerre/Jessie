@@ -112,12 +112,28 @@ function highlight() {
     }
 
     codeblock.innerHTML = command;
-    console.log(command);
+    
 }
+
+function addLineNumber() {
+    let re = /.+\n/g;
+    let newCommand = '';
+    let lines = command.match(re);
+    console.log(lines);
+    for (let i = 0; i < lines.length; i++) {
+        lines[i] = String(i+1) + lines[i];
+        newCommand += lines[i];
+    }
+    codeblock.innerHTML = newCommand;
+    console.log(newCommand);
+}
+
+
 
 let lan = document.getElementsByClassName('lang')[0];
 if (lan.textContent == 'Linux') {
     highlight();
+    addLineNumber();
 }
 
 
