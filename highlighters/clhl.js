@@ -52,24 +52,24 @@ ORANGE = [
 ];
 
 
-let STYLES = {
-    RED     : '<span class="red">',        //0
-    ORANGE  : '<span class="orange">',     //1
-    YELLOW  : '<span class="yellow">',     //2
-    GREEN   : '<span class="green">',      //3
-    CYAN    : '<span class="cyan">',       //4
-    BLUE    : '<span class="blue">',       //5
-    MAGENTA : '<span class="magenta">',    //6
-    GREY    : '<span class="grey">',       //7
-    CLOSE   : '</span>'
-};
+// let STYLES = {
+//     RED     : '<span class="red">',        //0
+//     ORANGE  : '<span class="orange">',     //1
+//     YELLOW  : '<span class="yellow">',     //2
+//     GREEN   : '<span class="green">',      //3
+//     CYAN    : '<span class="cyan">',       //4
+//     BLUE    : '<span class="blue">',       //5
+//     MAGENTA : '<span class="magenta">',    //6
+//     GREY    : '<span class="grey">',       //7
+//     CLOSE   : '</span>'
+// };
 
 
 function highlight() {
     // always first highlight strings to avoid class="XXX" error
     // first replace stringD
     command = command.replace(new RegExp(GREEN[0], 'g'), 
-    STYLES.CYAN+'"'+STYLES.CLOSE+
+    st.CYAN+'"'+st.CLOSE+
     STYLES.GREEN+'$1'+STYLES.CLOSE+
     STYLES.CYAN+'"'+STYLES.CLOSE);
 
