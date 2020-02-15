@@ -23,7 +23,7 @@ BLUE = [
 ],
 
 GREY = [
-    /#[^#]+(?=<br>)/
+    /(#[^#]+)(<br>)/
 ],
 
 GREEN = [
@@ -81,7 +81,7 @@ function highlight() {
 
     // ====== highlight comment
     command = command.replace(new RegExp(GREY[0], 'g'), 
-        STYLES.GREY+'$&'+STYLES.CLOSE);
+        STYLES.GREY+'$1'+STYLES.CLOSE);
     
     // ====== highlight options
     command = command.replace(new RegExp(ORANGE[0], 'g'), 
