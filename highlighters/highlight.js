@@ -2,9 +2,9 @@
 // import the needed modules
 
 import * as sh from "./langs/clhl.js";
-// import * as js from "./jshl.js";
+import * as js from "./langs/jshl.js";
 
-let codeBlock = document.querySelector('code'),
+let codeBlock = document.querySelector('.code'),
     cmd = codeBlock.innerHTML;
 
 let lan = document.getElementsByClassName('lang')[0];
@@ -13,6 +13,8 @@ if (lan.textContent == 'Linux') {
     console.log(newCmd);
     codeBlock.innerHTML = sh.addLineNumber(newCmd);
 }
-//  else if (lan.textContent == 'js') {
-//     js.highlight();
-// }
+ else if (lan.textContent == 'js') {
+    let newCmd = js.highlight(cmd);
+    console.log(newCmd);
+    codeBlock.innerHTML = js.addLineNumber(newCmd);
+}
