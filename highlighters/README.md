@@ -44,3 +44,9 @@ In the `anki-notes.html` file, there is a `<div>` with the class `language`, the
 
 ...
 (support for more languages will be added)
+
+## The console
+Open the `.html` file in a browser, say Firefox, and open the console. The marked content will be there. Copy it to Anki with the HTML tags.
+Below are two screenshots with highlighted syntax in both JavaScript and Linux command line:
+![js](https://github.com/Linerre/Jessie/blob/dev/highlighters/images/js.jpg)
+![cm](https://github.com/Linerre/Jessie/blob/dev/highlighters/images/Linux.jpg)
