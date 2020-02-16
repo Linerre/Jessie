@@ -1,8 +1,5 @@
 import {STYLES as st} from "./styles.js";
 
-export let jsCode = document.querySelector('code');
-export let data = jsCode.innerHTML;
-
 export let 
 // Comments, Invisibles, Line Highlighting: base03
 // #1 mark up this
@@ -125,106 +122,113 @@ JSBLUE = [
 ];
 
 
-function highlight() {
+export function highlight(data) {
 // ============== highlight string
 // stringD
-data = data.replace(new RegExp(JSGREEN[0], 'g'), 
-    st.JSCYAN+'"'+st.CLOSE+
-    st.JSGREEN+'$1'+st.CLOSE+
-    st.JSCYAN+'"'+st.CLOSE);
-// stringS
-data = data.replace(new RegExp(JSGREEN[1], 'g'), 
-    st.JSCYAN+'\''+st.CLOSE+
-    st.JSGREEN+'$1'+st.CLOSE+
-    st.JSCYAN+'\''+st.CLOSE);
+    data = data.replace(new RegExp(JSGREEN[0], 'g'), 
+        st.CYAN+'"'+st.CLOSE+
+        st.GREEN+'$1'+st.CLOSE+
+        st.CYAN+'"'+st.CLOSE);
+    // stringS
+    data = data.replace(new RegExp(JSGREEN[1], 'g'), 
+        st.CYAN+'\''+st.CLOSE+
+        st.GREEN+'$1'+st.CLOSE+
+        st.CYAN+'\''+st.CLOSE);
 
-// =============== highlight conmment
-data = data.replace(JSGREY[0], (match)=>{
-    return st.JSGREY+match.slice(0, -4)+st.CLOSE});
+    // =============== highlight conmment
+    data = data.replace(JSGREY[0], (match)=>{
+        return st.GREY+match.slice(0, -4)+st.CLOSE});
 
-// =============== highlight Operators
-data = data.replace(new RegExp(JSCYAN[0], 'g'), '$1'+'$2'+
-    st.JSCYAN+
-    '$3'+
-    st.CLOSE);
+    // =============== highlight Operators
+    data = data.replace(new RegExp(JSCYAN[0], 'g'), '$1'+'$2'+
+        st.CYAN+
+        '$3'+
+        st.CLOSE);
 
-    // ;
-data = data.replace(new RegExp(JSCYAN[1], 'g'), st.JSCYAN+
-    '$&'+
-    st.CLOSE);
+        // ;
+    data = data.replace(new RegExp(JSCYAN[1], 'g'), st.CYAN+
+        '$&'+
+        st.CLOSE);
 
-// >=|<=|>|<
-data = data.replace(new RegExp(JSCYAN[2], 'g'), st.JSCYAN+
-    '$&'+
-    st.CLOSE);
+    // >=|<=|>|<
+    data = data.replace(new RegExp(JSCYAN[2], 'g'), st.CYAN+
+        '$&'+
+        st.CLOSE);
 
-// =|+=|-=|*=|/=|%=|==|===|!=|!==
-data = data.replace(new RegExp(JSCYAN[3], 'g'), st.JSCYAN+
-    '$1'+
-    st.CLOSE);
+    // =|+=|-=|*=|/=|%=|==|===|!=|!==
+    data = data.replace(new RegExp(JSCYAN[3], 'g'), st.CYAN+
+        '$1'+
+        st.CLOSE);
 
-// braces
-data = data.replace(new RegExp(JSCYAN[4], 'g'), st.JSCYAN+
-    '$&'+
-    st.CLOSE);
+    // braces
+    data = data.replace(new RegExp(JSCYAN[4], 'g'), st.CYAN+
+        '$&'+
+        st.CLOSE);
 
-// 5 +-*/%?!:
-data = data.replace(new RegExp(JSCYAN[5], 'g'), st.JSCYAN+
-    '$1'+
-    st.CLOSE);
+    // 5 +-*/%?!:
+    data = data.replace(new RegExp(JSCYAN[5], 'g'), st.CYAN+
+        '$1'+
+        st.CLOSE);
 
-// boolean operator ||
-data = data.replace(new RegExp(JSCYAN[6], 'g'), st.JSCYAN+
-    '$&'+
-    st.CLOSE);
+    // boolean operator ||
+    data = data.replace(new RegExp(JSCYAN[6], 'g'), st.CYAN+
+        '$&'+
+        st.CLOSE);
 
-// boolean operator ||
-data = data.replace(new RegExp(JSCYAN[7], 'g'), st.JSCYAN+
-    '$&'+
-    st.CLOSE);
+    // boolean operator ||
+    data = data.replace(new RegExp(JSCYAN[7], 'g'), st.CYAN+
+        '$&'+
+        st.CLOSE);
 
-// new, in, instanceof
-data = data.replace(new RegExp(JSCYAN[8], 'g'), st.JSCYAN+
-    '$&'+
-    st.CLOSE);
+    // new, in, instanceof
+    data = data.replace(new RegExp(JSCYAN[8], 'g'), st.CYAN+
+        '$&'+
+        st.CLOSE);
 
-// ================ highlight keywords
-for (let pattern of JSMAGENTA) {
-    if (pattern.test(data)) {
-        data = data.replace(new RegExp(pattern, 'g'), st.JSMAGENTA+
-        '$&'+st.CLOSE);
-    } else continue;
+    // ================ highlight keywords
+    for (let pattern of JSMAGENTA) {
+        if (pattern.test(data)) {
+            data = data.replace(new RegExp(pattern, 'g'), st.MAGENTA+
+            '$&'+st.CLOSE);
+        } else continue;
+    }
+
+    // ================= highlight Objects
+    for (let pattern of JSYELLOW) {
+        if (pattern.test(data)) {
+            data = data.replace(new RegExp(pattern, 'g'), st.YELLOW+
+            '$&'+st.CLOSE);
+        } else continue;
+    }
+
+    // ================= highlight methods
+    for (let pattern of JSBLUE) {
+        if (pattern.test(data)) {
+            data = data.replace(new RegExp(pattern, 'g'), 
+            st.BLUE+'$&'+st.CLOSE)
+        } else continue;
+    }
+
+    // ================= highlight numbers, boolean values
+    data = data.replace(new RegExp(JSORANGE[0], 'g'), st.ORANGE+
+        '$1'+
+        st.CLOSE); 
+
+    data = data.replace(new RegExp(JSORANGE[1], 'g'), st.ORANGE+
+        '$&'+
+        st.CLOSE);
+
+    return data;
 }
 
-// ================= highlight Objects
-for (let pattern of JSYELLOW) {
-    if (pattern.test(data)) {
-        data = data.replace(new RegExp(pattern, 'g'), st.JSYELLOW+
-        '$&'+st.CLOSE);
-    } else continue;
-}
-
-// ================= highlight methods
-for (let pattern of JSBLUE) {
-    if (pattern.test(data)) {
-        data = data.replace(new RegExp(pattern, 'g'), 
-        st.JSBLUE+'$&'+st.CLOSE)
-    } else continue;
-}
-
-// ================= highlight numbers, boolean values
-data = data.replace(new RegExp(JSORANGE[0], 'g'), st.JSORANGE+
-    '$1'+
-    st.CLOSE); 
-
-data = data.replace(new RegExp(JSORANGE[1], 'g'), st.JSORANGE+
-    '$&'+
-    st.CLOSE);
-
-jsCode.innerHTML = data;
-};
-
-let lan = document.getElementsByClassName('lang')[0];
-if (lan.textContent =='js') {
-    highlight();
+export function addLineNumber(data) {
+    let re = /.+\n/g;
+    let newCommand = '';
+    let lines = data.match(re);
+    // console.log(lines);
+    for (let i = 0; i < lines.length; i++) {
+        lines[i] = String(i+1) + lines[i];
+        newCommand += lines[i];
+    }
+    return newCommand;
 }
