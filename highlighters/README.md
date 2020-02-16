@@ -18,3 +18,29 @@ On the other hand, there is no need to highlight a big chunck of code in Anki, f
 2. The syntax highlighter is static, rather than dynamic like a parser is.
 
 So for now I only need to handle a few lines of code and as I learn more and understand better, of course with help from Anki, I'll in the end get the job of creating a better syntax highlighter done!
+
+# Usage
+The `highlight.js` is the main JavaScript file that highlights the code. It is independent on three other `.js` modules stored in `langs`:
+1. `clhj.js`, highlighting **c**ommand **l**ines generally used in *nix systems;
+2. `jshl.js`, highlighting **J**ava**S**cript
+3. `styles.js`, defining the styles relevant to highlighting.
+
+In the future, there will be other `lang-hl.js` which highlights the specific language. 
+
+## The `#` sign
+The very idea behind the syntax highlighter is 1) use regular expressions to get the tokens and 2) mark up the tokens with css and replace the old ones. This process is static, meaning the highlighter does not parse the language in the way a parse does. So it will not report any syntax errors. 
+
+Among all the tokens, some are difficult to catch. And the lack of support for the lookbehind feature in JavaScript only makes it more diffuclt to catch some patterns such as function/class names, strings, and digits. Therefore, there are two major artifacial aid in creating patterns:
+1. `#` at the end of digits and operators;
+2. `<br>` tag at the end of comments;
+Take comment for example, instead of `// this is a comment`, it should be like this: `// this is a comment<br>`; A number will be `36#` rather than `36` alone. These special marks will be quitely dropped out after highlighting though.
+
+## The `language` class
+In the `anki-notes.html` file, there is a `<div>` with the class `language`, the `textContent` of it should be one of the following:
+- js
+- py
+- Linux
+- r
+
+...
+(support for more languages will be added)
