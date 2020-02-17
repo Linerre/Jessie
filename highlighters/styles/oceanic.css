@@ -13,7 +13,7 @@
 
 pre code {
     display: block;
-    font-family: Monaco, Menlo;
+    font-family: Monaco, Menlo,iosevka, Hack;
     background-color: #343D46;
     color: #D8DEE9;
     padding-left: 5px;
