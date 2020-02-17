@@ -12,3 +12,4 @@ toolkit/
 
 # ignore any kind of scripts not in use
 _*.js
+_*.html
