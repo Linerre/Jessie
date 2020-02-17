@@ -45,7 +45,7 @@ SHCYAN = [
 ],
 
 SHORANGE = [
-    /(-)(\w+)/
+    /([uaog])(=\+-)(\w+)/
 ];
 
 
@@ -70,7 +70,7 @@ export function highlight(command) {
     
     // ====== highlight options
     command = command.replace(new RegExp(SHORANGE[0], 'g'), 
-    '$1'+st.ORANGE+'$2'+st.CLOSE);
+    '$1'+'$2'+st.ORANGE+'$3'+st.CLOSE);
 
     // ====== highlight Operators
     for (let op of SHCYAN) {
