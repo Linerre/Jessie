@@ -50,3 +50,7 @@ Open the `.html` file in a browser, say Firefox, and open the console. The marke
 Below are two screenshots with highlighted syntax in both JavaScript and Linux command line:
 ![js](https://github.com/Linerre/Jessie/blob/dev/highlighters/images/js.jpg)
 ![cm](https://github.com/Linerre/Jessie/blob/dev/highlighters/images/Linux.jpg)
+
+## The server
+Please consier using the Live Server plug-in for VS Code to open the `.html` file. Or use any server that can put the HTML on live. Otherwise the console will not support JS modules. Hence everything nor working.
+- [ ] Figure this out so that VS Code will not be mendatory. 
