@@ -10,6 +10,8 @@ export let SHBLUE = [
     
     /ln(?= )/, /mkdir(?= )/,
 
+   /chmod(?= )/, /chown(?= )/,
+
     /u?mount(?= )/, /fdisk(?= )/, 
     
     /find(?= <span)/, /locate(?= )/, /touch(?= )/, /stat(?= ?)/,
