@@ -28,25 +28,25 @@ a {
 
 /* Oceanic Colorscheme */
 /* base08 */
-.red {color: #EC5f67; font-style: italic;}
+.red {color: #bf616a; font-style: italic;}
 
 /* base09 */
-.orange {color: #F99157;}
+.orange {color:#d08770;}
 
 /* base0A */
-.yellow {color: #FAC863; font-weight: 400;}
+.yellow {color: #ebcb8b; font-weight: 400;}
 
 /* base0B */
-.green {color: #99C794;}
+.green {color: #a3be8c;}
 
 /* base0C */
-.cyan {color: #5FB3B3;}
+.cyan {color: #88c0d0;}
 
 /* base0D */
-.blue {color: #6699CC;}
+.blue {color: #5e81ac;}
 
 /* base0E */
-.magenta {color: #C594C5;}
+.magenta {color: #b48ead;}
 
 /* comment base03 */
 .grey {color: #65737E;}
