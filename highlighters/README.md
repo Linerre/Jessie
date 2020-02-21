@@ -53,4 +53,7 @@ Below are two screenshots with highlighted syntax in both JavaScript and Linux c
 
 ## The server
 Please consier using the Live Server plug-in for VS Code to open the `.html` file. Or use any server that can put the HTML on live. Otherwise the console will not support JS modules. Hence everything nor working.
-- [ ] Figure this out so that VS Code will not be mendatory. 
+
+## TO DO
+- [ ] Figure this out so that VS Code will not be mendatory;
+- [ ] Figure out if there is a way to automatically detect the langauge;
