@@ -52,7 +52,7 @@ JSCYAN = [
     /([\+\*\/!%-]?={1,3})#/,
 
     // 4 braces
-    /\(|\)|\{|\}|\[|\]/,
+    /([\(\)\{\}\[\]])#/,
 
     // 5 +-*/%?!:    using # to assist
     /([-&%\+\*\/\.,!@\^:\?\\]{1,2})#/,
@@ -66,7 +66,7 @@ JSCYAN = [
     // 8 new and in
     /\bnew\b(?= +\w+)|\bin\b(?= +\w+)|\binstanceof\b(?= +\w+)/,
 
-    // 9 regualr expressions
+    // 9 regualr expressions consider using #
     /(\/(?!span>)[^\/]+\/)([gmiyu]+)/
 
 ],
@@ -92,13 +92,14 @@ JSMAGENTA = [
 
     /\blet(?= +)/, 
 
-    /\breturn(?= *)/, /\bswitch(?= *)/, 
+    /\breturn(?= *<span)/, /\bswitch(?= *)/, 
 
     /\bthrow(?= *)/, /\btry(?= *)/, 
         
     /\btypeof(?= +)/, /\bvar(?= +)/, 
 
-    /\bwhile(?= *)/, /\byield#(?= +)/ // consider using # to assist
+    /\bwhile(?= *)/, /\byield#(?= +)/, // consider using # to assist
+
 ],
 
 // Classes: base0A: yellow + bold;
@@ -162,7 +163,7 @@ export function highlight(data) {
 
     // braces
     data = data.replace(new RegExp(JSCYAN[4], 'g'), st.CYAN+
-        '$&'+
+        '$1'+
         st.CLOSE);
 
     // 5 +-*/%?!:
@@ -184,6 +185,11 @@ export function highlight(data) {
     data = data.replace(new RegExp(JSCYAN[8], 'g'), st.CYAN+
         '$&'+
         st.CLOSE);
+    
+    data = data.replace(new RegExp(JSCYAN[9], 'g'), st.CYAN+
+        '$1'+
+        st.CLOSE+
+        st.MAGENTA+'$2'+st.CLOSE);
 
     // ================ highlight keywords
     for (let pattern of JSMAGENTA) {
