@@ -233,7 +233,7 @@ export function addLineNumber(data) {
     let lines = data.match(re);
     // console.log(lines);
     for (let i = 0; i < lines.length; i++) {
-        lines[i] = String(i+1) + lines[i];
+        lines[i] = st.GREY+String(i+1)+st.CLOSE + lines[i];
         newCommand += lines[i];
     }
     return newCommand;
