@@ -16,7 +16,7 @@ export let SHBLUE = [
     
     /find(?= <span)/, /locate(?= )/, /touch(?= )/, /stat(?= ?)/,
 
-    /grep(?= <span)/, /awk(?= )/,
+    /grep(?= <span)/, 
 
     /tar(?= )/, /gzip(?= )/
 ],
