@@ -10,11 +10,13 @@ let codeBlock = document.querySelector('.code'),
 let lan = document.getElementsByClassName('lang')[0];
 if (lan.textContent == 'Linux') {
     let newCmd = sh.highlight(cmd);
+    newCmd = sh.addLineNumber(newCmd);
     console.log(newCmd);
-    codeBlock.innerHTML = sh.addLineNumber(newCmd);
+    codeBlock.innerHTML = newCmd;
 }
  else if (lan.textContent == 'js') {
     let newCmd = js.highlight(cmd);
+    newCmd = js.addLineNumber(newCmd);
     console.log(newCmd);
-    codeBlock.innerHTML = js.addLineNumber(newCmd);
+    codeBlock.innerHTML = newCmd
 }
