@@ -15,7 +15,6 @@ AWKMAGENTA = [
 
 AWKGREEN = /'[^']+'/;
 
-
 export function highlight(data) {
     // awk
     data = data.replace(AWKBLUE, 
@@ -37,7 +36,6 @@ export function highlight(data) {
         return match.slice(0,2)+st.MAGENTA+match.slice(2,)+st.CLOSE;
     });
         
-
     // body
     data = data.replace(AWKGREEN, 
     st.GREEN+'$&'+st.CLOSE);
