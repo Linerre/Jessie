@@ -3,6 +3,7 @@
 
 import * as sh from "./langs/clhl.js";
 import * as js from "./langs/jshl.js";
+import * as awk from "./langs/awkhl.js";
 
 let codeBlock = document.querySelector('.code'),
     cmd = codeBlock.innerHTML;
@@ -19,4 +20,8 @@ if (lan.textContent == 'Linux') {
     newCmd = js.addLineNumber(newCmd);
     console.log(newCmd);
     codeBlock.innerHTML = newCmd
+} else if (lan.textContent = 'awk') {
+    let newCmd = awk.highlight(cmd);
+    console.log(newCmd);
+    codeBlock.innerHTML = newCmd;
 }
