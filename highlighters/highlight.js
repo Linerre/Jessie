@@ -9,19 +9,31 @@ let codeBlock = document.querySelector('.code'),
     cmd = codeBlock.innerHTML;
 
 let lan = document.getElementsByClassName('lang')[0];
+
+// command line
 if (lan.textContent == 'Linux') {
     let newCmd = sh.highlight(cmd);
     newCmd = sh.addLineNumber(newCmd);
     console.log(newCmd);
     codeBlock.innerHTML = newCmd;
 }
- else if (lan.textContent == 'js') {
+// javascript
+else if (lan.textContent == 'js') {
     let newCmd = js.highlight(cmd);
     newCmd = js.addLineNumber(newCmd);
     console.log(newCmd);
     codeBlock.innerHTML = newCmd
-} else if (lan.textContent = 'awk') {
+} 
+// awk
+else if (lan.textContent = 'awk') {
     let newCmd = awk.highlight(cmd);
     console.log(newCmd);
     codeBlock.innerHTML = newCmd;
 }
+// python
+
+// perl
+
+// r
+
+// vim(script)add
