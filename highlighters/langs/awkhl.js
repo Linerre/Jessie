@@ -30,7 +30,8 @@ export function highlight(data) {
     
     // var
     data = data.replace(AWKMAGENTA[0], 
-        '$1'+st.MAGENTA+'$2'+st.CLOSE); 
+        st.CYAN+'$1'+st.CLOSE+
+        st.MAGENTA+'$2'+st.CLOSE); 
 
     data = data.replace(AWKMAGENTA[1], match=>{
         return match.slice(0,2)+st.MAGENTA+match.slice(2,)+st.CLOSE;
