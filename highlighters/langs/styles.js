@@ -1,5 +1,6 @@
 // the styles will be a dependency for all the highlighters
 export const STYLES = {
+    // color scheme
     RED     : '<span class="red">',        //0
     ORANGE  : '<span class="orange">',     //1
     YELLOW  : '<span class="yellow">',     //2
@@ -9,5 +10,11 @@ export const STYLES = {
     MAGENTA : '<span class="magenta">',    //6
     GREY    : '<span class="grey">',
     REDJS   : '<span class="redjs">',       //7
-    CLOSE   : '</span>'
+    CLOSE   : '</span>',
+
+    // style
+    INDENT1  : '<span class="indent1">',
+    INDENT2  : '<span class="indent2">',
+    INDENT3  : '<span class="indent3">',
+    BCLOSE   : '</div>'
 };
