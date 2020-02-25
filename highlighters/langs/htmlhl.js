@@ -8,11 +8,11 @@ HTMLTAG = [
 
     //ending tag
     /(&lt;\/)([a-z]+)(&gt;)/
-]
+];
 
 
 // values
-HTMLGREEN = /"([^"]+)"/;
+// HTMLGREEN = /"([^"]+)"/;
 
 export function highlight(data) {
     data = data.replace(new RegExp(HTMLTAG[0], 'g'), 
@@ -25,5 +25,7 @@ export function highlight(data) {
     st.CYAN+'$1'+st.CLOSE+
     st.RED+'$2'+st.CLOSE+
     st.CYAN+'$3'+st.CLOSE);
+
+    return data;
 }
 
