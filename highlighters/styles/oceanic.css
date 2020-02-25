@@ -28,7 +28,8 @@ a {
 
 /* Oceanic Colorscheme */
 /* base08 */
-.red {color: #EC5f67; font-style: italic;}
+.red {color: #EC5f67;}
+.redjs {color: #EC5f67; font-style: italic;}
 
 /* base09 */
 .orange {color: #F99157;}

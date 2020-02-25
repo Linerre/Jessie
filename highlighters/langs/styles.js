@@ -7,6 +7,7 @@ export const STYLES = {
     CYAN    : '<span class="cyan">',       //4
     BLUE    : '<span class="blue">',       //5
     MAGENTA : '<span class="magenta">',    //6
-    GREY    : '<span class="grey">',       //7
+    GREY    : '<span class="grey">',
+    REDJS   : '<span class="redjs">',       //7
     CLOSE   : '</span>'
 };
