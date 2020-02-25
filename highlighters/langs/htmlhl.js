@@ -4,18 +4,18 @@ export let
 
 // indent 20 * n (n >= 1) px
 INDENT = [
-    /1(?=&lt;)/,
-    /2(?=&lt;)/,
-    /3(?=&lt;)/,
+    /1(?!&lt;\/)(?=&lt;)/,
+    /2(?!&lt;\/)(?=&lt;)/,
+    /3(?!&lt;\/)(?=&lt;)/,
 ],
 
 // tag names: red + cyan
 HTMLTAG = [
     // begining tag
-    /(&lt;)([a-z]+)([\s\w"=]+)?(&gt;)/,
+    /(&lt;)([a-z0-6]+)([\s\w"=<>/]+)?(&gt;)/,
 
     //ending tag
-    /(&lt;\/)([a-z]+)(&gt;)/
+    /(&lt;\/)([a-z0-6]+)(&gt;)/
 ],
 
 
@@ -48,7 +48,7 @@ export function highlight(data) {
     st.CYAN+'$4'+st.CLOSE);
 
     // ending tag
-    data = data.replace(new RegExp(HTMLTAG[1], 'g'),
+    data = data.replace(new RegExp(HTMLTAG[1], 'gm'),
     st.CYAN+'$1'+st.CLOSE+
     st.RED+'$2'+st.CLOSE+
     st.CYAN+'$3'+st.CLOSE);
