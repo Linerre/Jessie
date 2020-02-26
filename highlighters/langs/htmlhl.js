@@ -4,9 +4,15 @@ export let
 
 // indent 20 * n (n >= 1) px
 INDENT = [
+    // to avoid indebting ...Header 3</h2>
     /1(?!&lt;\/)(?=&lt;)/,
     /2(?!&lt;\/)(?=&lt;)/,
     /3(?!&lt;\/)(?=&lt;)/,
+
+    // but also include 3</footer>
+    /1#(?=&lt;\/)/,
+    /2#(?=&lt;\/)/,
+    /3#(?=&lt;\/)/,
 ],
 
 // tag names: red + cyan
@@ -31,14 +37,22 @@ export function highlight(data) {
     st.CYAN+'$4'+st.CLOSE);
 
     // indent
-    // replace 1 to <div class="indent1">
+    // replace 1 to <span class="indent1"> and so on
     data = data.replace(new RegExp(INDENT[0], 'g'), st.INDENT1);
     data = data.replace(new RegExp(INDENT[1], 'g'), st.INDENT2);
+    data = data.replace(new RegExp(INDENT[2], 'g'), st.INDENT3);
 
-    // replace 1\n to </div>
+    // replace 1</h1> to <span class="indent1">
+    data = data.replace(new RegExp(INDENT[3], 'g'), st.INDENT1);
+    data = data.replace(new RegExp(INDENT[4], 'g'), st.INDENT2);
+    data = data.replace(new RegExp(INDENT[5], 'g'), st.INDENT3);
+
+
+
+    // replace 1\n to </span>
     data = data.replace(/1(?=\n)/g, st.CLOSE);
     data = data.replace(/2(?=\n)/g, st.CLOSE);
-
+    data = data.replace(/3(?=\n)/g, st.CLOSE);
 
     // begining tag
     data = data.replace(new RegExp(HTMLTAG[0], 'g'), 
