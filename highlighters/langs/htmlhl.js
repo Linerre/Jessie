@@ -18,7 +18,7 @@ INDENT = [
 // tag names: red + cyan
 HTMLTAG = [
     // begining tag
-    /(&lt;)([a-z0-6]+)([\s\w"=<>/]+)?(&gt;)/,
+    /(&lt;)([a-zA-Z0-6! ]+)([\d\s\w"=<>/-]+)?(\/?&gt;)/,
 
     //ending tag
     /(&lt;\/)([a-z0-6]+)(&gt;)/
