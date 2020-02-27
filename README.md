@@ -8,3 +8,6 @@ As the names itself indicates, the `anki` dir is all about the popular memorizat
 
 ## The `bash` dir
 The `bash` dir contains all the `.sh` scripts that can automate some boring and time-consuming tasks commonly met on a point-and-click Desktop Environment. These scripts also serve as learning experiments since both of us are new to bash programming.  
+
+## The `highlighters` dir
+This directory contains syntax highlighters for various programming languages. They are, however, not the dynamic highlighters which work like a parser. Instead, they are written in JavaScript and rely solely on the `.replace()` method to statically match and replace the lexes.  
