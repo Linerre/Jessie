@@ -13,7 +13,7 @@ DIR="/Users/username/Desktop/folder
 ## 2. 磨刀霍霍
 修改完上一步里提到的两处之后，保存并退出，回到桌面。打开终端，然后输入：
 ```
-cd ~Desktop
+cd ~/Desktop
 ```
 这时候终端会进入桌面。
 
