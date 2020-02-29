@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+
+DIR="/Users/leon/Desktop/Homework-original"
+SUB="Submission attachment(s)"
+FED="Feedback Attachment(s)"
+cd ${DIR}
+
+for item in *; do
+  if [ -d "$item" ]; then
+    # need to deal with .DS_STORE!q
+    if [ "$(ls -A "$item"/"$SUB" | wc -l)" -gt 1 ]; then
+      # or
+      # [ $(ls -A "$item"/"$SUB") == ".DS_Store"]
+      
+      echo "Deleting student" "$item" "'s feedabck folder"
+      rm -rf "$item"/"$FED"/*
+      #echo "$item"/"$SUB" "is not empty."
+    else
+      echo "Student" "$item" "has an empty feedback folder!"
+    fi
+  else
+    printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
+  fi
+done
+cd ..
+
+echo "Deleting DONE!"
