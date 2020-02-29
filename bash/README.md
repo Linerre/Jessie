@@ -3,7 +3,7 @@
 请用 VS Code 编辑器打开 bash 文件夹里的 `copy.sh`，并找到第8行：
 
 ```
-DIR="/Users/username/Desktop/folder
+DIR="/Users/username/Desktop/folder"
 ```
 
 此行有两处需要修改：
