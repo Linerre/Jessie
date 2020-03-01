@@ -1,30 +1,38 @@
-# cp files from one sub dirs to another in the same dir. 
-# do this for a group of such dir once and for fall
-# may need to test under at least two circumenstances
 #!/usr/bin/env bash
 
+read -p 'Please enter your username: ' username
+read -p 'Please enter target forlder name: ' folder
 
-# Need to change to your directory accordingly
-DIR="/Users/leon/Desktop/Homework-original"
+DIR="/Users/$username/Desktop/$folder"
 SUB="Submission attachment(s)"
 FED="Feedback Attachment(s)"
+
+# create an empty array to hold students who submit nothing
+declare -a empty
+
 cd ${DIR}
 
 for item in *; do
   if [ -d "$item" ]; then
-    # need to deal with .DS_STORE!
+    # need to deal with .DS_STORE!q
     if [ "$(ls -A "$item"/"$SUB" | wc -l)" -gt 1 ]; then
       # or
       # [ $(ls -A "$item"/"$SUB") == ".DS_Store"]
       
-      #echo "Copying student" "$item" "'s submussion to feedback folder"
+      echo "Copying student" "$item" "'s submussion to feedback folder"
       cp "$item"/"$SUB"/* "$item"/"$FED"/
-      # echo "$item"/"$SUB" "is not empty."
     else
-      echo "$item" "has an empty directory!"
+      empty+=("item")
     fi
   else
     printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
   fi
 done
 cd ..
+
+echo "Copying DONE!"
+echo
+printf '%s \e[1;33m%s\e[0m %s\n' "The following stduents have" "NO" "submission."
+for i in "${empty[@]}"; do
+  echo $i
+done
