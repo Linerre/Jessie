@@ -32,7 +32,7 @@ cd ..
 
 echo "Copying DONE!"
 echo
-printf '%s \e[1;33m%s\e[0m %s\n' "The following stduents have" "NO" "submission."
+printf '%s \e[1;33m%s\e[0m %s\n' "The following students have" "NO" "submission."
 for i in "${empty[@]}"; do
   echo $i
 done
