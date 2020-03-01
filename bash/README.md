@@ -9,11 +9,7 @@
 下面讲述了的操作办法，稍微繁琐了一些，但是相对好理解。日后会讲解更简单的使用办法，需要额外学习一点超纲知识。
 
 ## 1. 准备工作
-首先注意自己的用户名。打开 iTerm 就可以看到。比如我的用户名是下图中圈住的部分：
-
-![username](https://github.com/Linerre/Jessie/blob/master/bash/images/username.jpg)
-
-其次，要记得存放作业的总文件夹名字，比如我的是下图中的 Homework-original：
+注意存放作业的总文件夹名字，比如我的是下图中的 Homework-original：
 
 ![folder](https://github.com/Linerre/Jessie/blob/master/bash/images/folder.jpg)
 
@@ -28,9 +24,8 @@
 
 即先输入一个点（英文的句号），然后空一格，然后输入后面这个路径，一摸一样地输入就好
 
-3. 此时需要你输入两个变量：
-	1. username 就是你在第一步中看到的 
-	2. folder 是存放作业的总文件夹名，比如 Homewrok
+3. 此时需要你输入一个变量：
+	1. folder，就是存放作业的总文件夹名，比如 Homewrok
 4. 回车
 
 不出意外，终端会返回一些提示：
