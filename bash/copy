@@ -19,10 +19,10 @@ for item in *; do
       # or
       # [ $(ls -A "$item"/"$SUB") == ".DS_Store"]
       
-      echo "Copying student" "$item" "'s submussion to feedback folder"
+      printf '%s \e[0;34m%s\e[0m %s\n' "Copying student" "$item" "'s submussion to feedback folder"
       cp "$item"/"$SUB"/* "$item"/"$FED"/
     else
-      empty+=("item")
+      empty+=("$item")
     fi
   else
     printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
