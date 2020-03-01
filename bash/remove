@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-read -p 'Please enter your username: ' username
-read -p 'Please enter target forlder name: ' folder
+# read -p 'Please enter your username: ' username
+read -p 'Please enter target folder name: ' folder
 
-DIR="/Users/$username/Desktop/$folder"
+DIR="/Users/$USER/Desktop/$folder"
 SUB="Submission attachment(s)"
 FED="Feedback Attachment(s)"
 
