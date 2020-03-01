@@ -1,9 +1,12 @@
 # 用法说明
 ## 1. 准备工作
 首先注意自己的用户名。打开 iTerm 就可以看到。比如我的用户名是下图中圈住的部分：
-![username]()
+
+![username](https://github.com/Linerre/Jessie/blob/master/bash/images/username.jpg)
+
 其次，要记得存放作业的总文件夹名字，比如我的是下图中的 Homework-original：
-![folder]()
+
+![folder](https://github.com/Linerre/Jessie/blob/master/bash/images/folder.jpg)
 
 **注意**：这里默认这个文件夹是存放在桌面上的，如果你存放到了其他地方，可以拷贝一份到桌面上，有两个好处：
 - 可以把桌面上的当作一个备份
