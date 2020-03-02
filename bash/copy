@@ -9,20 +9,35 @@ FED="Feedback Attachment(s)"
 
 # create an empty array to hold students who submit nothing
 declare -a empty
+declare -a rar
 
 cd ${DIR}
 
 for item in *; do
   if [ -d "$item" ]; then
     # need to deal with .DS_STORE!q
-    if [ "$(ls -A "$item"/"$SUB" | wc -l)" -gt 1 ]; then
-      # or
-      # [ $(ls -A "$item"/"$SUB") == ".DS_Store"]
+    if [[ "$(ls -A "$item"/"$SUB" | wc -l)" -eq 0 \
+      || "$(ls -A "$item"/"$SUB")" == ".DS_Store" ]]; then
       
+      empty+=("$item")
+      
+    else
       printf '%s \e[0;34m%s\e[0m %s\n' "Copying student" "$item" "'s submussion to feedback folder"
       cp "$item"/"$SUB"/* "$item"/"$FED"/
-    else
-      empty+=("$item")
+
+      # check .zip and .rar files
+      if [[ $(ls "$item"/"$FED" | grep -e '\.zip$' | wc -l) -ge 1 \
+        && $(ls "$item"/"$FED" | grep -e '\.rar$' | wc -l) -eq 0 ]]; then
+        unzip -q "$item"/"$FED"/*.zip -d "$item"/"$FED"
+        rm "$item"/"$FED"/*.zip
+
+      elif [[ $(ls "$item"/"$FED" | grep -e '\.zip$' | wc -l) -ge 1 \
+        && $(ls "$item"/"$FED" | grep -e '\.rar$' | wc -l) -ge 1 ]]; then
+        rar+=("$item")
+        unzip -q "$item"/"$FED"/*.zip -d "$item"/"$FED"
+        rm "$item"/"$FED"/*.zip
+      fi
+
     fi
   else
     printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
@@ -34,5 +49,10 @@ echo "Copying DONE!"
 echo
 printf '%s \e[1;33m%s\e[0m %s\n' "The following students have" "NO" "submission."
 for i in "${empty[@]}"; do
+  echo $i
+done
+
+echo "The following students have .rar files. Need to unzip manually."
+for i in "${rar[@]}"; do
   echo $i
 done
