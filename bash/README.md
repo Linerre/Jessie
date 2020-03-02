@@ -9,7 +9,16 @@
 下面讲述的操作办法，稍微繁琐一些，但是相对好理解。日后会讲解更简单的办法，需要学习一点超纲知识。
 
 ## 准备工作
-准备工主要有两点。首先，是确认脚本文件的使用权限：
+准备工主要有三点
+### 下载 The Unarchiver
+这个软件（如图）需要去 App Store 下载，也可以去[官网](https://theunarchiver.com/)点击链接跳转至苹果商店。
+
+![The Unarchiver](https://github.com/Linerre/Jessie/blob/master/bash/images/The-Unarchiver.jpg)
+
+软件是免费的，又是从苹果商店下载的，也就是说：绿色免费软件。它专门用来对付 `.rar`格式的文件。
+
+### 查看脚本文件 `copy` 的权限
+确认脚本文件 `copy` 的使用权限：
 1. 用命令 `pwd` 查看当前是否在 `~/Desktop/Jessie/bash` 这个路径下，如果不在，用 `cd` 命令移动到该路径下。如果之前刚执行过 `git pull`, 则只需 `cd bash` 即可。
 2. 用 `ls -lh` 这个命令查看文件的信息，如下图所示：
 
@@ -19,7 +28,8 @@
 
 3. 如果不是，则使用命令 `chmod 755 copy` 来更改文件的权限，更改后重新用 `ls -lh`查看，应该前四位就是 `-rwx` 了。
 
-第二步准备工作是确认存放放作业的总文件夹名字，比如我的是下图中的 Homework-original：
+### 确认作业总文件夹的名称
+确认存放放作业的总文件夹名字，比如我的是下图中的 Homework-original：
 
 ![folder](https://github.com/Linerre/Jessie/blob/master/bash/images/folder.jpg)
 
@@ -31,7 +41,7 @@
 1. 输入 `cd Desktop` 移动到桌面
 2. 接着输入 `. Jessie/bash/copy`
 
-即先输入一个点（英文的句号），然后空一格，然后输入后面这个路径，一摸一样地输入就好
+即先输入一个点（英文的句号），然后空一格，然后输入后面这个路径，一摸一样地输入就好。
 
 3. 此时需要你输入第一步中的变量 folder：就是存放作业的总文件夹名，比如 Homewrok
 4. 回车
