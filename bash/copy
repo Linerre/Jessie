@@ -52,7 +52,8 @@ for i in "${empty[@]}"; do
   echo $i
 done
 
-echo "The following students have .rar files. Need to unzip manually."
+echo
+printf '\e[0;35m%s\e[0m\n' "The following students have .rar files. Need to unzip manually."
 for i in "${rar[@]}"; do
   echo $i
 done
