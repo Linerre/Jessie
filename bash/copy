@@ -39,11 +39,11 @@ for item in *; do
       fi
 
       if [[ $(ls "$item"/"$FED" | grep -e '\.rar$' | wc -l) -ge 1 ]]; then
-        unrar x -inul -o+ "$item"/"$FED"/*.rar -d "$item"/"$FED"/
+        unrar x -ad -inul -o+ "$item"/"$FED"/*.rar "$item"/"$FED"/
         rm "$item"/"$FED"/*.rar
       fi
     fi
-  else
+  else 
     printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
   fi
 done
