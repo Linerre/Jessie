@@ -34,12 +34,12 @@ for item in *; do
 
       # check .zip and .rar files
       if [[ $(ls "$item"/"$FED" | grep -e '\.zip$' | wc -l) -ge 1 ]]; then
-        unzip -q "$item"/"$FED"/*.zip -d "$item"/"$FED"
+        unzip -q "$item"/"$FED"/"*.zip" -d "$item"/"$FED"
         rm "$item"/"$FED"/*.zip
       fi
 
       if [[ $(ls "$item"/"$FED" | grep -e '\.rar$' | wc -l) -ge 1 ]]; then
-        unrar x -ad -inul -o+ "$item"/"$FED"/*.rar "$item"/"$FED"/
+        unrar x -ad -inul -o+ "$item"/"$FED"/"*.rar" "$item"/"$FED"/
         rm "$item"/"$FED"/*.rar
       fi
     fi
