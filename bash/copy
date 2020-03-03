@@ -53,7 +53,7 @@ echo "Copying DONE!"
 
 printf '\e[1;32m%d\e[0m %s\n' ${#total[@]} "students in total."
 printf '\e[1;32m%d\e[0m %s\n' ${#load[@]} "students submitted homework."
-printf '\e[1;32m%d\e[0m %s\n' ${#empty[@]} "students submitted homework."
+printf '\e[1;32m%d\e[0m %s\n' ${#empty[@]} "students submitted nothing."
 
 echo
 if [ ${#empty[@]} -gt 1 ]; then
