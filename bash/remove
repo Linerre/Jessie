@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /bin/bash
 
 # read -p 'Please enter your username: ' username
 read -p 'Please enter target folder name: ' folder
