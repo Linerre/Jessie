@@ -12,7 +12,7 @@ export let SHBLUE = [
 
    /chmod(?= )/, /chown(?= )/,
 
-    /u?mount(?= )/, /fdisk(?= )/, 
+    /u?mount(?= )/, /fdisk(?= )/, /find(?= [~\/])/,
     
     /find(?= <span)/, /locate(?= )/, /touch(?= )/, /stat(?= ?)/,
 
@@ -33,11 +33,12 @@ SHGREEN = [
 
 
 SHMAGENTA = [
-    /for(?= +)/, /(?: +)in(?= +)/,
+    /(for)( +[\w\d]+ +)(in)/
 
-   /do(?=\n)/, /if(?= +<span)/, /then(?= ?)/, /else(?=\n)/,
+// complete later
+//    /do(?=\n)/, /if(?= +<span)/, /then(?= ?)/, /else(?=\n)/,
 
-   /fi(?=\n)/, /done\n/
+//    /fi(?=\n)/, /done\n/
 ],
 
 SHCYAN = [
@@ -83,12 +84,12 @@ export function highlight(command) {
     }
 
     // ====== highlight Keywords (if, done, etc)
-     for (let kw of SHMAGENTA) {
-        if (kw.test(command)) {
-            command = command.replace(new RegExp(kw, 'g'), 
-            st.MAGENTA+'$&'+st.CLOSE);
-        } 
-    }
+    // for ... in ...
+    command = command.replace(new RegExp(SHMAGENTA[0], 'g'),
+    st.MAGENTA+'$1'+st.CLOSE+
+    '$2'+
+    st.MAGENTA+'$3'+st.CLOSE)
+
 
     // ====== highlight Commands
     for (let cm of SHBLUE) {
