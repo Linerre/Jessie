@@ -12,7 +12,7 @@ export const SHBLUE = [
 
    /chmod(?= )/, /chown(?= )/,
 
-    /u?mount(?= )/, /fdisk(?= )/, /find(?= [~\/p])/,
+    /u?mount(?= )/, /fdisk(?= )/, /find(?= [~\/p<])/,
     
     /locate(?= )/, /touch(?= )/, /stat(?= ?)/,
 
