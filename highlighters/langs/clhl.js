@@ -12,9 +12,9 @@ export let SHBLUE = [
 
    /chmod(?= )/, /chown(?= )/,
 
-    /u?mount(?= )/, /fdisk(?= )/, /find(?= [~\/])/,
+    /u?mount(?= )/, /fdisk(?= )/, /find(?= [~\/p])/,
     
-    /find(?= <span)/, /locate(?= )/, /touch(?= )/, /stat(?= ?)/,
+    /locate(?= )/, /touch(?= )/, /stat(?= ?)/,
 
     /grep(?= <span)/, 
 
