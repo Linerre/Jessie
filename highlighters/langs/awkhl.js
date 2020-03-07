@@ -1,6 +1,6 @@
 import {STYLES as st} from "./styles.js";
 
-export let 
+export const 
 AWKBLUE = /awk/,
 
 AWKORANGE = /(-|--)(\w+)/,

@@ -1,6 +1,6 @@
 import {STYLES as st} from "./styles.js";
 
-export let 
+export const 
 // Comments, Invisibles, Line Highlighting: base03
 // #1 mark up this
 JSGREY = [

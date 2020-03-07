@@ -3,7 +3,7 @@
 import {STYLES as st} from "./styles.js";
 
 // Commands, i.e. the programmes frequently used in a terminal
-export let SHBLUE = [
+export const SHBLUE = [
     /ls(?= ?)/, /cd(?= ?)/, /cp(?= ?)/, /mv(?= )/,
 
     /rm(?= )/, /echo(?= ?)/, /printf(?= ?)/, /cat(?= )/,

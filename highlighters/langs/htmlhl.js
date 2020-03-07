@@ -1,6 +1,6 @@
 import {STYLES as st} from "./styles.js";
 
-export let
+export const
 
 // indent 20 * n (n >= 1) px
 INDENT = [
