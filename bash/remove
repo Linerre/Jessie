@@ -1,0 +1,45 @@
+#! /bin/bash
+
+# read -p 'Please enter your username: ' username
+read -p 'Please enter target folder name: ' folder
+
+DIR="/Users/$USER/Desktop/$folder"
+SUB="Submission attachment(s)"
+FED="Feedback Attachment(s)"
+
+# create an empty array to hold students who submit nothing
+declare -a empty
+
+cd ${DIR}
+
+for item in *; do
+  if [ -d "$item" ]; then
+    # need to deal with .DS_STORE!q
+    if [ "$(ls -A "$item"/"$SUB" | wc -l)" -gt 1 ]; then
+      # or
+      # [ $(ls -A "$item"/"$SUB") == ".DS_Store"]
+      
+      echo "Deleting student" "$item" "'s feedback contents ..."
+      rm -rf "$item"/"$FED"/*
+      #echo "$item"/"$SUB" "is not empty."
+    else
+      # the brackets are necessary 
+      # otherwise all names will join into one single element
+      empty+=("$item")
+    fi
+  else
+    printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
+  fi
+done
+cd $HOME/Desktop
+
+echo "Deleting DONE!"
+echo
+
+if [ ${#empty[@]} -gt 0 ]; then
+  printf '%s \e[1;36m%s\e[0m %s\n' "The following stduents have an" "empty" "submission folder"
+  for i in "${empty[@]}"; do
+    echo $i
+  done
+fi
+
