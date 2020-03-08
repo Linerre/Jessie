@@ -52,7 +52,7 @@ Below are two screenshots with highlighted syntax in both JavaScript and Linux c
 ![cm](https://github.com/Linerre/Jessie/blob/dev/highlighters/images/Linux.jpg)
 
 ## The server
-Please consier using the Live Server plug-in for VS Code to open the `.html` file. Or use any server that can put the HTML on live. Otherwise the console will not support JS modules. Hence everything nor working.
+Please consier using the Live Server plug-in for VS Code to open the `.html` file. Or use any server that can put the HTML on live. Otherwise the console will not support JS modules. Hence everything will not work.
 
 ## TO DO
 - [ ] Figure this out so that VS Code will not be mendatory;
