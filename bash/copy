@@ -35,7 +35,7 @@ for item in *; do
       # check .zip and .rar files
       if [[ $(ls "$item"/"$FED" | grep -e '\.zip$' | wc -l) -ge 1 ]]; then
         unzip -q "$item"/"$FED"/"*.zip" -d "$item"/"$FED"
-        rm "$item"/"$FED"/*.zip
+        rm "$item"/"$FED"/*.zip; rm -rf __MACOSX
       fi
 
       if [[ $(ls "$item"/"$FED" | grep -e '\.rar$' | wc -l) -ge 1 ]]; then
