@@ -19,7 +19,7 @@ for item in *; do
       # or
       # [ $(ls -A "$item"/"$SUB") == ".DS_Store"]
       
-      echo "Deleting student" "$item" "'s feedabck folder"
+      echo "Deleting student" "$item" "'s feedback contents ..."
       rm -rf "$item"/"$FED"/*
       #echo "$item"/"$SUB" "is not empty."
     else
@@ -31,12 +31,15 @@ for item in *; do
     printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
   fi
 done
-cd ..
+cd $HOME/Desktop
 
 echo "Deleting DONE!"
 echo
-printf '%s \e[1;36m%s\e[0m %s\n' "The following stduents have an" "empty" "submission folder"
-for i in "${empty[@]}"; do
-  echo $i
-done
+
+if [ ${#empty[@]} -gt 0 ]; then
+  printf '%s \e[1;36m%s\e[0m %s\n' "The following stduents have an" "empty" "submission folder"
+  for i in "${empty[@]}"; do
+    echo $i
+  done
+fi
 

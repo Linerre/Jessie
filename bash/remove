@@ -15,12 +15,12 @@ cd ${DIR}
 for item in *; do
   if [ -d "$item" ]; then
     # need to deal with .DS_STORE!q
-    if [ "$(ls -A "$item"/"$SUB" | wc -l)" -gt 1 ]; then
+    if [ "$(ls -A "$item"/"$SUB" | wc -l)" -ge 1 ]; then
       # or
       # [ $(ls -A "$item"/"$SUB") == ".DS_Store"]
       
-      echo "Deleting student" "$item" "'s feedback contents ..."
-      rm -rf "$item"/"$FED"/*
+      echo "Deleting student" "$item" "'s submission contents ..."
+      rm -rf "$item"/"$SUB"/*
       #echo "$item"/"$SUB" "is not empty."
     else
       # the brackets are necessary 
@@ -35,11 +35,8 @@ cd $HOME/Desktop
 
 echo "Deleting DONE!"
 echo
+echo "Start Compressing ..."
 
-if [ ${#empty[@]} -gt 0 ]; then
-  printf '%s \e[1;36m%s\e[0m %s\n' "The following stduents have an" "empty" "submission folder"
-  for i in "${empty[@]}"; do
-    echo $i
-  done
-fi
+zip -rq homework $DIR
+# zip -rd homework.zip __MACOSX
 
