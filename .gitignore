@@ -13,3 +13,6 @@ toolkit/
 # ignore any kind of scripts not in use
 _*.js
 _*.html
+
+# ignore the erase script
+bash/erase
