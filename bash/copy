@@ -35,8 +35,8 @@ for item in *; do
       # check .zip and .rar files
       if [[ $(ls "$item"/"$FED" | grep -e '\.zip$' | wc -l) -ge 1 ]]; then
         unzip -q "$item"/"$FED"/"*.zip" -d "$item"/"$FED"
+        rm -rf "$item"/"$FED"/__MACOSX
         rm "$item"/"$FED"/*.zip
-        rm -rf "*MACOSX"
       fi
 
       if [[ $(ls "$item"/"$FED" | grep -e '\.rar$' | wc -l) -ge 1 ]]; then
@@ -49,7 +49,7 @@ for item in *; do
     printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
   fi
 done
-cd ~/Desktop
+cd $HOME/Desktop
 
 echo "Copying DONE!"
 echo
