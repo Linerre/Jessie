@@ -11,6 +11,13 @@
     display: none;
 }
 
+.question {
+    font-family: Monaco, Menlo,iosevka, Hack;
+    background-color: #343D46;
+    color: #65737E;
+    padding: 2px 5px; 
+}
+
 pre code {
     display: block;
     font-family: Monaco, Menlo,iosevka, Hack;
