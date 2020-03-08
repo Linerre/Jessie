@@ -37,6 +37,9 @@ echo "Deleting DONE!"
 echo
 echo "Start Compressing ..."
 
-zip -rq homework $DIR
-# zip -rd homework.zip __MACOSX
+zip -rq $folder $DIR
+zip -dq $folder "*.DS_Store"
+zip -dq $folder "*__MACOSX*"
+
+echo "Compressing DONE!"
 
