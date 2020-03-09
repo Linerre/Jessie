@@ -37,9 +37,16 @@ echo "Deleting DONE!"
 echo
 echo "Start Compressing ..."
 
-zip -rq $folder $DIR
-zip -dq $folder "*.DS_Store"
-zip -dq $folder "*__MACOSX*"
+zip -rq "${folder}.zip" $folder
+
+# delete all .DS_Store and __MACOSX
+# first delete .DS_Store
+if [[ $(unzip -l "${folder}.zip" | grep ".DS_Store" | wc -l) -ge 1 ]]; then 
+  zip -dq "${folder}.zip" "*.DS_Store"
+# then delete __MACOSX
+elif [[ $(unzip -l "${folder}.zip" | grep "__MACOSX" | wc -l) -ge 1 ]]; then
+  zip -dq "${folder}.zip" "*__MACOSX*"
+fi
 
 echo "Compressing DONE!"
 
