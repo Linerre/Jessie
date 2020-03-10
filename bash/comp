@@ -37,7 +37,10 @@ echo "Deleting DONE!"
 echo
 echo "Start Compressing ..."
 
-zip -r9q "${folder}.zip" $folder
+while zip -rq -9 "${folder}.zip" $folder; do
+  printf '\e[0;33m%s\e[0m' '#'
+  sleep 0.001
+done
 
 # delete all .DS_Store and __MACOSX
 # first delete .DS_Store
