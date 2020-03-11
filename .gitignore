@@ -15,4 +15,4 @@ _*.js
 _*.html
 
 # ignore the erase script
-bash/erase
+bash/remove
