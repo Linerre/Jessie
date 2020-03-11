@@ -33,12 +33,14 @@ SHGREEN = [
 
 
 SHMAGENTA = [
-    /(for)( +[\w\d]+ +)(in)/
+    /(for)( +[\w\d]+ +)(in)/,
 
 // complete later
-//    /do(?=\n)/, /if(?= +<span)/, /then(?= ?)/, /else(?=\n)/,
+   /do(?=\n)/, 
+   
+//    /if(?= +<span)/, /then(?= ?)/, /else(?=\n)/,
 
-//    /fi(?=\n)/, /done\n/
+   /fi(?=\n)/, /done\n/
 ],
 
 SHCYAN = [
@@ -88,7 +90,13 @@ export function highlight(command) {
     command = command.replace(new RegExp(SHMAGENTA[0], 'g'),
     st.MAGENTA+'$1'+st.CLOSE+
     '$2'+
-    st.MAGENTA+'$3'+st.CLOSE)
+    st.MAGENTA+'$3'+st.CLOSE);
+
+    command = command.replace(new RegExp(SHMAGENTA[1], 'g'),
+    st.MAGENTA+'$&'+st.CLOSE);
+
+    command = command.replace(new RegExp(SHMAGENTA[3], 'g'),
+    st.MAGENTA+'$&'+st.CLOSE);
 
 
     // ====== highlight Commands
