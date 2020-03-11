@@ -33,8 +33,11 @@ SHGREEN = [
 
 
 SHMAGENTA = [
+    // traditional shell form: for var in [words]; do
     /(for)( +[\w\d]+ +)(in)/,
-
+    //  C form for ((expr1; expr2; expr3))
+    /(for)( +<span)/,
+    
 // complete later
    /do(?=\n)/, 
    
@@ -46,7 +49,8 @@ SHMAGENTA = [
 SHCYAN = [
     /\||;/,
     /-/,
-    /&gt;|&lt;/
+    /&gt;|&lt;/,
+    /\({2}|\){2}/
 ],
 
 SHORANGE = [
@@ -86,16 +90,23 @@ export function highlight(command) {
     }
 
     // ====== highlight Keywords (if, done, etc)
-    // for ... in ...
+    // for var in ...
     command = command.replace(new RegExp(SHMAGENTA[0], 'g'),
     st.MAGENTA+'$1'+st.CLOSE+
     '$2'+
     st.MAGENTA+'$3'+st.CLOSE);
 
+    // for ((expr1; expr2; expr3)) do;
     command = command.replace(new RegExp(SHMAGENTA[1], 'g'),
+    st.MAGENTA+'$1'+st.CLOSE+
+    '$2');
+
+    // do
+    command = command.replace(new RegExp(SHMAGENTA[2], 'g'),
     st.MAGENTA+'$&'+st.CLOSE);
 
-    command = command.replace(new RegExp(SHMAGENTA[3], 'g'),
+    // done
+    command = command.replace(new RegExp(SHMAGENTA[4], 'g'),
     st.MAGENTA+'$&'+st.CLOSE);
 
 
