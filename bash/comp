@@ -43,7 +43,7 @@ zip -rq -9 "${folder}.zip" $folder
 # first delete .DS_Store
 if [[ $(unzip -l "${folder}.zip" | grep ".DS_Store" | wc -l) -ge 1 ]]; then 
   zip -dq "${folder}.zip" "*.DS_Store"
-# then delete __MACOSX
+# then delete __MACOSX/
 elif [[ $(unzip -l "${folder}.zip" | grep "__MACOSX" | wc -l) -ge 1 ]]; then
   zip -dq "${folder}.zip" "*__MACOSX*"
 fi
