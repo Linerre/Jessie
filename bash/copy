@@ -28,7 +28,7 @@ for item in *; do
       empty+=("$item")
     # if not empty  
     else
-      printf '%s \e[0;34m%s\e[0m %s\n' "Copying student" "$item" "'s submussion to feedback folder"
+      printf '%s \e[0;34m%s\e[0m%s\n' "Copying student" "$item" "'s submussions to feedback folder"
       cp -R "$item"/"$SUB"/* "$item"/"$FED"/
       load+=("$item")
 
