@@ -64,3 +64,5 @@ if [ ${#empty[@]} -gt 0 ]; then
     echo $i
   done
 fi
+# delet the arrays to avoid duplicate counts
+unset empty load total
