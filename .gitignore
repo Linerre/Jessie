@@ -15,4 +15,5 @@ _*.js
 _*.html
 
 # ignore the erase script
-bash/remove
+#bash/remove
+bash/pcopy
