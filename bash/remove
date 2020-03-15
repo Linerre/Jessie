@@ -1,18 +1,17 @@
 #! /bin/bash
-
-# read -p 'Please enter your username: ' username
+# remove all the contents in students' feedback folder
 read -p 'Please enter target folder name: ' folder
 
 DIR="$HOME/Desktop/$folder"
 SUB="Submission attachment(s)"
 FED="Feedback Attachment(s)"
 
+# total holds the total num of the students
+total=$(ls -l $DIR | grep -c -e "^d")
 # empty array to hold students who submit nothing
 declare -a empty
-# load array to hold students who submit sth
-declare -a load
-# total array to hold all students
-declare -a total
+# load holds the num of students who submit sth
+load
 
 bar="##############################" # 30
 barlen=${#bar}
@@ -23,7 +22,7 @@ remove() {
     # check if the item is a dir
     if [ -d "$item" ]; then
       # count as one student if item is a directory
-      total+=("$item")
+      # total+=("$item")
 
       # check if empty, i.e either empty or mere a .DS_Store file
       if [[ "$(ls -A "$item"/"$SUB" | wc -l)" -eq 0 \
