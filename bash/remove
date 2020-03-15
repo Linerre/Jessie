@@ -6,13 +6,18 @@ DIR="$HOME/Desktop/$folder"
 SUB="Submission attachment(s)"
 FED="Feedback Attachment(s)"
 
+# get rid of all the annoying .DS_Store files!
+rm -rf $DIR/*/*/.DS_Store
 # total holds the total num of the students
 total=$(ls -l $DIR | grep -c -e "^d")
 
+# load holds the num of those who sub-ed sth
+load=$(find $DIR/* -mindepth 1 -maxdepth 1 \! -empty | wc -l)
+echo $load
 
-bar="##############################" # 30
-barlen=${#bar}
-n=0
+bar="############################################################" # 60
+# barlen=${#bar}
+n=1
 
 remove() {
   for item in *; do
@@ -33,9 +38,9 @@ remove() {
       # if not empty  
       else
         rm -rf "$item"/"$FED"/*
-        load+=("$item")
-        # printf "\r[%-${barlen}s]" "${bar:0:++n}"
-        # sleep 0.1
+        # load+=("$item")
+        printf "\r[%-${load}s]" "${bar:0:++n}"
+        sleep 0.1
       fi
     else
       # if not a dir, do nothing
@@ -62,7 +67,7 @@ cd $HOME/Desktop
 printf "\e[0;32m%s\e[0m\n" "Deleting DONE!"
 echo
 printf "\e[1;32m%d\e[0m students in total.\n" $total
-printf "\e[1;33m%d\e[0m students got feedback.\n" ${#load[@]}
+printf "\e[1;33m%d\e[0m students got feedback.\n" $load
 printf "\e[1;31m%d\e[0m students submitted nothing.\n" ${#empty[@]}
 
 echo
