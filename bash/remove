@@ -42,7 +42,7 @@ remove() {
 }
 
 # start processing
-printf "\e[0;33m%s\[0m\n" "Start Deleting ..."
+printf "\e[0;33m%s\e[0m\n" "Start Deleting ..."
 cd ${DIR}
 remove
 
