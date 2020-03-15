@@ -14,7 +14,9 @@ declare -a load
 # total array to hold all students
 declare -a total
 
-
+bar="##############################" # 30
+barlen=${#bar}
+n=0
 
 remove() {
   for item in *; do
@@ -29,9 +31,10 @@ remove() {
         empty+=("$item")
       # if not empty  
       else
-        # printf '%s \e[0;34m%s\e[0m%s\n' "Deleting student" "$item" "'s feedback content"
         rm -rf "$item"/"$FED"/*
         load+=("$item")
+        printf "\r[%-${barlen}s]" "${bar:0:++n}"
+        sleep 0.1
       fi
     else
       # echo 
@@ -39,13 +42,21 @@ remove() {
       continue
     fi
   done
+  # count=0
+  # while ((count<=30)); do
+  #   # bash supports only integer; make sure n increases in one each time
+  #   n=$((count*barlen / 30)) # 0 1 2 3 4 5 
+  #   printf "\r[%-${barlen}s]" "${bar:0:n}"
+  #   count=$(( count + 1))
+  #   sleep 0.1
+  # done
+  echo
 }
 
 # start processing
 printf "\e[0;33m%s\e[0m\n" "Start Deleting ..."
 cd ${DIR}
 remove
-
 cd $HOME/Desktop
 
 printf "\e[0;32m%s\e[0m\n" "Deleting DONE!"
@@ -71,4 +82,4 @@ printf "\e[0;34m%-10s\e[0m\t\e[0;34m%-40s\e[0m\n" "NetID" "Student Name"
 for ((i = 0; i < ${#name[@]}; ++i)); do
    printf "%-10s\t%-35s\n" "${netid[i]}" "${name[i]}"
 done
-unset empty load total
+unset empty load total count
