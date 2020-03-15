@@ -21,9 +21,12 @@ remove() {
       # count as one student if item is a directory
       # total+=("$item")
 
-      # check if empty, i.e either empty or mere a .DS_Store file
-      if [[ "$(ls -A "$item"/"$SUB" | wc -l)" -eq 0 \
-        || "$(ls -A "$item"/"$SUB")" == ".DS_Store" ]]; then
+      # check if empty, i.e nothing there (but, perhaps, .DS_Store)
+      if [[ $(ls "$item"/"$SUB" | wc -l) -eq 0 ]]; then
+      # ==================== old and bad ======================
+      # if [[ "$(ls -A "$item"/"$SUB" | wc -l)" -eq 0 \
+      #   || "$(ls -A "$item"/"$SUB")" == ".DS_Store" ]]; then
+      # =======================================================
       # if empty
       # empty array to hold students who submit nothing   
         empty+=("$item")
