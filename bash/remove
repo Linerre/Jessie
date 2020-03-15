@@ -14,33 +14,41 @@ declare -a load
 # total array to hold all students
 declare -a total
 
-cd ${DIR}
 
-for item in *; do
-  if [ -d "$item" ]; then
-    # count as one student if item is a directory
-    total+=("$item")
 
-    # check if empty, i.e either empty or mere a .DS_Store file
-    if [[ "$(ls -A "$item"/"$SUB" | wc -l)" -eq 0 \
-      || "$(ls -A "$item"/"$SUB")" == ".DS_Store" ]]; then
-    # if empty   
-      empty+=("$item")
-    # if not empty  
+remove() {
+  for item in *; do
+    if [ -d "$item" ]; then
+      # count as one student if item is a directory
+      total+=("$item")
+
+      # check if empty, i.e either empty or mere a .DS_Store file
+      if [[ "$(ls -A "$item"/"$SUB" | wc -l)" -eq 0 \
+        || "$(ls -A "$item"/"$SUB")" == ".DS_Store" ]]; then
+      # if empty   
+        empty+=("$item")
+      # if not empty  
+      else
+        # printf '%s \e[0;34m%s\e[0m%s\n' "Deleting student" "$item" "'s feedback content"
+        rm -rf "$item"/"$FED"/*
+        load+=("$item")
+      fi
     else
-      # printf '%s \e[0;34m%s\e[0m%s\n' "Deleting student" "$item" "'s feedback content"
-      rm -rf "$item"/"$FED"/*
-      load+=("$item")
+      # echo 
+      # printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
+      continue
     fi
-  else
-    # echo 
-    # printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
-    continue
-  fi
-done
+  done
+}
+
+# start processing
+printf "\e[0;33m%s\[0m\n" "Start Deleting ..."
+cd ${DIR}
+remove
+
 cd $HOME/Desktop
 
-echo "Deleting DONE!"
+printf "\e[0;32m%s\e[0m\n" "Deleting DONE!"
 echo
 printf "\e[1;32m%d\e[0m students in total.\n" ${#total[@]}
 printf "\e[1;33m%d\e[0m students got feedback.\n" ${#load[@]}
