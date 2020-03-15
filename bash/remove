@@ -20,6 +20,7 @@ n=0
 
 remove() {
   for item in *; do
+    # check if the item is a dir
     if [ -d "$item" ]; then
       # count as one student if item is a directory
       total+=("$item")
@@ -33,12 +34,11 @@ remove() {
       else
         rm -rf "$item"/"$FED"/*
         load+=("$item")
-        printf "\r[%-${barlen}s]" "${bar:0:++n}"
-        sleep 0.1
+        # printf "\r[%-${barlen}s]" "${bar:0:++n}"
+        # sleep 0.1
       fi
     else
-      # echo 
-      # printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
+      # if not a dir, do nothing
       continue
     fi
   done
