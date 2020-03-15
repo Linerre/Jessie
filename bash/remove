@@ -1,5 +1,7 @@
 #! /bin/bash
 # remove all the contents in students' feedback folder
+
+# get the dir name from user
 read -p 'Please enter target folder name: ' folder
 
 DIR="$HOME/Desktop/$folder"
@@ -7,17 +9,16 @@ SUB="Submission attachment(s)"
 FED="Feedback Attachment(s)"
 
 # get rid of all the annoying .DS_Store files!
-rm -rf $DIR/*/*/.DS_Store
+rm -rf $DIR/*/*/.DS_Store $DIR/*/.DS_Store
+
 # total holds the total num of the students
 total=$(ls -l $DIR | grep -c -e "^d")
-
 # load holds the num of those who sub-ed sth
 load=$(find $DIR/* -mindepth 1 -maxdepth 1 \! -empty | wc -l)
-echo $load
 
 bar="############################################################" # 60
 # barlen=${#bar}
-n=1
+count=1
 
 remove() {
   for item in *; do
@@ -39,7 +40,8 @@ remove() {
       else
         rm -rf "$item"/"$FED"/*
         # load+=("$item")
-        printf "\r[%-${load}s]" "${bar:0:++n}"
+        pro=$((count*100/load))
+        printf "\r[%-${load}s] %2d%%" "${bar:0:++count}" $pro
         sleep 0.1
       fi
     else
@@ -47,14 +49,6 @@ remove() {
       continue
     fi
   done
-  # count=0
-  # while ((count<=30)); do
-  #   # bash supports only integer; make sure n increases in one each time
-  #   n=$((count*barlen / 30)) # 0 1 2 3 4 5 
-  #   printf "\r[%-${barlen}s]" "${bar:0:n}"
-  #   count=$(( count + 1))
-  #   sleep 0.1
-  # done
   echo
 }
 
