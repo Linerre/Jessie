@@ -1,52 +1,78 @@
 #! /bin/bash
 
-# read -p 'Please enter your username: ' username
+# remove all the contents in submission and zip the whole dir
+
 read -p 'Please enter target folder name: ' folder
 
-DIR="/Users/$USER/Desktop/$folder"
+DIR="$HOME/Desktop/$folder"
 SUB="Submission attachment(s)"
 FED="Feedback Attachment(s)"
 
-# create an empty array to hold students who submit nothing
-declare -a empty
+# get rid of all the annoying .DS_Store files!
+rm -rf $DIR/*/*/.DS_Store $DIR/*/.DS_Store
 
-cd ${DIR}
+# the num of stu who sub-ed sth
+load=$( find $DIR/*/"Submission attachment(s)" -maxdepth 0 \! -empty | wc -l )
 
-for item in *; do
-  if [ -d "$item" ]; then
-    # need to deal with .DS_STORE!q
-    if [ "$(ls -A "$item"/"$SUB" | wc -l)" -ge 1 ]; then
-      # or
-      # [ $(ls -A "$item"/"$SUB") == ".DS_Store"]
-      
-      echo "Deleting student" "$item" "'s submission contents ..."
-      rm -rf "$item"/"$SUB"/*
-      #echo "$item"/"$SUB" "is not empty."
+# the num of all the files/folders to be zipped
+# This num could easilly be greater than 100
+# all=$( find $DIR -type d -or -type f | wc -l )
+
+bar="############################################################" # 60
+
+clean() {
+  n=1
+  for item in *; do
+    if [ -d "$item" ]; then
+      # if [ "$(ls "$item"/"$SUB" | wc -l)" -ge 1 ]; then      
+        rm -rf "$item"/"$SUB"/*
+        cleanPro=$((n*100/load))
+        printf "\r[%-${load}s] %3d%%" "${bar:0:++n}" $cleanPro
+        sleep 0.1
+
+      # else
+        # the brackets are necessary 
+        # otherwise all names will join into one single element
+        # empty+=("$item")
+      # fi
     else
-      # the brackets are necessary 
-      # otherwise all names will join into one single element
-      empty+=("$item")
+      # if not a dir, do nothing
+      continue
     fi
-  else
-    printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
-  fi
-done
+  done
+  echo
+}
+
+pack() {
+  
+  zip -rq -9 "${folder}.zip" $folder &
+  
+  # delete all .DS_Store and __MACOSX
+  # send stdout and stderror to null if either of them not found
+  zip -dq "${folder}.zip" "*.DS_Store" &> /dev/null &
+  zip -dq "${folder}.zip" "*__MACOSX*" &> /dev/null &
+  m=1
+  while ((m<=50))
+  do
+    packPro=$((m*100/50))
+    printf "\r[%-51s] %3d%%" "${bar:0:++m}" $packPro
+    sleep 0.3
+  done
+  echo
+}
+
+
+# start processing
+cd ${DIR}
+printf "\e[0;33m%s\e[0m\n" "Start Cleaning Submitted Contents ..."
+# clcean
+printf "\e[0;33m%s\e[0m\n" "Cleaning DONE!"
+
 cd $HOME/Desktop
-
-echo "Deleting DONE!"
 echo
-echo "Start Compressing ..."
+printf "\e[0;33m%s\e[0m\n" "Start Compressing ..."
+pack
+printf "\e[0;32m%s\e[0m\n" "Compressing DONE!"
 
-zip -rq -9 "${folder}.zip" $folder
-
-# delete all .DS_Store and __MACOSX
-# first delete .DS_Store
-if [[ $(unzip -l "${folder}.zip" | grep ".DS_Store" | wc -l) -ge 1 ]]; then 
-  zip -dq "${folder}.zip" "*.DS_Store"
-# then delete __MACOSX/
-elif [[ $(unzip -l "${folder}.zip" | grep "__MACOSX" | wc -l) -ge 1 ]]; then
-  zip -dq "${folder}.zip" "*__MACOSX*"
-fi
-
-echo "Compressing DONE!"
+unset empty load m n all
 
