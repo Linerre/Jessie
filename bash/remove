@@ -15,7 +15,6 @@ rm -rf $DIR/*/*/.DS_Store $DIR/*/.DS_Store
 total=$(ls -l $DIR | grep -c -e "^d")
 # load holds the num of those who sub-ed sth
 load=$(find $DIR/*/"$SUB" -mindepth 0 -maxdepth 0 \! -empty | wc -l)
-echo $load
 
 bar="############################################################" # 60
 # barlen=${#bar}

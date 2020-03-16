@@ -17,7 +17,7 @@ total=$(ls -l $DIR | grep -c -e "^d")
 
 # load holds the num of those who sub-ed sth
 # ATM all feedback folders are empty so this method works well
-# In remove, yet another another condition need to be added!
+# In remove, conditions are slightly different
 load=$(find $DIR/* -mindepth 1 -maxdepth 1 \! -empty | wc -l)
 
 bar="############################################################" # 60
