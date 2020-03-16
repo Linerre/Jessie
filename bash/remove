@@ -66,9 +66,7 @@ printf "\e[1;31m%d\e[0m students submitted nothing.\n" ${#empty[@]}
 
 echo
 if [ ${#empty[@]} -gt 0 ]; then
-    declare -a name
-    declare -a netid
-    pat='([a-zA-Z ,]+)\(([a-z0-9]+)\)'
+  pat='([a-zA-Z ,]+)\(([a-z0-9]+)\)'
   for i in "${empty[@]}"; do
     [[ "$i" =~ $pat ]] 
 	name+=("${BASH_REMATCH[1]}")
@@ -81,4 +79,6 @@ printf "\e[0;34m%-10s\e[0m\t\e[0;34m%-40s\e[0m\n" "NetID" "Student Name"
 for ((i = 0; i < ${#name[@]}; ++i)); do
    printf "%-10s\t%-35s\n" "${netid[i]}" "${name[i]}"
 done
-unset empty load total count
+
+# delete useless vars
+unset empty load total count name netid
