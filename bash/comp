@@ -59,8 +59,8 @@ pack() {
 # start processing
 cd ${DIR}
 printf "\e[0;33m%s\e[0m\n" "Start Cleaning Submitted Contents ..."
-clcean
-printf "\e[0;33m%s\e[0m\n" "Cleaning DONE!"
+clean
+printf "\e[0;32m%s\e[0m\n" "Cleaning DONE!"
 
 cd $HOME/Desktop
 echo
