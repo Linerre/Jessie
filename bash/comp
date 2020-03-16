@@ -14,10 +14,6 @@ rm -rf $DIR/*/*/.DS_Store $DIR/*/.DS_Store
 # the num of stu who sub-ed sth
 load=$( find $DIR/*/"Submission attachment(s)" -maxdepth 0 \! -empty | wc -l )
 
-# the num of all the files/folders to be zipped
-# This num could easilly be greater than 100
-# all=$( find $DIR -type d -or -type f | wc -l )
-
 bar="############################################################" # 60
 
 clean() {
@@ -29,12 +25,6 @@ clean() {
         cleanPro=$((n*100/load))
         printf "\r[%-${load}s] %3d%%" "${bar:0:++n}" $cleanPro
         sleep 0.1
-
-      # else
-        # the brackets are necessary 
-        # otherwise all names will join into one single element
-        # empty+=("$item")
-      # fi
     else
       # if not a dir, do nothing
       continue
@@ -44,13 +34,17 @@ clean() {
 }
 
 pack() {
-  
+  # compressing in the background
   zip -rq -9 "${folder}.zip" $folder &
   
   # delete all .DS_Store and __MACOSX
   # send stdout and stderror to null if either of them not found
   zip -dq "${folder}.zip" "*.DS_Store" &> /dev/null &
   zip -dq "${folder}.zip" "*__MACOSX*" &> /dev/null &
+
+  # meanwhile wait 15s with a progress bar doing the countdown
+  # 15s might be slightly shorter or longer than necessary
+  # in a test for 118MB zip (which takes around 7.5s), it is far more than enough
   m=1
   while ((m<=50))
   do
@@ -65,7 +59,7 @@ pack() {
 # start processing
 cd ${DIR}
 printf "\e[0;33m%s\e[0m\n" "Start Cleaning Submitted Contents ..."
-# clcean
+clcean
 printf "\e[0;33m%s\e[0m\n" "Cleaning DONE!"
 
 cd $HOME/Desktop
@@ -74,5 +68,5 @@ printf "\e[0;33m%s\e[0m\n" "Start Compressing ..."
 pack
 printf "\e[0;32m%s\e[0m\n" "Compressing DONE!"
 
-unset empty load m n all
+unset empty load m n cleanPro packPro
 
