@@ -15,9 +15,10 @@
 2. [下载安装 The Unarchiver (备选)](https://github.com/Linerre/Jessie/blob/dev/bash/docs/README-unarchiever.md)
 3. [查看脚本文件 `copy` 的权限](https://github.com/Linerre/Jessie/blob/dev/bash/docs/README-mode.md)
 4. [确认作业总文件夹的名称](https://github.com/Linerre/Jessie/blob/dev/bash/docs/README-pathname.md)
+
 ⚠️：请一定阅读**第4条准备工作中的第一小节**。
 
-## 输入变量
+## copy
 1. 打开 iTerm （确保当前所在路径为 `~/Desktop`）
 2. 接着输入 `. Jessie/bash/copy`
 
