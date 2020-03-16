@@ -39,7 +39,6 @@ delivery() {
         pro=$((count*100/load))
         printf "\r[%-${load}s] %2d%%" "${bar:0:++count}" $pro
         sleep 0.1
-        # load+=("$item")
 
         # check .zip and .rar files
         if [[ $(ls "$item"/"$FED" | grep -e '\.zip$' | wc -l) -ge 1 ]]; then
@@ -70,16 +69,26 @@ cd $HOME/Desktop
 
 printf "\e[0;32m%s\e[0m\n" "Copying DONE!"
 echo
+
 printf "\e[1;32m%d\e[0m students in total.\n" $total
 printf "\e[1;33m%d\e[0m students submitted homework.\n" $load
 printf "\e[1;31m%d\e[0m students submitted nothing.\n" ${#empty[@]}
-
 echo
+
 if [ ${#empty[@]} -gt 0 ]; then
-  printf "The following students have \e[1;36m%s\e[0m submission.\n" "NO"
+  pat='([a-zA-Z ,]+)\(([a-z0-9]+)\)'
   for i in "${empty[@]}"; do
-    echo $i
+    [[ "$i" =~ $pat ]] 
+  name+=("${BASH_REMATCH[1]}")
+  netid+=("${BASH_REMATCH[2]}") 
   done
 fi
+
+printf "The following students have \e[1;36m%s\e[0m submission.\n" "NO"
+printf "\e[0;34m%-10s\e[0m\t\e[0;34m%-40s\e[0m\n" "NetID" "Student Name"
+for ((i = 0; i < ${#name[@]}; ++i)); do
+   printf "%-10s\t%-35s\n" "${netid[i]}" "${name[i]}"
+done
+
 # delet the arrays to avoid duplicate counts
-unset empty load total count
+unset empty load total count name netid
