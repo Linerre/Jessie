@@ -16,8 +16,9 @@ rm -rf $DIR/*/*/.DS_Store $DIR/*/.DS_Store
 total=$(ls -l $DIR | grep -c -e "^d")
 
 # load holds the num of those who sub-ed sth
+# ATM all feedback folders are empty so this method works well
+# In remove, yet another another condition need to be added!
 load=$(find $DIR/* -mindepth 1 -maxdepth 1 \! -empty | wc -l)
-echo $load
 
 bar="############################################################" # 60
 # barlen=${#bar}
