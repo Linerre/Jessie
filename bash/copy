@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# Copy and unzip submission' contents of each stu to feedback
+
 # read -p 'Please enter your username: ' username
 read -p 'Please enter target folder name: ' folder
 
@@ -7,62 +9,77 @@ DIR="/Users/$USER/Desktop/$folder"
 SUB="Submission attachment(s)"
 FED="Feedback Attachment(s)"
 
-# empty array to hold students who submit nothing
-declare -a empty
-# load array to hold students who submit sth
-declare -a load
-# total array to hold all students
-declare -a total
+# get rid of all the annoying .DS_Store files!
+rm -rf $DIR/*/*/.DS_Store $DIR/*/.DS_Store
+
+# var total to hold all students
+total=$(ls -l $DIR | grep -c -e "^d")
+
+# load holds the num of those who sub-ed sth
+load=$(find $DIR/* -mindepth 1 -maxdepth 1 \! -empty | wc -l)
+
+bar="############################################################" # 60
+# barlen=${#bar}
+count=1
+
+
+delivery() {
+  for item in *; do
+    if [ -d "$item" ]; then
+      # count as one student if item is a directory
+      total+=("$item")
+
+      # check if empty
+      if [[ $(ls "$item"/"$SUB" | wc -l) -eq 0 ]]; then
+      # if empty, create an empty array and add stu to it at the same time   
+        empty+=("$item")
+      # if not empty  
+      else
+        cp -R "$item"/"$SUB"/* "$item"/"$FED"/
+        pro=$((count*100/load))
+        printf "\r[%-${load}s] %2d%%" "${bar:0:++count}" $pro
+        sleep 0.1
+        # load+=("$item")
+
+        # check .zip and .rar files
+        if [[ $(ls "$item"/"$FED" | grep -e '\.zip$' | wc -l) -ge 1 ]]; then
+          unzip -q "$item"/"$FED"/"*.zip" -d "$item"/"$FED" 2> /dev/null
+          rm -rf "$item"/"$FED"/__MACOSX/
+          rm "$item"/"$FED"/*.zip
+        fi
+
+        if [[ $(ls "$item"/"$FED" | grep -e '\.rar$' | wc -l) -ge 1 ]]; then
+          unrar x -ad -inul -o+ "$item"/"$FED"/"*.rar" "$item"/"$FED"/
+          rm "$item"/"$FED"/*.rar
+        fi
+      fi
+    else
+      # if not a dir, do nothing
+      continue
+    fi
+  done
+  echo
+}
+
+# start processing
+printf "\e[0;33m%s\e[0m\n" "Start Copying ..."
 
 cd ${DIR}
-
-for item in *; do
-  if [ -d "$item" ]; then
-    # count as one student if item is a directory
-    total+=("$item")
-
-    # check if empty, i.e either empty or mere a .DS_Store file
-    if [[ "$(ls -A "$item"/"$SUB" | wc -l)" -eq 0 \
-      || "$(ls -A "$item"/"$SUB")" == ".DS_Store" ]]; then
-    # if empty   
-      empty+=("$item")
-    # if not empty  
-    else
-      printf '%s \e[0;34m%s\e[0m%s\n' "Copying student" "$item" "'s submussions to feedback folder"
-      cp -R "$item"/"$SUB"/* "$item"/"$FED"/
-      load+=("$item")
-
-      # check .zip and .rar files
-      if [[ $(ls "$item"/"$FED" | grep -e '\.zip$' | wc -l) -ge 1 ]]; then
-        unzip -q "$item"/"$FED"/"*.zip" -d "$item"/"$FED" 2> /dev/null
-        rm -rf "$item"/"$FED"/__MACOSX/
-        rm "$item"/"$FED"/*.zip
-      fi
-
-      if [[ $(ls "$item"/"$FED" | grep -e '\.rar$' | wc -l) -ge 1 ]]; then
-        unrar x -ad -inul -o+ "$item"/"$FED"/"*.rar" "$item"/"$FED"/
-        rm "$item"/"$FED"/*.rar
-      fi
-    fi
-  else
-    echo 
-    printf '%s %s \e[1;31m%s\e[0m %s\n' "$item" 'is' 'NOT' 'a directory.'
-  fi
-done
+delivery
 cd $HOME/Desktop
 
-echo "Copying DONE!"
+printf "\e[0;32m%s\e[0m\n" "Copying DONE!"
 echo
-printf '\e[1;32m%d\e[0m %s\n' ${#total[@]} "students in total."
-printf '\e[1;33m%d\e[0m %s\n' ${#load[@]} "students submitted homework."
-printf '\e[1;31m%d\e[0m %s\n' ${#empty[@]} "students submitted nothing."
+printf "\e[1;32m%d\e[0m students in total.\n" $total
+printf "\e[1;33m%d\e[0m students submitted homework.\n" $load
+printf "\e[1;31m%d\e[0m students submitted nothing.\n" ${#empty[@]}
 
 echo
 if [ ${#empty[@]} -gt 0 ]; then
-  printf '%s \e[1;36m%s\e[0m %s\n' "The following students have" "NO" "submission."
+  printf "The following students have \e[1;36m%s\e[0m submission.\n" "NO"
   for i in "${empty[@]}"; do
     echo $i
   done
 fi
 # delet the arrays to avoid duplicate counts
-unset empty load total
+unset empty load total count
