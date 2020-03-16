@@ -14,7 +14,8 @@ rm -rf $DIR/*/*/.DS_Store $DIR/*/.DS_Store
 # total holds the total num of the students
 total=$(ls -l $DIR | grep -c -e "^d")
 # load holds the num of those who sub-ed sth
-load=$(find $DIR/* -mindepth 1 -maxdepth 1 \! -empty | wc -l)
+load=$(find $DIR/*/"$SUB" -mindepth 0 -maxdepth 0 \! -empty | wc -l)
+echo $load
 
 bar="############################################################" # 60
 # barlen=${#bar}
@@ -41,7 +42,7 @@ remove() {
         rm -rf "$item"/"$FED"/*
         # load+=("$item")
         pro=$((count*100/load))
-        printf "\r[%-${load}s] %2d%%" "${bar:0:++count}" $pro
+        printf "\r[%-${load}s] %3d%%" "${bar:0:++count}" $pro
         sleep 0.1
       fi
     else
@@ -81,4 +82,4 @@ for ((i = 0; i < ${#name[@]}; ++i)); do
 done
 
 # delete useless vars
-unset empty load total count name netid
+unset empty load total count name netid pro
