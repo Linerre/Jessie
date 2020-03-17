@@ -11,8 +11,8 @@ FED="Feedback Attachment(s)"
 # get rid of all the annoying .DS_Store files!
 rm -rf $DIR/*/*/.DS_Store $DIR/*/.DS_Store
 
-# the num of stu who sub-ed sth
-load=$( find $DIR/*/"Submission attachment(s)" -maxdepth 0 \! -empty | wc -l )
+# the num of all stu
+load=$( ls -l $DIR | grep -c -e "^d" )
 
 bar="############################################################" # 60
 
@@ -20,7 +20,6 @@ clean() {
   n=1
   for item in *; do
     if [ -d "$item" ]; then
-      # if [ "$(ls "$item"/"$SUB" | wc -l)" -ge 1 ]; then      
         rm -rf "$item"/"$SUB"/*
         cleanPro=$((n*100/load))
         printf "\r[%-${load}s] %3d%%" "${bar:0:++n}" $cleanPro
@@ -56,17 +55,20 @@ pack() {
 }
 
 
-# start processing
+# start deleting sub
 cd ${DIR}
 printf "\e[0;33m%s\e[0m\n" "Start Cleaning Submitted Contents ..."
 clean
 printf "\e[0;32m%s\e[0m\n" "Cleaning DONE!"
 
-cd $HOME/Desktop
 echo
+
+# start compressing
+cd $HOME/Desktop
 printf "\e[0;33m%s\e[0m\n" "Start Compressing ..."
 pack
 printf "\e[0;32m%s\e[0m\n" "Compressing DONE!"
 
+# dispose of useless vars
 unset empty load m n cleanPro packPro
 
