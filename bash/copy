@@ -2,7 +2,6 @@
 
 # Copy and unzip submission' contents of each stu to feedback
 
-# read -p 'Please enter your username: ' username
 read -p 'Please enter target folder name: ' folder
 
 DIR="/Users/$USER/Desktop/$folder"
