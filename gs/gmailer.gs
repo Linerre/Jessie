@@ -24,9 +24,9 @@ function libNotyWatcher() {
 		// check if the subject is one of the subjects
 		for (var sub of subjects) {
 			if (subject == sub) {
+				threads[i].markRead();
 				libNoty.addToThread(threads[i]);
 				threads[i].moveToArchive();
-				for (var mes of messages) {mes.markRead();}
 			} else continue;
 		}
 	}	
