@@ -12,10 +12,10 @@ subjects = [
 
 // mark as read, label with LibNoty (Library Notifications), and remove monthly(?)
 
-// get the first 50 threads from inbox and the needed lable
-var threads = GamilApp.getInboxThreads(0,50);
-var libNoty = GamilApp.getUserLabelByName("LibNoty");
-var inbox = GamilApp.getUserLabelByName("inbox");
+// get the first 50 threads from inbox and the needed label
+var threads = GmailApp.getInboxThreads(0,50);
+var libNoty = GmailApp.getUserLabelByName("LibNoty");
+var inbox = GmailApp.getUserLabelByName("inbox");
 
 function libNotyWatcher() {
 	for (var i = 0; i < threads.length; i++) {
@@ -25,7 +25,8 @@ function libNotyWatcher() {
 		// check if the subject is one of the subjects
 		for (var sub of subjects) {
 			if (subject == sub) {
-				lable.addToThread(threads[i]);
+				libNoty.addToThread(threads[i]);
+				inbox.deleteLabel();
 				message.markRead();
 			} else continue;
 		}
