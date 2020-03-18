@@ -20,7 +20,7 @@ function libNotyWatcher() {
 	for (var i = 0; i < threads.length; i++) {
 		// get the subject of the first message from each thread
 		var subject = threads[i].getFirstMessageSubject();
-		var messages = threads[i].getMessages();
+		// var messages = threads[i].getMessages();
 		// check if the subject is one of the subjects
 		for (var sub of subjects) {
 			if (subject == sub) {
