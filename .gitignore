@@ -17,3 +17,7 @@ _*.html
 # ignore the erase script
 #bash/remove
 bash/pcopy
+
+# ignore clasp files
+.clasp.json
+appsscript.json
