@@ -21,3 +21,4 @@ bash/pcopy
 # ignore clasp files
 .clasp.json
 appsscript.json
+Code.js
