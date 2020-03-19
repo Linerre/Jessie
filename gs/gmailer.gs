@@ -8,15 +8,17 @@ subjects = [
 	'NO Shanghai Paging Requests to Report',			// paging request
 	'NO NYUSH Booking Requests to Report',				// booking request
 	'There were NO Shanghai Expired Holds to Report',	// expired holds
+	''
 ]
 
 // mark as read, label with LibNoty (Library Notifications), and remove monthly(?)
 
 // get the first 50 threads from inbox and the needed label
 var threads = GmailApp.getInboxThreads(0,50);
-var libNoty = GmailApp.getUserLabelByName("LibNoty");
+var libNoty = GmailApp.getUserLabelByName('LibNoty');
 
 function libNotyWatcher() {
+	var count = 0;
 	for (var i = 0; i < threads.length; i++) {
 		// get the subject of the first message from each thread
 		var subject = threads[i].getFirstMessageSubject();
@@ -27,7 +29,16 @@ function libNotyWatcher() {
 				threads[i].markRead();
 				libNoty.addToThread(threads[i]);
 				threads[i].moveToArchive();
+				count += 1;
 			} else continue;
 		}
-	}	
+	}
+	return count;	
+};
+
+// run every 12 hours
+Script.newTrigger('libNotyWatcher') {
+	.timeBased();
+	.everyHours(12);
+	.create();
 }
