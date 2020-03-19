@@ -36,9 +36,10 @@ function libNotyWatcher() {
 	return count;	
 };
 
-// run every 12 hours
-Script.newTrigger('libNotyWatcher') {
-	.timeBased();
-	.everyHours(12);
-	.create();
+// run every 4 hours
+function manager() {
+	var builder = ScriptApp.newTrigger('libNotyWatcher').timeBased();
+		builder.everyHours(4);
+		builder.create();	
 }
+
