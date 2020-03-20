@@ -1,55 +1,70 @@
 // check inbox to automate some daily routines
 
-// get email from lib-dba@nyu.edu or DoNotReply_EMS_Notification@nyu.edu
-const LIBDBA = "lib-dba@nyu.edu";
-const EMSNOTY = "DoNotReply_EMS_Notification@nyu.edu";
+// senders
+const LIBREPORT = "lib-dba@nyu.edu";
+const GROUPSTUD = "DoNotReply_EMS_Notification@nyu.edu";
 
-// if subject is one of the following ones, means no requests and not worth attention
+// Subjects
 var subjects = [
-	'NO Shanghai Paging Requests to Report',			// 2:00AM 8:00PM
-	'NO NYUSH Booking Requests to Report',				// 8:00AM 3:00PM
-	'There were NO Shanghai Expired Holds to Report',	// 12:01PM
-	'Based on the report criteria, there is no data to display for the designated time period.' // length 89
-]; 
-
-// mark as read, label with LibNoty (Library Notifications), and remove monthly(?)
-
-// get the first 50 threads from inbox and the needed label
-var threads = GmailApp.getInboxThreads(0,50);
-var libNoty = GmailApp.getUserLabelByName('LibNoty');
-
-// ====================================== this works ======
-var toBuy   = GmailApp.getUserLabelByName('To Buy/Ordered');
-toBuy.removeFromThread(threads[8]);
-Logger.log(threads[8]);
-
-function libNotyWatcher() {
-	Logger.log(threads[4].getMessages()[0].getPlainBody());
-	Logger.log(threads[4].getRawContent());
-
-	for (var i = 0; i < threads.length; i++) {
+  'NO Shanghai Paging Requests to Report',			// 2:00AM 8:00PM
+  'NO NYUSH Booking Requests to Report',			// 8:00AM 3:00PM
+  'There were NO Shanghai Expired Holds to Report',	// 12:01PM
+];
 
 
-		// get the subject of the first message from each thread
-		var subject = threads[i].getFirstMessageSubject();
-		// check if the subject is one of the subjects
-		for (var sub of subjects) {
-			if (subject == sub) {
-				threads[i].markRead();
-				libNoty.addToThread(threads[i]);
-				threads[i].moveToArchive();
-				count += 1;
-			} else continue;
-		}
-	}
-	// return count;	
+// Labels
+const LIBNOTY = {
+  DISCARD: GmailApp.getUserLabelByName('LibNoty/Discard'),
+  KEEP   : GmailApp.getUserLabelByName('LibNoty/Keep'),
+  REVIEW : GmailApp.getUserLabelByName('LibNoty/Review')
 };
+
+  
+
+// get the first 200 threads from inbox and the needed label
+var threads = GmailApp.getInboxThreads(0,200);
+  
+
+// deal with group study room report
+function testFeature() {
+  for (var i = 0; i < threads.length; i++) {
+    // no group study room report
+    if (threads[i].getMessages()[0].getFrom() == GROUPSTUD && threads[10].getMessages()[0].getAttachments().length == 0) {
+      // mark as read, label with Discard and archive
+      threads[i].markRead();
+      LIBNOTY.DISCARD.addToThread(threads[i]);
+      threads[i].moveToArchive();
+  
+    // with report attahcment
+    } else if (threads[i].getMessages()[0].getFrom() == GROUPSTUD && threads[10].getMessages()[0].getAttachments().length != 0) {
+      // keep it unread, label with Review but archive later
+      LIBNOTY.Review.addToThread(threads[i]);
+    }
+  }
+}
+  
+  
+function libNotyWatcher() {
+  for (var i = 0; i < threads.length; i++) {
+    // get the subject of the first message from each thread
+    var subject = threads[i].getFirstMessageSubject();
+ 
+    // check if the subject is one of the subjects
+    for (var sub of subjects) {
+        if (subject == sub) {
+            threads[i].markRead();
+            libNoty.addToThread(threads[i]);
+            threads[i].moveToArchive();
+            count += 1;
+      } else continue;
+    }
+  }
+}
 
 
 // run every 4 hours
 function manager() {
-	var builder = ScriptApp.newTrigger('libNotyWatcher').timeBased();
-		builder.everyHours(4);
-		builder.create();	
+  var builder = ScriptApp.newTrigger('libNotyWatcher').timeBased();
+  builder.everyHours(4);
+  builder.create();
 }
-
