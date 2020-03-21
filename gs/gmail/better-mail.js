@@ -90,7 +90,7 @@ function gNotifyAndAres() {
 	var read = `in:inbox is:read from:${CONTACTS.NTF}`;
 	var unread = `in:inbox is:unread from:${CONTACTS.NTF}`;
   var notifyUnread = find (unread);
-	var notifyRead = find(unread);
+	var notifyRead = find(read);
 
 	if (read.length !== 0) {
 		GmailApp.markThreadsUnimportant(notifyRead);
@@ -102,13 +102,6 @@ function gNotifyAndAres() {
 		GmailApp.markThreadsUnimportant(notifyUnread);
   	label('LibNoty/Keep').addToThreads(notifyUnread);
 	}
-}
-
-  
-
-  
-  
-  
 }
 
 // run every 4 hours
