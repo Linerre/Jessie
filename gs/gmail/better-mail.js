@@ -1,70 +1,104 @@
 // check inbox to automate some daily routines
 
-// senders
-const LIBREPORT = "lib-dba@nyu.edu";
-const GROUPSTUD = "DoNotReply_EMS_Notification@nyu.edu";
+const CONTACTS = {
+	// lib-related reports: holds, paging request, etc.
+	LIB : "lib-dba@nyu.edu",
+	// group study room reservation report, discard
+	EMS : "DoNotReply_EMS_Notification@nyu.edu",
+	RES : "shanghai.reserves@nyu.edu",
+	CIR : "shanghai.circulation@nyu.edu"，
+	ARE : "do-not-reply-nyu-classes-group@nyu.edu"
+};
 
-// Subjects
-var subjects = [
-  'NO Shanghai Paging Requests to Report',			// 2:00AM 8:00PM
-  'NO NYUSH Booking Requests to Report',			// 8:00AM 3:00PM
-  'There were NO Shanghai Expired Holds to Report',	// 12:01PM
+
+// any empty reports or notifications
+const TO_CAST_SUB = [
+  'NO Shanghai Paging Requests to Report',
+  'NO NYUSH Booking Requests to Report',
+  'There were NO Shanghai Expired Holds to Report',
+  'Return Receipt',
+  'NYU Shanghai Group Study Room Schedule'
+];
+
+// any non-empty or with-attachments reports 
+const TO_KEEP_SUB = [
+	'NYU52 ILL Rush Orders Report',
+	'Shanghai Patrons who owe more than 100 Report',
+	'Shanghai New Holds Report',
+	'ALEPH SHANGHAI Paging Request Report',
+	'CLANCY Offsite Requests',
+	'NYU SH Inventory Report'
 ];
 
 
 // Labels
-const LIBNOTY = {
-  DISCARD: GmailApp.getUserLabelByName('LibNoty/Discard'),
-  KEEP   : GmailApp.getUserLabelByName('LibNoty/Keep'),
-  REVIEW : GmailApp.getUserLabelByName('LibNoty/Review')
+const LIB_NOTY = {
+  CAST: GmailApp.getUserLabelByName('LibNoty/Discard'),
+  KEEP: GmailApp.getUserLabelByName('LibNoty/Keep'),
 };
 
   
 
-// get the first 200 threads from inbox and the needed label
-var threads = GmailApp.getInboxThreads(0,200);
-  
-
-// deal with group study room report
-function testFeature() {
-  for (var i = 0; i < threads.length; i++) {
-    // no group study room report
-    if (threads[i].getMessages()[0].getFrom() == GROUPSTUD && threads[10].getMessages()[0].getAttachments().length == 0) {
-      // mark as read, label with Discard and archive
-      threads[i].markRead();
-      LIBNOTY.DISCARD.addToThread(threads[i]);
-      threads[i].moveToArchive();
-  
-    // with report attahcment
-    } else if (threads[i].getMessages()[0].getFrom() == GROUPSTUD && threads[10].getMessages()[0].getAttachments().length != 0) {
-      // keep it unread, label with Review but archive later
-      LIBNOTY.Review.addToThread(threads[i]);
-    }
-  }
-}
-  
+// get the first 100 threads from inbox and the needed label
+// The Gmail Service won't make changes to more than 100 threads \
+// at a time, so batchLength defaults to 100.
+var threads = GmailApp.getInboxThreads(0,100);
+    
   
 function libNotyWatcher() {
   for (var i = 0; i < threads.length; i++) {
     // get the subject of the first message from each thread
     var subject = threads[i].getFirstMessageSubject();
- 
-    // check if the subject is one of the subjects
-    for (var sub of subjects) {
-        if (subject == sub) {
-            threads[i].markRead();
-            libNoty.addToThread(threads[i]);
-            threads[i].moveToArchive();
-            count += 1;
-      } else continue;
-    }
+    var sender = threads[i].getMessages()[0].getFrom();
+    var attach = threads[i].getMessages()[0].getAttachments();
+ 		
+ 		subjectChecker(threads[i], subject, TO_CAST_SUB, LIB_NOTY.CAST)
+ 		subjectChecker(threads[i], subject, TO_KEEP_SUB, LIB_NOTY.KEEP)
   }
-}
+};
+
+// clean notifications previously labelled 'keep' but without any attachement
+function libNotyCleaner() {
+	// array of threads labelled 'libnoty/keep' 
+	var targets = LIB_NOTY.KEEP.getThreads(0, 100);
+	for (var target of targets) {
+		var msg = target.getMessages()[0];
+		var ats = target.getMessages()[0].getAttachments();
+		if (ats.length == 0) {
+			LIB_NOTY.KEEP.removeFromThread(target);
+			LIB_NOTY.CAST.addToThread(target);
+		} else continue;
+	}
+
+	// clean all the 'discard' messages/threads to trash
+	var discards = LIB_NOTY.CAST.getThreads(0, 100);
+	GmailApp.moveThreadsToTrash(discards);
+};
 
 
 // run every 4 hours
 function manager() {
-  var builder = ScriptApp.newTrigger('libNotyWatcher').timeBased();
-  builder.everyHours(4);
-  builder.create();
+	// run every 4 hours
+  var hourjob = ScriptApp.newTrigger('libNotyWatcher').timeBased();
+  hourjob.everyHours(4)
+  .create();
+
+  // run every two months
+  var fortnightjob = ScriptApp.newTrigger('libNotyCleaner').timeBased();
+  fortnightjob.atHour(10)
+  .onWeekDay(ScriptApp.WeekDay.SATURDAT)
+  .everyWeeks(8)
+  .create();
+};
+
+
+function subjectChecker(thread, subject, subList, label) {
+	for (var sub of subList) {
+		if (subject == sub) {
+			thread.markUnimportant();
+			thread.markRead();
+			label.addToThread(thread);
+			thread.moveToArchive();
+		} else continue;
+	}
 }
