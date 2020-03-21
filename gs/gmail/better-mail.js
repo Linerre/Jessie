@@ -6,12 +6,13 @@ const CONTACTS = {
 	// group study room reservation report, discard
 	EMS : "DoNotReply_EMS_Notification@nyu.edu",
 	RES : "shanghai.reserves@nyu.edu",
-	CIR : "shanghai.circulation@nyu.edu"，
-	ARE : "do-not-reply-nyu-classes-group@nyu.edu"
+	CIR : "shanghai.circulation@nyu.edu",
+	ARE : "do-not-reply-nyu-classes-group@nyu.edu",
+	NTF : "notify@google.com"
 };
 
 
-// any empty reports or notifications
+// any empty reports or notificationRead
 const TO_CAST_SUB = [
   'NO Shanghai Paging Requests to Report',
   'NO NYUSH Booking Requests to Report',
@@ -34,7 +35,14 @@ const TO_KEEP_SUB = [
 // Labels
 const LIB_NOTY = {
   CAST: GmailApp.getUserLabelByName('LibNoty/Discard'),
-  KEEP: GmailApp.getUserLabelByName('LibNoty/Keep'),
+  KEEP: GmailApp.getUserLabelByName('LibNoty/Keep')
+};
+
+const ACTION = {
+	TODO : GmailApp.getUserLabelByName('Action/ToDo'),
+	DOING: GmailApp.getUserLabelByName('Action/Doing'),
+	DONE : GmailApp.getUserLabelByName('Action/Done'),
+	NOTED: GmailApp.getUserLabelByName('Action/Noted')
 };
 
   
@@ -42,32 +50,32 @@ const LIB_NOTY = {
 // get the first 100 threads from inbox and the needed label
 // The Gmail Service won't make changes to more than 100 threads \
 // at a time, so batchLength defaults to 100.
-var threads = GmailApp.getInboxThreads(0,100);
+var inboxThreads = GmailApp.getInboxThreads(0,100);
     
   
 function libNotyWatcher() {
-  for (var i = 0; i < threads.length; i++) {
+  for (var i = 0; i < inboxThreads.length; i++) {
     // get the subject of the first message from each thread
-    var subject = threads[i].getFirstMessageSubject();
-    var sender = threads[i].getMessages()[0].getFrom();
-    var attach = threads[i].getMessages()[0].getAttachments();
+    var subject = inboxThreads[i].getFirstMessageSubject();
+    var sender = inboxThreads[i].getMessages()[0].getFrom();
+    var attach = inboxThreads[i].getMessages()[0].getAttachments();
  		
- 		subjectChecker(threads[i], subject, TO_CAST_SUB, LIB_NOTY.CAST)
- 		subjectChecker(threads[i], subject, TO_KEEP_SUB, LIB_NOTY.KEEP)
+ 		subjectChecker(inboxThreads[i], subject, TO_CAST_SUB, LIB_NOTY.CAST)
+ 		subjectChecker(inboxThreads[i], subject, TO_KEEP_SUB, LIB_NOTY.KEEP)
   }
 };
 
-// clean notifications previously labelled 'keep' but without any attachement
+// clean notification previously labelled 'keep'
 function libNotyCleaner() {
-	// array of threads labelled 'libnoty/keep' 
 	var targets = LIB_NOTY.KEEP.getThreads(0, 100);
 	for (var target of targets) {
 		var msg = target.getMessages()[0];
 		var ats = target.getMessages()[0].getAttachments();
-		if (ats.length == 0) {
+		// trash non-attach
+		if (ats.length == 0 || ats.length == 2) {
 			LIB_NOTY.KEEP.removeFromThread(target);
 			LIB_NOTY.CAST.addToThread(target);
-		} else continue;
+		} 
 	}
 
 	// clean all the 'discard' messages/threads to trash
@@ -75,6 +83,33 @@ function libNotyCleaner() {
 	GmailApp.moveThreadsToTrash(discards);
 };
 
+// deal with ares class report and notify google
+// run every 12 hours
+function gNotifyAndAres() {
+	// if read, label discard + unimport and archive
+	var read = `in:inbox is:read from:${CONTACTS.NTF}`;
+	var unread = `in:inbox is:unread from:${CONTACTS.NTF}`;
+  var notifyUnread = find (unread);
+	var notifyRead = find(unread);
+
+	if (read.length !== 0) {
+		GmailApp.markThreadsUnimportant(notifyRead);
+  	label('LibNoty/Discard').addToThreads(notifyRead);
+  	GmailApp.moveThreadsToArchive(notifyRead);
+	}
+  
+	if (unread.length !== 0) {
+		GmailApp.markThreadsUnimportant(notifyUnread);
+  	label('LibNoty/Keep').addToThreads(notifyUnread);
+	}
+}
+
+  
+
+  
+  
+  
+}
 
 // run every 4 hours
 function manager() {
@@ -101,4 +136,30 @@ function subjectChecker(thread, subject, subList, label) {
 			thread.moveToArchive();
 		} else continue;
 	}
+};
+
+function labelSwap(oldLabel, newLabel, thread) {
+	oldLabel.removeFromThread(thread);
+	newLabel.addToThread(thread);
+};
+
+/* find.gs */
+function find(searchString, shouldLimit, batchLength) {
+  // The Gmail Service won't make changes to more than 100 threads
+  // at a time, so batchLength defaults to 100.
+  shouldLimit = (typeof shouldLimit !== 'undefined') ?  shouldLimit : true;
+  batchLength = (typeof batchLength !== 'undefined') ?  batchLength : 100;
+  if (shouldLimit) {
+    return GmailApp.search(searchString, 0, batchLength);
+  } else {
+    return GmailApp.search(searchString);
+  }
+};
+
+/* label.gs */
+
+function label(name) {
+  // This only works for user-defined labels,
+  // not system labels like "Spam."
+  return GmailApp.getUserLabelByName(name);
 }
