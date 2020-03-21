@@ -87,39 +87,36 @@ function libNotyCleaner() {
 // run every 12 hours
 function gNotifyAndAres() {
 	// if read, label discard + unimport and archive
-	var read = `in:inbox is:read from:${CONTACTS.NTF}`;
-	var unread = `in:inbox is:unread from:${CONTACTS.NTF}`;
-  var notifyUnread = find (unread);
-	var notifyRead = find(read);
+	var readFilters = `from:${CONTACTS.NTF} in:inbox is:read`;
+	var read = find(readFilters);
 
+	// if unread for more than one day, 
+	// label discard + unimportant and archive
+	var unreadForeverFilters = `from:${CONTACTS.NTF} in:inbox is:unread older_than:1d`;
+  var unreadForever = find(unreadForeverFilters);
+
+  // if unread for less than one day, keep it unread until the next loop
+	var unreadOneDayFilters = `from:${CONTACTS.NTF} in:inbox is:unread newer_than:1d`;
+	var unreadOneDay = find(unreadOneDayFilters);
+
+	
+	
 	if (read.length !== 0) {
-		GmailApp.markThreadsUnimportant(notifyRead);
-  	label('LibNoty/Discard').addToThreads(notifyRead);
-  	GmailApp.moveThreadsToArchive(notifyRead);
+		preClean('LibNoty/Discard', read)
 	}
   
-	if (unread.length !== 0) {
-		GmailApp.markThreadsUnimportant(notifyUnread);
-  	label('LibNoty/Keep').addToThreads(notifyUnread);
+	if (unreadForever.length !== 0) {
+		preClean('LibNoty/Discard', unreadForever);
+	}
+	if (unreadOneDay.length !== 0) {
+		GmailApp.markThreadsUnimportant(unreadOneDay);
+  	label('LibNoty/Keep').addToThreads(ureadOneDay);
 	}
 }
 
-// run every 4 hours
-function manager() {
-	// run every 4 hours
-  var hourjob = ScriptApp.newTrigger('libNotyWatcher').timeBased();
-  hourjob.everyHours(4)
-  .create();
-
-  // run every two months
-  var fortnightjob = ScriptApp.newTrigger('libNotyCleaner').timeBased();
-  fortnightjob.atHour(10)
-  .onWeekDay(ScriptApp.WeekDay.SATURDAT)
-  .everyWeeks(8)
-  .create();
-};
 
 
+// check subject and label accordingly
 function subjectChecker(thread, subject, subList, label) {
 	for (var sub of subList) {
 		if (subject == sub) {
@@ -131,9 +128,12 @@ function subjectChecker(thread, subject, subList, label) {
 	}
 };
 
-function labelSwap(oldLabel, newLabel, thread) {
-	oldLabel.removeFromThread(thread);
-	newLabel.addToThread(thread);
+// get things ready for cleaner
+function preClean(labelName, threads) {
+	GmailApp.markThreadsUnimportant(threads);
+	GmailApp.markThreadsRead(threads);
+	label(labelName).addToThreads(threads);
+	GmailApp.moveThreadsToArchive(threads);
 };
 
 /* find.gs */
@@ -156,3 +156,21 @@ function label(name) {
   // not system labels like "Spam."
   return GmailApp.getUserLabelByName(name);
 }
+
+
+/* ===================== triggers ================ */
+/* ===================== deprecated ================ */
+// run every 4 hours
+function manager() {
+	// run every 4 hours
+  var hourjob = ScriptApp.newTrigger('libNotyWatcher').timeBased();
+  hourjob.everyHours(4)
+  .create();
+
+  // run every two months
+  var fortnightjob = ScriptApp.newTrigger('libNotyCleaner').timeBased();
+  fortnightjob.atHour(10)
+  .onWeekDay(ScriptApp.WeekDay.SATURDAT)
+  .everyWeeks(8)
+  .create();
+};
