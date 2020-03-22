@@ -122,6 +122,34 @@ function gNotifyAndAres() {
 	}
 }
 
+function emsAndAres() {
+	var aresFilters = `from:${CONTACTS.ARE} label:inbox`;
+	var aresThreads = find(aresFilters);
+    // in case some are important by default, undo this!
+    GmailApp.markThreadsUnimportant(aresThreads);
+    
+    // star the NoSH message (a thread with a single msg) 
+	for (var thread of aresThreads) {
+		var msgnum = thread.getMessageCount();
+        var msg = thread.getMessages();   
+		if (msgnum == 1) {GmailApp.starMessages(msg);}
+  }
+  
+	// find those starred NoSH threads and discard them
+	var aresNoSHFilters = `from:${CONTACTS.ARE} label:inbox is:starred`;
+	var aresNoSHThreads = find(aresNoSHFilters);
+	preClean('LibNoty/Discard', aresNoSHThreads);
+  
+  // deal with SH threads, if (unread and older than 1d or more), discard 
+  var aresSHUnreadFilters = `from:${CONTACTS.ARE} label:inbox is:unread older_than:1d`;
+  var aresSHUnreadThreads = find(aresSHUnreadFilters);
+  preClean('LibNoty/Discard', aresSHUnreadThreads);
+    
+  // if read, discard
+  var aresSHReadFilters = `from:${CONTACTS.ARE} label:inbox is:read`;
+  var aresSHReadThreads = find(aresSHReadFilters);
+  preClean('LibNoty/Discard', aresSHReadThreads);
+}
 
 
 
