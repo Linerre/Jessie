@@ -3,14 +3,15 @@
 const CONTACTS = {
 	// lib-related reports: holds, paging request, etc.
 	LIB : "lib-dba@nyu.edu",
+	ALL : "lib-all@nyu.edu",
 	// group study room reservation report, discard
 	EMS : "DoNotReply_EMS_Notification@nyu.edu",
 	RES : "shanghai.reserves@nyu.edu",
 	CIR : "shanghai.circulation@nyu.edu",
 	ARE : "do-not-reply-nyu-classes-group@nyu.edu",
-	NTF : "notify@google.com"
+	NTF : "notify@google.com",
+	SHL : "shanghai.library@nyu.edu"
 };
-
 
 // any empty reports or notificationRead
 const TO_CAST_SUB = [
@@ -31,7 +32,6 @@ const TO_KEEP_SUB = [
 	'NYU SH Inventory Report'
 ];
 
-
 // Labels
 const LIB_NOTY = {
   CAST: GmailApp.getUserLabelByName('LibNoty/Discard'),
@@ -45,27 +45,70 @@ const ACTION = {
 	NOTED: GmailApp.getUserLabelByName('Action/Noted')
 };
 
-  
 
-// get the first 100 threads from inbox and the needed label
-// The Gmail Service won't make changes to more than 100 threads \
-// at a time, so batchLength defaults to 100.
-var inboxThreads = GmailApp.getInboxThreads(0,100);
-    
-  
+/* --------------------------- ATTENTION  -------------------------*/
+/*
+1. time-drive triggers better be created using GUI, unless in need of conditions
+2. catagorize email from within inbox and clean the useless later regularly
+3. (to be continued)
+
+
+
+
+*/
+
+/* --------------------------- run hourly ----------------------- */
+/* libnoty watcher */
+// run every 4 hours
 function libNotyWatcher() {
-  for (var i = 0; i < inboxThreads.length; i++) {
-    // get the subject of the first message from each thread
-    var subject = inboxThreads[i].getFirstMessageSubject();
-    var sender = inboxThreads[i].getMessages()[0].getFrom();
-    var attach = inboxThreads[i].getMessages()[0].getAttachments();
- 		
- 		subjectChecker(inboxThreads[i], subject, TO_CAST_SUB, LIB_NOTY.CAST)
- 		subjectChecker(inboxThreads[i], subject, TO_KEEP_SUB, LIB_NOTY.KEEP)
-  }
-};
+	var libThreadsFilters = `from:${CONTACTS.LIB} in:inbox is:unread`;
+	var libThreads = find(libThreadsFilters, batchLength=50);
 
-// clean notification previously labelled 'keep'
+  for (var i = 0; i < libThreads.length; i++) {
+    // get the subject of the first message from each thread
+    var subject = libThreads[i].getFirstMessageSubject();
+
+    // mark read + unimportant, label either 'keep'(non-empty) 
+    // or 'discard' (empty), and archive
+ 		subjectChecker(libThreads[i], subject, TO_CAST_SUB, LIB_NOTY.CAST)
+ 		subjectChecker(libThreads[i], subject, TO_KEEP_SUB, LIB_NOTY.KEEP)
+  }
+}
+
+
+/* --------------------------- run daily ----------------------- */
+/* libAll.gs */
+// take care of messages to lib-all@nyu.edu
+// run daily at noon 12:00PM
+function libAll() {
+	// lib-all invitations --> discard
+	var inviteFilters = `to:${CONTACTS.ALL} (invite.ics OR invite.vcs) has:attachment`;
+	var inviteThreads = find(inviteFilters);
+	preClean('LibNoty/Discard', inviteThreads);
+
+	// to:lib-all from:heads 
+}
+
+function emsAndAres() {
+	// group study room report --> discard
+	var emsFilters = `from:${CONTACTS.EMS} label:inbox`;
+	var emsThreads = find(emsFilters);
+	preClean(LIB_NOTY.CAST, emsThreads);
+
+	// ares merged class via NYU Classes
+	// only check those about SH
+	var aresFilters = `from:${CONTACTS.ARE} label:inbox`;
+	var aresThreads = find(aresFilters);
+	var aresThreadsNoSH = [];
+	// for those without SH (msg==1), move to the array and discard 
+	for (var thread of aresThreads) {
+		var msgnum = thread.getMessageCount();
+		if (msgnum > 1) {aresThreadsNoSH.push(thread)};
+	}
+	preClean(LIB_NOTY.CAST, aresThreadsNoSH);
+}
+
+// change label to discard for notification previously labelled 'keep'
 function libNotyCleaner() {
 	var targets = LIB_NOTY.KEEP.getThreads(0, 100);
 	for (var target of targets) {
@@ -83,6 +126,9 @@ function libNotyCleaner() {
 	GmailApp.moveThreadsToTrash(discards);
 };
 
+
+/* --------------------------- run weekly ----------------------- */
+
 // deal with ares class report and notify google
 // run every 12 hours
 function gNotifyAndAres() {
@@ -98,8 +144,6 @@ function gNotifyAndAres() {
   // if unread for less than one day, keep it unread until the next loop
 	var unreadOneDayFilters = `from:${CONTACTS.NTF} in:inbox is:unread newer_than:1d`;
 	var unreadOneDay = find(unreadOneDayFilters);
-
-	
 	
 	if (read.length !== 0) {
 		preClean('LibNoty/Discard', read)
@@ -114,8 +158,11 @@ function gNotifyAndAres() {
 	}
 }
 
+/* --------------------------- run monthly----------------------- */
 
 
+
+/* ------------------------ customized funcs --------------------- */
 // check subject and label accordingly
 function subjectChecker(thread, subject, subList, label) {
 	for (var sub of subList) {
@@ -129,6 +176,7 @@ function subjectChecker(thread, subject, subList, label) {
 };
 
 // get things ready for cleaner
+// mark read + unimportant, label discard, archive
 function preClean(labelName, threads) {
 	GmailApp.markThreadsUnimportant(threads);
 	GmailApp.markThreadsRead(threads);
@@ -140,6 +188,8 @@ function preClean(labelName, threads) {
 function find(searchString, shouldLimit, batchLength) {
   // The Gmail Service won't make changes to more than 100 threads
   // at a time, so batchLength defaults to 100.
+  // shouldLimit here is like a switch, when defiend, it means
+  // no need to limit, which is rarely the case
   shouldLimit = (typeof shouldLimit !== 'undefined') ?  shouldLimit : true;
   batchLength = (typeof batchLength !== 'undefined') ?  batchLength : 100;
   if (shouldLimit) {
