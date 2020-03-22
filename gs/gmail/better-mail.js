@@ -1,5 +1,6 @@
 // check inbox to automate some daily routines
 
+/* ------------------- constants ----------------- */
 const CONTACTS = {
 	// lib-related reports: holds, paging request, etc.
 	LIB : "lib-dba@nyu.edu",
@@ -55,27 +56,28 @@ const ACTION = {
 4. can star ONLY msgs, though hasStarredMessages() can detect such threads
 +  thus, for thds with a single msg, it is good to star them, leaving imp for others
 
-
-
-
 */
 
 /* --------------------------- run hourly ----------------------- */
 /* libnoty watcher */
+// deal with daily lib notifications with various subjects, which can be divided
+// into two groups: 1. nth to report; 2. sth to report 
 // run every 4 hours
 function libNotyWatcher() {
-	var libThreadsFilters = `from:${CONTACTS.LIB} in:inbox is:unread`;
+	var libThreadsFilters = `from:${CONTACTS.LIB} OR from:${CONTACTS.EMS} in:inbox is:unread`;
 	var libThreads = find(libThreadsFilters, batchLength=50);
 
   for (var i = 0; i < libThreads.length; i++) {
     // get the subject of the first message from each thread
     var subject = libThreads[i].getFirstMessageSubject();
 
-    // mark read + unimportant, label either 'keep'(non-empty) 
-    // or 'discard' (empty), and archive
+    // if nth to report, discard
  		subjectChecker(libThreads[i], subject, TO_CAST_SUB, LIB_NOTY.CAST)
+ 		// if sth to report, label keep first
  		subjectChecker(libThreads[i], subject, TO_KEEP_SUB, LIB_NOTY.KEEP)
   }
+
+
 }
 
 
