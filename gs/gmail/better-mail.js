@@ -52,7 +52,8 @@ const ACTION = {
 2. catagorize email from within inbox and clean the useless later regularly
 3. self-made array not working with arrays created by gmail class
 +  use its class to add a group of similar threads at one time
-4. 
+4. can star ONLY msgs, though hasStarredMessages() can detect such threads
++  thus, for thds with a single msg, it is good to star them, leaving imp for others
 
 
 
@@ -164,6 +165,10 @@ function subjectChecker(thread, subject, subList, label) {
 // get things ready for cleaner
 // mark read + unimportant, label discard, archive
 function preClean(labelName, threads) {
+	for (var thread of threads) {
+		var messages = thread.getMessages();
+		GmailApp.unstarMessages(messages);
+	}
 	GmailApp.markThreadsUnimportant(threads);
 	GmailApp.markThreadsRead(threads);
 	label(labelName).addToThreads(threads);
