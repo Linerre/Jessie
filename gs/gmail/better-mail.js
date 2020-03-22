@@ -50,7 +50,9 @@ const ACTION = {
 /*
 1. time-drive triggers better be created using GUI, unless in need of conditions
 2. catagorize email from within inbox and clean the useless later regularly
-3. (to be continued)
+3. self-made array not working with arrays created by gmail class
++  use its class to add a group of similar threads at one time
+4. 
 
 
 
@@ -79,7 +81,7 @@ function libNotyWatcher() {
 /* --------------------------- run daily ----------------------- */
 /* libAll.gs */
 // take care of messages to lib-all@nyu.edu
-// run daily at noon 12:00PM
+// run daily at noon 12:00-1:00PM
 function libAll() {
 	// lib-all invitations --> discard
 	var inviteFilters = `to:${CONTACTS.ALL} (invite.ics OR invite.vcs) has:attachment`;
@@ -89,48 +91,9 @@ function libAll() {
 	// to:lib-all from:heads 
 }
 
-function emsAndAres() {
-	// group study room report --> discard
-	var emsFilters = `from:${CONTACTS.EMS} label:inbox`;
-	var emsThreads = find(emsFilters);
-	preClean(LIB_NOTY.CAST, emsThreads);
-
-	// ares merged class via NYU Classes
-	// only check those about SH
-	var aresFilters = `from:${CONTACTS.ARE} label:inbox`;
-	var aresThreads = find(aresFilters);
-	var aresThreadsNoSH = [];
-	// for those without SH (msg==1), move to the array and discard 
-	for (var thread of aresThreads) {
-		var msgnum = thread.getMessageCount();
-		if (msgnum > 1) {aresThreadsNoSH.push(thread)};
-	}
-	preClean(LIB_NOTY.CAST, aresThreadsNoSH);
-}
-
-// change label to discard for notification previously labelled 'keep'
-function libNotyCleaner() {
-	var targets = LIB_NOTY.KEEP.getThreads(0, 100);
-	for (var target of targets) {
-		var msg = target.getMessages()[0];
-		var ats = target.getMessages()[0].getAttachments();
-		// trash non-attach
-		if (ats.length == 0 || ats.length == 2) {
-			LIB_NOTY.KEEP.removeFromThread(target);
-			LIB_NOTY.CAST.addToThread(target);
-		} 
-	}
-
-	// clean all the 'discard' messages/threads to trash
-	var discards = LIB_NOTY.CAST.getThreads(0, 100);
-	GmailApp.moveThreadsToTrash(discards);
-};
-
-
-/* --------------------------- run weekly ----------------------- */
-
+/* notify@google and ares class reprot */
 // deal with ares class report and notify google
-// run every 12 hours
+// run every 24 hours at 1:00-2:00PM
 function gNotifyAndAres() {
 	// if read, label discard + unimport and archive
 	var readFilters = `from:${CONTACTS.NTF} in:inbox is:read`;
@@ -158,9 +121,32 @@ function gNotifyAndAres() {
 	}
 }
 
+
+
+
+/* --------------------------- run weekly ----------------------- */
+
+
+
 /* --------------------------- run monthly----------------------- */
 
+// change label to discard for notification previously labelled 'keep'
+function libNotyCleaner() {
+	var targets = LIB_NOTY.KEEP.getThreads(0, 100);
+	for (var target of targets) {
+		var msg = target.getMessages()[0];
+		var ats = target.getMessages()[0].getAttachments();
+		// trash non-attach
+		if (ats.length == 0 || ats.length == 2) {
+			LIB_NOTY.KEEP.removeFromThread(target);
+			LIB_NOTY.CAST.addToThread(target);
+		} 
+	}
 
+	// clean all the 'discard' messages/threads to trash
+	var discards = LIB_NOTY.CAST.getThreads(0, 100);
+	GmailApp.moveThreadsToTrash(discards);
+};
 
 /* ------------------------ customized funcs --------------------- */
 // check subject and label accordingly
