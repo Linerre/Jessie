@@ -13,7 +13,7 @@ const CONTACTS = {
 	CIR : "shanghai.circulation@nyu.edu",
 	ARE : "do-not-reply-nyu-classes-group@nyu.edu",
 	NTF : "notify@google.com",
-	SHL : "shanghai.library@nyu.edu"
+	SHL : "shanghai.library@nyu.edu",
 	HRG : "shanghai.hr@nyu.edu",
 	OFF : "lib-offsite@nyu.edu"
 };
@@ -31,13 +31,13 @@ const HEADS = {
 	// Director, Special Collections & Librarian for Printed Books
 	'Charlotte Priddle'  : 'charlotte.priddle@nyu.edu', 
 	// Senior Manager, Digital Library Infrastructure
-	'Carol Kassel':'cmk@nyu.edu'
+	'Carol Kassel'       :'cmk@nyu.edu'
 	// Assistant Dean, Human Resources
 	'Enrique E.Yanez'    : 'enrique.yanez@nyu.edu', 
 	// Circulation Services Manager
 	'Franses A.Rodriguez': 'far4@nyu.edu', 
 	// Vice Chancellor
-	'Jeffrey S Lehman'   :'jeffrey.lehman@nyu.edu'
+	'Jeffrey S Lehman'   :'jeffrey.lehman@nyu.edu',
 	// Provost, NYU Shanghai
 	'Joanna Waley-Cohen' : 'joanna.waleycohen@nyu.edu', 
 	// Associate Dean for Collections & Content Strategy
@@ -52,7 +52,7 @@ const HEADS = {
 	'Wei Guo'            : 'wg22@nyu.edu', 
 	// Director, NYU Shanghai Library
 	'Xiaojing Zu'        : 'xiaojing.zu@nyu.edu'
-}
+};
 
 
 // any empty reports or notificationRead
@@ -90,6 +90,15 @@ const ACTION = {
 	NOTED: 'Action/Noted'
 };
 
+// NYU Catagories
+const NYU = {
+	BOBST: 'NYU/Bobst',
+	HEADS: 'NYU/Heads',
+	HR   : 'NYU/HR',
+	PUBS : 'NYU/Public Safety',
+	STUD : 'NYU/Student&Event',
+	WORK : 'NYU/Workshop'
+};
 
 /* --------------------------- ATTENTION  -------------------------*/
 /*
