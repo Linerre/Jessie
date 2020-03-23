@@ -55,15 +55,15 @@ const TO_KEEP_SUB = [
 
 // Labels
 const LIB_NOTY = {
-  CAST: GmailApp.getUserLabelByName('LibNoty/Discard'),
-  KEEP: GmailApp.getUserLabelByName('LibNoty/Keep')
+  CAST: 'LibNoty/Discard',
+  KEEP: 'LibNoty/Keep'
 };
 
 const ACTION = {
-	TODO : GmailApp.getUserLabelByName('Action/ToDo'),
-	DOING: GmailApp.getUserLabelByName('Action/Doing'),
-	DONE : GmailApp.getUserLabelByName('Action/Done'),
-	NOTED: GmailApp.getUserLabelByName('Action/Noted')
+	TODO : 'Action/ToDo',
+	DOING: 'Action/Doing',
+	DONE : 'Action/Done',
+	NOTED: 'Action/Noted'
 };
 
 
@@ -198,24 +198,29 @@ function libNotyCleaner() {
 
 	// then, find all the 'discard' threads
 	// do the trash n=length/100 times
-	do {
-		var discards = find('LibNoty/Discard', shouldLimit=false);
-		var times = discards.length/100;
-		GmailApp.moveThreadsToTrash(discards);
-	}
-	while (times > 1);
-	
-	
+	// Gmail won't automatically include trash in a search
+	// so it's fine to just search for emails with a label
+	var cleanerFilter = `label:${LIB_NOTY.CAST} older_than:1m`;
+	var totalDiscards = find(cleanerFilter, shouldLimit=false); // up to 500 thds
+	var discards = find(cleanerFilter); // up to 100 thds
+	var n = totalDiscards.length/100; // clean n time(s)
+	if (n > 1) {
+		do {
+			GmailApp.moveThreadsToTrash(discards);
+			discards = find(cleanerFilter); // another up-to-100 thds
+			n--;
+		} while (n > 0);  // n, n-1, n-2, ..., 3, 2, 1 done!	
+	} else if (n < 1) {GmailApp.moveThreadsToTrash(discards);}
 };
 
 /* ------------------------ customized funcs --------------------- */
 // check subject and label accordingly
-function subjectChecker(thread, subject, subList, label) {
+function subjectChecker(thread, subject, subList, labelString) {
 	for (var sub of subList) {
 		if (subject == sub) {
 			thread.markUnimportant();
 			thread.markRead();
-			label.addToThread(thread);
+			label(labelString).addToThread(thread);
 			thread.moveToArchive();
 		} else continue;
 	}
@@ -223,14 +228,14 @@ function subjectChecker(thread, subject, subList, label) {
 
 // get things ready for cleaner
 // mark read + unimportant, label discard, archive
-function preClean(labelName, threads) {
+function preClean(labelString, threads) {
 	for (var thread of threads) {
 		var messages = thread.getMessages();
 		GmailApp.unstarMessages(messages);
 	}
 	GmailApp.markThreadsUnimportant(threads);
 	GmailApp.markThreadsRead(threads);
-	label(labelName).addToThreads(threads);
+	label(labelString).addToThreads(threads);
 	GmailApp.moveThreadsToArchive(threads);
 };
 
@@ -267,8 +272,8 @@ function label(name) {
 
 /* label swapper */
 function labelSwap(oldLabel, newLable, threads) {
-	oldLabel.removeFromThreads(threads);
-	newLable.addToThreads(threads);
+	label(oldLabel).removeFromThreads(threads);
+	label(newLable).addToThreads(threads);
 }
 
 
