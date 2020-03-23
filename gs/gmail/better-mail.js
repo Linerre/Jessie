@@ -42,12 +42,15 @@ const TO_CAST_SUB = [
 
 // any non-empty or with-attachments reports exclude nightly overdue
 const TO_KEEP_SUB = [
+	// attachment: true
 	'NYU52 ILL Rush Orders Report',
 	'Shanghai Patrons who owe more than 100 Report',
+	'NYU SH Inventory Report',
+
+	//attachment: false
 	'Shanghai New Holds Report',
 	'ALEPH SHANGHAI Paging Request Report',
-	'CLANCY Offsite Requests',
-	'NYU SH Inventory Report',
+	'CLANCY Offsite Requests'
 ];
 
 // Labels
@@ -101,8 +104,8 @@ function libNotyWatcher() {
 // take care of messages to lib-all@nyu.edu
 // run daily at noon 12:00-1:00PM
 function libAll() {
-	// lib-all invitations --> discard
-	var inviteFilters = `to:${CONTACTS.ALL} (invite.ics OR invite.vcs) has:attachment`;
+	// lib-all invitations --> discard all except workshops
+	var inviteFilters = `to:${CONTACTS.ALL} (invite.ics OR invite.vcs) has:attachment -subject:workshop`;
 	var inviteThreads = find(inviteFilters);
 	preClean('LibNoty/Discard', inviteThreads);
 
@@ -112,8 +115,9 @@ function libAll() {
 
 
 /* notify@google and ares class reprot */
+/* notify google */
 // deal with ares class report and notify google
-// run every 24 hours at 1:00-2:00PM
+// run every 24 hours at 12:00PM-1:00PM
 function notifyGoogle() {
 	// if read, label discard + unimport and archive
 	var readFilters = `from:${CONTACTS.NTF} label:inbox is:read`;
@@ -146,11 +150,14 @@ function notifyGoogle() {
 	forceClean(oldNotiThreads);
 }
 
+/* Ares Merged Classes */
+// deal with merged classes report
+// run every 24 hours at 2:00PM
 function aresMergedClasses() {
 	var aresFilters = `from:${CONTACTS.ARE} label:inbox`;
 	var aresThreads = find(aresFilters);
     // in case some are important by default, undo this!
-    GmailApp.markThreadsUnimportant(aresThreads);
+  GmailApp.markThreadsUnimportant(aresThreads);
     
     // star the NoSH message (a thread with a single msg) 
 	for (var thread of aresThreads) {
@@ -159,20 +166,20 @@ function aresMergedClasses() {
 		if (msgnum == 1) {GmailApp.starMessages(msg);}
   }
   
-	// find those starred NoSH threads and discard them
+	// find those starred NoSH threads and trash
 	var aresNoSHFilters = `from:${CONTACTS.ARE} label:inbox is:starred`;
 	var aresNoSHThreads = find(aresNoSHFilters);
-	preClean('LibNoty/Discard', aresNoSHThreads);
+	forceClean(aresNoSHThreads);
   
-  // deal with SH threads, if (unread and older than 1d or more), discard 
+  // deal with SH threads, if (unread and older than 1d or more), discard
   var aresSHUnreadFilters = `from:${CONTACTS.ARE} label:inbox is:unread older_than:1d`;
   var aresSHUnreadThreads = find(aresSHUnreadFilters);
   preClean('LibNoty/Discard', aresSHUnreadThreads);
     
-  // if read, discard
+  // if read, trash
   var aresSHReadFilters = `from:${CONTACTS.ARE} label:inbox is:read`;
   var aresSHReadThreads = find(aresSHReadFilters);
-  preClean('LibNoty/Discard', aresSHReadThreads);
+  forceClean(aresSHReadThreads);
 }
 
 
@@ -182,23 +189,23 @@ function aresMergedClasses() {
 
 
 /* --------------------------- run monthly----------------------- */
-
 // change label to discard for notification previously labelled 'keep'
 function libNotyCleaner() {
-	var targets = LIB_NOTY.KEEP.getThreads(0, 100);
-	for (var target of targets) {
-		var msg = target.getMessages()[0];
-		var ats = target.getMessages()[0].getAttachments();
-		// trash non-attach
-		if (ats.length == 0 || ats.length == 2) {
-			LIB_NOTY.KEEP.removeFromThread(target);
-			LIB_NOTY.CAST.addToThread(target);
-		} 
-	}
+	// first, discard attach-free threads
+	var noAttachFilters = `label:${LIB_NOTY.KEEP} -has:attachment`;
+	var noAttachthreads = find(noAttachFilters);
+	labelSwap(LIB_NOTY.KEEP, LIB_NOTY.CAST, noAttachthreads);
 
-	// clean all the 'discard' messages/threads to trash
-	var discards = LIB_NOTY.CAST.getThreads(0, 100);
-	GmailApp.moveThreadsToTrash(discards);
+	// then, find all the 'discard' threads
+	// do the trash n=length/100 times
+	do {
+		var discards = find('LibNoty/Discard', shouldLimit=false);
+		var times = discards.length/100;
+		GmailApp.moveThreadsToTrash(discards);
+	}
+	while (times > 1);
+	
+	
 };
 
 /* ------------------------ customized funcs --------------------- */
@@ -258,20 +265,26 @@ function label(name) {
   return GmailApp.getUserLabelByName(name);
 }
 
+/* label swapper */
+function labelSwap(oldLabel, newLable, threads) {
+	oldLabel.removeFromThreads(threads);
+	newLable.addToThreads(threads);
+}
+
 
 /* ===================== triggers ================ */
 /* ===================== deprecated ================ */
 // run every 4 hours
-function manager() {
-	// run every 4 hours
-  var hourjob = ScriptApp.newTrigger('libNotyWatcher').timeBased();
-  hourjob.everyHours(4)
-  .create();
+// function manager() {
+// 	// run every 4 hours
+//   var hourjob = ScriptApp.newTrigger('libNotyWatcher').timeBased();
+//   hourjob.everyHours(4)
+//   .create();
 
-  // run every two months
-  var fortnightjob = ScriptApp.newTrigger('libNotyCleaner').timeBased();
-  fortnightjob.atHour(10)
-  .onWeekDay(ScriptApp.WeekDay.SATURDAT)
-  .everyWeeks(8)
-  .create();
-};
+//   // run every two months
+//   var fortnightjob = ScriptApp.newTrigger('libNotyCleaner').timeBased();
+//   fortnightjob.atHour(10)
+//   .onWeekDay(ScriptApp.WeekDay.SATURDAT)
+//   .everyWeeks(8)
+//   .create();
+// };
