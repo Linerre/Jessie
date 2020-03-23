@@ -15,19 +15,43 @@ const CONTACTS = {
 	NTF : "notify@google.com",
 	SHL : "shanghai.library@nyu.edu"
 	HRG : "shanghai.hr@nyu.edu",
-	HRL : "wg22@nyu.edu", // HR Director
 	OFF : "lib-offsite@nyu.edu"
 };
 
 // Direcotr, Dean, Provost, Librarian
 const HEADS = {
-	'Ashley Maynor'      : 'arm12@nyu.edu', //Director, Library Lab & Special Projects
-	'Austin Booth'       : 'austin.booth@nyu.edu', // Dean, Division of Libraries
-	'Joanna Waley-Cohen' : 'joanna.waleycohen@nyu.edu', // Provost, NYU Shanghai 
-	'Susan Kaplan Jacobs': 'susan.jacobs@nyu.edu', //Health Sciences Librarian
-
-
-	'Wei Guo'            : ''
+	// Interim Co-Head of  Bern Dibner Library
+	'Ana Torres'         : 'ana.torres@nyu.edu', 
+	//Director of Scholarly Communications and Information Policy
+	'April Hathcock'     : 'april.hathcock@nyu.edu', 
+	//Director, Library Lab & Special Projects
+	'Ashley Maynor'      : 'arm12@nyu.edu', 
+	// Dean, Division of Libraries
+	'Austin Booth'       : 'austin.booth@nyu.edu', 
+	// Director, Special Collections & Librarian for Printed Books
+	'Charlotte Priddle'  : 'charlotte.priddle@nyu.edu', 
+	// Senior Manager, Digital Library Infrastructure
+	'Carol Kassel':'cmk@nyu.edu'
+	// Assistant Dean, Human Resources
+	'Enrique E.Yanez'    : 'enrique.yanez@nyu.edu', 
+	// Circulation Services Manager
+	'Franses A.Rodriguez': 'far4@nyu.edu', 
+	// Vice Chancellor
+	'Jeffrey S Lehman'   :'jeffrey.lehman@nyu.edu'
+	// Provost, NYU Shanghai
+	'Joanna Waley-Cohen' : 'joanna.waleycohen@nyu.edu', 
+	// Associate Dean for Collections & Content Strategy
+	'Kristina L Rose'    : 'kristina.rose@nyu.edu',
+	// Associate Director for Human Resources
+	'Katie OBrien'       : 'katie.obrien@nyu.edu', 
+	// Director, User Experience 
+	'Lisa Gayhart'       : 'lisa.gayhart@nyu.edu', 
+	//Health Sciences Librarian
+	'Susan Kaplan Jacobs': 'susan.jacobs@nyu.edu', 
+	// HR Director'
+	'Wei Guo'            : 'wg22@nyu.edu', 
+	// Director, NYU Shanghai Library
+	'Xiaojing Zu'        : 'xiaojing.zu@nyu.edu'
 }
 
 
@@ -100,11 +124,12 @@ function libNotyWatcher() {
 
 
 /* --------------------------- run daily ----------------------- */
-/* libAll.gs */
-// take care of messages to lib-all@nyu.edu
+/* toAll.gs */
+// take care of messages to a mailing list which I'm in
 // run daily at noon 12:00-1:00PM
-function libAll() {
+function toAll() {
 	// lib-all invitations --> discard all except workshops
+	// another way to detect invitations: subject:+invitation: has:attachment 
 	var inviteFilters = `to:${CONTACTS.ALL} (invite.ics OR invite.vcs) has:attachment -subject:workshop`;
 	var inviteThreads = find(inviteFilters);
 	preClean('LibNoty/Discard', inviteThreads);
