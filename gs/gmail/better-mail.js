@@ -1,6 +1,8 @@
 // check inbox to automate some daily routines
 
 /* ------------------- constants ----------------- */
+/* ------------------- frequent senders ---------- */
+// frequent senders: non-reply & group
 const CONTACTS = {
 	// lib-related reports: holds, paging request, etc.
 	LIB : "lib-dba@nyu.edu",
@@ -12,7 +14,22 @@ const CONTACTS = {
 	ARE : "do-not-reply-nyu-classes-group@nyu.edu",
 	NTF : "notify@google.com",
 	SHL : "shanghai.library@nyu.edu"
+	HRG : "shanghai.hr@nyu.edu",
+	HRL : "wg22@nyu.edu", // HR Director
+	OFF : "lib-offsite@nyu.edu"
 };
+
+// Direcotr, Dean, Provost, Librarian
+const HEADS = {
+	'Ashley Maynor'      : 'arm12@nyu.edu', //Director, Library Lab & Special Projects
+	'Austin Booth'       : 'austin.booth@nyu.edu', // Dean, Division of Libraries
+	'Joanna Waley-Cohen' : 'joanna.waleycohen@nyu.edu', // Provost, NYU Shanghai 
+	'Susan Kaplan Jacobs': 'susan.jacobs@nyu.edu', //Health Sciences Librarian
+
+
+	'Wei Guo'            : ''
+}
+
 
 // any empty reports or notificationRead
 const TO_CAST_SUB = [
@@ -23,14 +40,14 @@ const TO_CAST_SUB = [
   'NYU Shanghai Group Study Room Schedule'
 ];
 
-// any non-empty or with-attachments reports 
+// any non-empty or with-attachments reports exclude nightly overdue
 const TO_KEEP_SUB = [
 	'NYU52 ILL Rush Orders Report',
 	'Shanghai Patrons who owe more than 100 Report',
 	'Shanghai New Holds Report',
 	'ALEPH SHANGHAI Paging Request Report',
 	'CLANCY Offsite Requests',
-	'NYU SH Inventory Report'
+	'NYU SH Inventory Report',
 ];
 
 // Labels
@@ -64,7 +81,7 @@ const ACTION = {
 // into two groups: 1. nth to report; 2. sth to report 
 // run every 4 hours
 function libNotyWatcher() {
-	var libThreadsFilters = `from:${CONTACTS.LIB} OR from:${CONTACTS.EMS} in:inbox is:unread`;
+	var libThreadsFilters = `from:${CONTACTS.LIB} OR from:${CONTACTS.EMS} OR from:${CONTACTS.OFF} label:inbox is:unread`;
 	var libThreads = find(libThreadsFilters, batchLength=50);
 
   for (var i = 0; i < libThreads.length; i++) {
@@ -76,8 +93,6 @@ function libNotyWatcher() {
  		// if sth to report, label keep first
  		subjectChecker(libThreads[i], subject, TO_KEEP_SUB, LIB_NOTY.KEEP)
   }
-
-
 }
 
 
@@ -94,21 +109,23 @@ function libAll() {
 	// to:lib-all from:heads 
 }
 
+
+
 /* notify@google and ares class reprot */
 // deal with ares class report and notify google
 // run every 24 hours at 1:00-2:00PM
-function gNotifyAndAres() {
+function notifyGoogle() {
 	// if read, label discard + unimport and archive
-	var readFilters = `from:${CONTACTS.NTF} in:inbox is:read`;
+	var readFilters = `from:${CONTACTS.NTF} label:inbox is:read`;
 	var read = find(readFilters);
 
 	// if unread for more than one day, 
 	// label discard + unimportant and archive
-	var unreadForeverFilters = `from:${CONTACTS.NTF} in:inbox is:unread older_than:1d`;
+	var unreadForeverFilters = `from:${CONTACTS.NTF} label:inbox is:unread older_than:1d`;
   var unreadForever = find(unreadForeverFilters);
 
   // if unread for less than one day, keep it unread until the next loop
-	var unreadOneDayFilters = `from:${CONTACTS.NTF} in:inbox is:unread newer_than:1d`;
+	var unreadOneDayFilters = `from:${CONTACTS.NTF} label:inbox is:unread newer_than:1d`;
 	var unreadOneDay = find(unreadOneDayFilters);
 	
 	if (read.length !== 0) {
@@ -122,9 +139,14 @@ function gNotifyAndAres() {
 		GmailApp.markThreadsUnimportant(unreadOneDay);
   	label('LibNoty/Keep').addToThreads(ureadOneDay);
 	}
+
+	// trash those older than 1d regardless of label and (un)read status
+	var oldNotiFilters = `from:${CONTACTS.NTF} older_than:1d`;
+	var oldNotiThreads = find(oldNotiFilters);
+	forceClean(oldNotiThreads);
 }
 
-function emsAndAres() {
+function aresMergedClasses() {
 	var aresFilters = `from:${CONTACTS.ARE} label:inbox`;
 	var aresThreads = find(aresFilters);
     // in case some are important by default, undo this!
@@ -204,6 +226,14 @@ function preClean(labelName, threads) {
 	label(labelName).addToThreads(threads);
 	GmailApp.moveThreadsToArchive(threads);
 };
+
+/* force clean */
+// {unimportant + read + trash} threads
+function forceClean(threads) {
+	GmailApp.markThreadsUnimportant(threads);
+	GmailApp.markThreadsRead(threads);
+	GmailApp.moveThreadsToTrash(threads);
+}
 
 /* find.gs */
 function find(searchString, shouldLimit, batchLength) {
