@@ -22,3 +22,6 @@ bash/pcopy
 .clasp.json
 appsscript.json
 Code.js
+
+# ignore jshint file
+.jshintrc
