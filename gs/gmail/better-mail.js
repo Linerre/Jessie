@@ -31,7 +31,9 @@ const HEADS = {
 	// Director, Special Collections & Librarian for Printed Books
 	'Charlotte Priddle'  : 'charlotte.priddle@nyu.edu', 
 	// Senior Manager, Digital Library Infrastructure
-	'Carol Kassel'       :'cmk@nyu.edu'
+	'Carol Kassel'       : 'cmk@nyu.edu',
+	// Dean of Students
+	'David Pe'           : 'davidpe@nyu.edu',
 	// Assistant Dean, Human Resources
 	'Enrique E.Yanez'    : 'enrique.yanez@nyu.edu', 
 	// Circulation Services Manager
@@ -46,6 +48,8 @@ const HEADS = {
 	'Katie OBrien'       : 'katie.obrien@nyu.edu', 
 	// Director, User Experience 
 	'Lisa Gayhart'       : 'lisa.gayhart@nyu.edu', 
+	// Metadata Librarian she/her/hers
+	'Alexandra Provo'    : 'alexandra.provo@nyu.edu',
 	//Health Sciences Librarian
 	'Susan Kaplan Jacobs': 'susan.jacobs@nyu.edu', 
 	// HR Director'
@@ -139,11 +143,25 @@ function libNotyWatcher() {
 function toAll() {
 	// lib-all invitations --> discard all except workshops
 	// another way to detect invitations: subject:+invitation: has:attachment 
-	var inviteFilters = `to:${CONTACTS.ALL} (invite.ics OR invite.vcs) has:attachment -subject:workshop`;
-	var inviteThreads = find(inviteFilters);
-	preClean('LibNoty/Discard', inviteThreads);
+	var inviteNoWoFilters = `to:${CONTACTS.ALL} (invite.ics OR invite.vcs) has:attachment -subject:workshop`;
+	var inviteNoWoThreads = find(inviteNoWoFilters);
+	preClean('LibNoty/Discard', inviteNoWoThreads);
 
 	// to:lib-all from:heads 
+	// loop over heads, find their threads and process
+  for (const name of Object.keys(HEADS)) {
+    var headFilters = `from:${HEADS[name]}`;
+    var headThreads = find(headFilters);
+    
+  // star + mark important + archive
+    collectFromHeads(`${NYU.HEADS}`, headThreads);
+  }
+  // select workshops as many as possible
+  // since some are just mentioned rather than a subject
+  // may improve the algorithm later
+  var libWoFilters = `label:${NYU.HEADS} OR to:${CONTACTS.ALL} subject:workshop`;
+  var libWoThreads = find(libWoFilters);
+  label(NYU.WORK).addToThreads(libWoThreads);
 }
 
 
@@ -279,6 +297,16 @@ function forceClean(threads) {
 	GmailApp.markThreadsUnimportant(threads);
 	GmailApp.markThreadsRead(threads);
 	GmailApp.moveThreadsToTrash(threads);
+}
+
+function collectFromHeads(labelString, threads) {
+  GmailApp.markThreadsImportant(threads);
+  label(labelString).addToThreads(threads);
+  var msgs = GmailApp.getMessagesForThreads(threads);
+  for (var i=0; i<msgs.length; i++) {
+    GmailApp.starMessages(msgs[i]);
+  }
+  GmailApp.moveThreadsToArchive(threads);
 }
 
 /* find.gs */
