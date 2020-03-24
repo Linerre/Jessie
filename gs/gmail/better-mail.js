@@ -1,7 +1,7 @@
 // check inbox to automate some daily routines
 
 /* ------------------- constants ----------------- */
-/* ------------------- frequent senders ---------- */
+/* --------------- frequent senders ---------- */
 // frequent senders: non-reply & group
 const CONTACTS = {
 	// lib-related reports: holds, paging request, etc.
@@ -106,12 +106,12 @@ const NYU = {
 
 /* --------------------------- ATTENTION  -------------------------*/
 /*
-1. time-drive triggers better be created using GUI, unless in need of conditions
+1. time-drive triggers better be created using GUI, unless in need of more conditions
 2. catagorize email from within inbox and clean the useless later regularly
 3. self-made array not working with arrays created by gmail class
 +  use its class to add a group of similar threads at one time
-4. can star ONLY msgs, though hasStarredMessages() can detect such threads
-+  thus, for thds with a single msg, it is good to star them, leaving imp for others
+4. can star ONLY msgs, though hasStarredMessages() can detect such thds
++  thus, for thds with a single msg, it is good to star them, leaving imp for ths only
 
 */
 
@@ -121,7 +121,7 @@ const NYU = {
 // into two groups: 1. nth to report; 2. sth to report 
 // run every 4 hours
 function libNotyWatcher() {
-	var libThreadsFilters = `from:${CONTACTS.LIB} OR from:${CONTACTS.EMS} OR from:${CONTACTS.OFF} label:inbox is:unread`;
+	var libThreadsFilters = `from:${CONTACTS.LIB} OR from:${CONTACTS.EMS} OR from:${CONTACTS.OFF} label:inbox`;
 	var libThreads = find(libThreadsFilters, batchLength=50);
 
   for (var i = 0; i < libThreads.length; i++) {
@@ -193,7 +193,7 @@ function notifyGoogle() {
 	}
 	if (unreadOneDay.length !== 0) {
 		GmailApp.markThreadsUnimportant(unreadOneDay);
-  	label('LibNoty/Keep').addToThreads(ureadOneDay);
+  	label('LibNoty/Keep').addToThreads(unreadOneDay);
 	}
 
 	// trash those older than 1d regardless of label and (un)read status
@@ -234,6 +234,25 @@ function aresMergedClasses() {
   forceClean(aresSHReadThreads);
 }
 
+function invitationCleaner() {
+	// if read, trash
+	var inviteAttch = '(invite.ics OR invite.vcs)';
+	var inviteReadFilters = `to:me has:attachment is:read`;
+	var inviteReadThreads = find(inviteReadFilters);
+	label('RSVP?').removeFromThreads(inviteReadThreads);
+	forceClean(inviteReadThreads);
+
+	// if unread for over one day, trash
+	var inviteUnreadLongFilters = `to:me ${inviteAttch} has:attachment is:unread older_than:1d`;
+	var inviteUnreadLongThreads = find(inviteUnreadLongFilters);
+	label('RSVP?').removeFromThreads(inviteUnreadLongThreads);
+	forceClean(inviteUnreadLongThreads);
+
+	// if unread within one day (To Be Decided), label RSVP? and remain unread
+	var inviteTBDFilters = `to:me ${inviteAttch} has:attachment is:unread newer_than:1d`;
+	var inviteTBDThreads = find(inviteTBDFilters);
+	label('RSVP?').addToThreads(inviteTBDThreads);
+}
 
 
 /* --------------------------- run weekly ----------------------- */
@@ -263,7 +282,7 @@ function libNotyCleaner() {
 			n--;
 		} while (n > 0);  // n, n-1, n-2, ..., 3, 2, 1 done!	
 	} else if (n < 1) {GmailApp.moveThreadsToTrash(discards);}
-};
+}
 
 /* ------------------------ customized funcs --------------------- */
 // check subject and label accordingly
@@ -276,7 +295,7 @@ function subjectChecker(thread, subject, subList, labelString) {
 			thread.moveToArchive();
 		} else continue;
 	}
-};
+}
 
 // get things ready for cleaner
 // mark read + unimportant, label discard, archive
@@ -289,7 +308,7 @@ function preClean(labelString, threads) {
 	GmailApp.markThreadsRead(threads);
 	label(labelString).addToThreads(threads);
 	GmailApp.moveThreadsToArchive(threads);
-};
+}
 
 /* force clean */
 // {unimportant + read + trash} threads
@@ -322,7 +341,7 @@ function find(searchString, shouldLimit, batchLength) {
   } else {
     return GmailApp.search(searchString);
   }
-};
+}
 
 /* label.gs */
 
@@ -355,3 +374,4 @@ function labelSwap(oldLabel, newLable, threads) {
 //   .everyWeeks(8)
 //   .create();
 // };
+
