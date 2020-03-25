@@ -14,8 +14,31 @@ const CONTACTS = {
 	ARE : "do-not-reply-nyu-classes-group@nyu.edu",
 	NTF : "notify@google.com",
 	SHL : "shanghai.library@nyu.edu",
-	HRG : "shanghai.hr@nyu.edu",
 	OFF : "lib-offsite@nyu.edu"
+};
+
+const NYUSH = {
+	MEM: 'shanghai.staff@nyu.edu',
+	STU: 'shanghai.student@nyu.edu',
+	TEC: 'shanghai.faculty@nyu.edu',
+	// NYU/Notice
+	HRG: 'shanghai.hr@nyu.edu',
+	HRH: 'shanghai.hr.help@nyu.edu',
+	PUB: 'shanghai.publicsafety@nyu.edu',
+	FIN: 'shanghai.finance.help@nyu.edu',
+	FAC: 'shanghai.facilities@nyu.edu',
+	HEL: 'shanghai.health@nyu.edu',
+	// NYU/Student
+	ATH: 'shanghai.athletics@nyu.edu',
+	ELE: 'shanghai.student.elections@nyu.edu', 
+	// NYU/Academic
+	CGA: 'shanghai.cga@nyu.edu', // Center for Gloabl Asia
+	AAF: 'shanghai.academicaffairs@nyu.edu',
+	ARC: 'shanghai.arc@nyu.edu',
+	// NYU/IT
+	ITS: 'nyush.itsm@nyu.edu',
+	// NYU/Dev
+	DEV : 'shanghai.learning.development@nyu.edu',
 };
 
 // Direcotr, Dean, Provost, Librarian
@@ -38,6 +61,8 @@ const HEADS = {
 	'Enrique E.Yanez'    : 'enrique.yanez@nyu.edu', 
 	// Circulation Services Manager
 	'Franses A.Rodriguez': 'far4@nyu.edu', 
+	// Head of Resource Management
+	'Greg Ferguson'      : 'greg.ferguson@nyu.edu',
 	// Vice Chancellor
 	'Jeffrey S Lehman'   :'jeffrey.lehman@nyu.edu',
 	// Provost, NYU Shanghai
@@ -81,7 +106,7 @@ const TO_KEEP_SUB = [
 	'CLANCY Offsite Requests'
 ];
 
-// Labels
+/* ----------------------- Labels --------------------- */
 const LIB_NOTY = {
   CAST: 'LibNoty/Discard',
   KEEP: 'LibNoty/Keep'
@@ -96,11 +121,15 @@ const ACTION = {
 
 // NYU Catagories
 const NYU = {
+	ACADE: 'NYU/Academic',
 	BOBST: 'NYU/Bobst',
+	DEV  : 'NYU/Dev',
+	IT   : 'NYU/IT',
 	HEADS: 'NYU/Heads',
 	HR   : 'NYU/HR',
-	PUBS : 'NYU/Public Safety',
-	STUD : 'NYU/Student&Event',
+	NOTY : 'NYU/Notice',
+	NYC  : 'NYU/NYC',
+	STUD : 'NYU/Student',
 	WORK : 'NYU/Workshop'
 };
 
@@ -137,31 +166,37 @@ function libNotyWatcher() {
 
 
 /* --------------------------- run daily ----------------------- */
-/* toAll.gs */
-// take care of messages to a mailing list which I'm in
+/* libAll.gs */
+// take care of messages to lib-all mailing list
 // run daily at noon 12:00-1:00PM
-function toAll() {
+function libAllSort() {
 	// lib-all invitations --> discard all except workshops
 	// another way to detect invitations: subject:+invitation: has:attachment 
 	var inviteNoWoFilters = `to:${CONTACTS.ALL} (invite.ics OR invite.vcs) has:attachment -subject:workshop`;
 	var inviteNoWoThreads = find(inviteNoWoFilters);
-	preClean('LibNoty/Discard', inviteNoWoThreads);
+	preClean(LIB_NOTY.CAST, inviteNoWoThreads);
 
 	// to:lib-all from:heads 
-	// loop over heads, find their threads and process
+	// loop over heads in inbox, find their threads and process
   for (const name of Object.keys(HEADS)) {
-    var headFilters = `from:${HEADS[name]}`;
+    var headFilters = `from:${HEADS[name]} label:inbox`;
     var headThreads = find(headFilters);
-    
-  // star + mark important + archive
-    collectFromHeads(`${NYU.HEADS}`, headThreads);
+  // star + mark important + archive, regardless of read/unread
+    collectFromHeads(NYU.HEADS, headThreads);
   }
   // select workshops as many as possible
   // since some are just mentioned rather than a subject
   // may improve the algorithm later
-  var libWoFilters = `label:${NYU.HEADS} OR to:${CONTACTS.ALL} subject:workshop`;
+  var libWoFilters = `(label:${NYU.HEADS} OR to:${CONTACTS.ALL}) subject:workshop`;
   var libWoThreads = find(libWoFilters);
   label(NYU.WORK).addToThreads(libWoThreads);
+  // mark unimportant those not from HEADS
+  GmailApp.markThreadsUnimportant(find(`to:${CONTACTS.ALL}) subject:workshop`));
+
+  // handle the rest
+  var libRestFilters = `to:${CONTACTS.ALL} label:inbox`;
+  var libRestThreads = find(libRestFilters);
+  preClean(NYU.NYC, libRestThreads);
 }
 
 
@@ -185,7 +220,7 @@ function notifyGoogle() {
 	var unreadOneDay = find(unreadOneDayFilters);
 	
 	if (read.length !== 0) {
-		preClean('LibNoty/Discard', read)
+		preClean('LibNoty/Discard', read);
 	}
   
 	if (unreadForever.length !== 0) {
@@ -301,8 +336,10 @@ function subjectChecker(thread, subject, subList, labelString) {
 // mark read + unimportant, label discard, archive
 function preClean(labelString, threads) {
 	for (var thread of threads) {
-		var messages = thread.getMessages();
-		GmailApp.unstarMessages(messages);
+		if (thread.hasStarredMessages()) {
+			var messages = thread.getMessages();
+			GmailApp.unstarMessages(messages);
+		} else continue;
 	}
 	GmailApp.markThreadsUnimportant(threads);
 	GmailApp.markThreadsRead(threads);
