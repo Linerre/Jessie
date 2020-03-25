@@ -303,9 +303,10 @@ function invitationCleaner() {
 	label('RSVP?').addToThreads(inviteTBDThreads);
 }
 
-// 
+/* NYU Today summary */
+// document the history, never clean
 function nyuToday() {
-
+	batchClean(`from:${NYUSH.TODY[0]} OR from:${NYUSH.TODY[1]} label:inbox`, NYU.TODY);
 }
 
 /* --------------------------- run weekly ----------------------- */
