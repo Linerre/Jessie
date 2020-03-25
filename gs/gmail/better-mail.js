@@ -307,10 +307,7 @@ function nyuToday() {
 }
 
 /* --------------------------- run weekly ----------------------- */
-
-
-
-/* --------------------------- run monthly----------------------- */
+// run every week on Fri 1-2am
 // change label to discard for notification previously labelled 'keep'
 function libNotyCleaner() {
 	// first, discard attach-free threads
@@ -334,6 +331,10 @@ function libNotyCleaner() {
 		} while (n > 0);  // n, n-1, n-2, ..., 3, 2, 1 done!	
 	} else if (n < 1) {GmailApp.moveThreadsToTrash(discards);}
 }
+
+
+/* --------------------------- run monthly----------------------- */
+
 
 /* ------------------------ customized funcs --------------------- */
 // check subject and label accordingly
