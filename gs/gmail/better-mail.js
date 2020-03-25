@@ -86,7 +86,6 @@ const HEADS = {
 	'Xiaojing Zu'        : 'xiaojing.zu@nyu.edu'
 };
 
-
 // any empty reports or notificationRead
 const TO_CAST_SUB = [
   'NO Shanghai Paging Requests to Report',
@@ -161,9 +160,9 @@ function libNotyWatcher() {
     var subject = libThreads[i].getFirstMessageSubject();
 
     // if nth to report, discard
- 		subjectChecker(libThreads[i], subject, TO_CAST_SUB, LIB_NOTY.CAST)
+ 		subjectChecker(libThreads[i], subject, TO_CAST_SUB, LIB_NOTY.CAST);
  		// if sth to report, label keep first
- 		subjectChecker(libThreads[i], subject, TO_KEEP_SUB, LIB_NOTY.KEEP)
+ 		subjectChecker(libThreads[i], subject, TO_KEEP_SUB, LIB_NOTY.KEEP);
   }
 }
 
@@ -173,11 +172,11 @@ function libNotyWatcher() {
 function libAllSort() {
 	// lib-all invitations --> discard all except workshops
 	// another way to detect invitations: subject:+invitation: has:attachment 
-	var inviteNoWoFilters = `to:${CONTACTS.ALL} (invite.ics OR invite.vcs) has:attachment -subject:workshop`;
+	var inviteNoWoFilters = `to:${CONTACTS.ALL} label:inbox (invite.ics OR invite.vcs) has:attachment -subject:workshop`;
 	var inviteNoWoThreads = find(inviteNoWoFilters);
 	preClean(LIB_NOTY.CAST, inviteNoWoThreads);
 
-	// to:lib-all from:heads 
+	// to:lib-all from:heads inbox
 	// loop over heads in inbox, find their threads and process
   for (const name of Object.keys(HEADS)) {
     var headFilters = `from:${HEADS[name]} label:inbox`;
@@ -188,7 +187,7 @@ function libAllSort() {
   // select workshops as many as possible
   // since some are just mentioned rather than a subject
   // may improve the algorithm later
-  var libWoFilters = `(label:${NYU.HEADS} OR to:${CONTACTS.ALL}) subject:workshop`;
+  var libWoFilters = `(label:${NYU.HEADS} OR to:${CONTACTS.ALL}) label:inbox subject:workshop`;
   var libWoThreads = find(libWoFilters);
   label(NYU.WORK).addToThreads(libWoThreads);
   // mark unimportant those not from HEADS
@@ -202,13 +201,13 @@ function libAllSort() {
 
 /* NYUSH Messages Sort */
 function nyushSort() {
-	batchClean(`from:${NYUSH.HRG} OR from:${NYUSH.HRH}`, NYU.NOTY);
-	batchClean(`from:${NYUSH.PUB} OR from:${NYUSH.FIN}`, NYU.NOTY);
-	batchClean(`from:${NYUSH.FAC} OR from:${NYUSH.HEL}`, NYU.NOTY);
-	batchClean(`from:${NYUSH.ATH} OR from:${NYUSH.ELE}`, NYU.STUD);
-	batchClean(`from:${NYUSH.CGA} OR from:${NYUSH.AAF} OR from:${NYUSH.ARC}`, NYU.STUD);
-	batchClean(`from:${NYUSH.CGA}`, NYU.ITS);
-	batchClean(`from:${NYUSH.DEV}`, NYU.DEV);
+	batchClean(`from:${NYUSH.HRG} OR from:${NYUSH.HRH} label:inbox`, NYU.NOTY);
+	batchClean(`from:${NYUSH.PUB} OR from:${NYUSH.FIN} label:inbox`, NYU.NOTY);
+	batchClean(`from:${NYUSH.FAC} OR from:${NYUSH.HEL} label:inbox`, NYU.NOTY);
+	batchClean(`from:${NYUSH.ATH} OR from:${NYUSH.ELE} label:inbox`, NYU.STUD);
+	batchClean(`from:${NYUSH.CGA} OR from:${NYUSH.AAF} OR from:${NYUSH.ARC} label:inbox`, NYU.STUD);
+	batchClean(`from:${NYUSH.CGA} label:inbox`, NYU.ITS);
+	batchClean(`from:${NYUSH.DEV} label:inbox`, NYU.DEV);
 }
 
 
@@ -221,23 +220,21 @@ function notifyGoogle() {
 	// if read, label discard + unimport and archive
 	var readFilters = `from:${CONTACTS.NTF} label:inbox is:read`;
 	var read = find(readFilters);
+	if (read.length !== 0) {
+		preClean('LibNoty/Discard', read);
+	}
 
 	// if unread for more than one day, 
 	// label discard + unimportant and archive
 	var unreadForeverFilters = `from:${CONTACTS.NTF} label:inbox is:unread older_than:1d`;
   var unreadForever = find(unreadForeverFilters);
+	if (unreadForever.length !== 0) {
+		preClean('LibNoty/Discard', unreadForever);
+	}
 
   // if unread for less than one day, keep it unread until the next loop
 	var unreadOneDayFilters = `from:${CONTACTS.NTF} label:inbox is:unread newer_than:1d`;
 	var unreadOneDay = find(unreadOneDayFilters);
-	
-	if (read.length !== 0) {
-		preClean('LibNoty/Discard', read);
-	}
-  
-	if (unreadForever.length !== 0) {
-		preClean('LibNoty/Discard', unreadForever);
-	}
 	if (unreadOneDay.length !== 0) {
 		GmailApp.markThreadsUnimportant(unreadOneDay);
   	label('LibNoty/Keep').addToThreads(unreadOneDay);
@@ -261,7 +258,7 @@ function aresMergedClasses() {
     // star the NoSH message (a thread with a single msg) 
 	for (var thread of aresThreads) {
 		var msgnum = thread.getMessageCount();
-        var msg = thread.getMessages();   
+    var msg = thread.getMessages();   
 		if (msgnum == 1) {GmailApp.starMessages(msg);}
   }
   
@@ -284,21 +281,21 @@ function aresMergedClasses() {
 /* invitation cleaner */
 // get rid of RSVP notifications which will go calendar
 function invitationCleaner() {
-	// if read, trash
 	var inviteAttch = '(invite.ics OR invite.vcs)';
-	var inviteReadFilters = `to:me has:attachment is:read`;
+	// if read, trash
+	var inviteReadFilters = `to:me ${inviteAttch} has:attachment label:inbox is:read`;
 	var inviteReadThreads = find(inviteReadFilters);
 	label('RSVP?').removeFromThreads(inviteReadThreads);
 	forceClean(inviteReadThreads);
 
 	// if unread for over one day, trash
-	var inviteUnreadLongFilters = `to:me ${inviteAttch} has:attachment is:unread older_than:1d`;
+	var inviteUnreadLongFilters = `to:me ${inviteAttch} has:attachment label:inbox is:unread older_than:1d`;
 	var inviteUnreadLongThreads = find(inviteUnreadLongFilters);
 	label('RSVP?').removeFromThreads(inviteUnreadLongThreads);
 	forceClean(inviteUnreadLongThreads);
 
 	// if unread within one day (To Be Decided), label RSVP? and remain unread
-	var inviteTBDFilters = `to:me ${inviteAttch} has:attachment is:unread newer_than:1d`;
+	var inviteTBDFilters = `to:me ${inviteAttch} label:inbox has:attachment is:unread newer_than:1d`;
 	var inviteTBDThreads = find(inviteTBDFilters);
 	label('RSVP?').addToThreads(inviteTBDThreads);
 }
