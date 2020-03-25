@@ -39,6 +39,9 @@ const NYUSH = {
 	ITS: 'nyush.itsm@nyu.edu',
 	// NYU/Dev
 	DEV : 'shanghai.learning.development@nyu.edu',
+	// NYU/Today
+	TODY : ['shanghai.allowposting.student@nyu.edu ', 
+					'all_public_services-group@nyu.edu']
 };
 
 // Direcotr, Dean, Provost, Librarian
@@ -124,12 +127,12 @@ const NYU = {
 	ACADE: 'NYU/Academic',
 	BOBST: 'NYU/Bobst',
 	DEV  : 'NYU/Dev',
-	IT   : 'NYU/IT',
 	HEADS: 'NYU/Heads',
-	HR   : 'NYU/HR',
+	IT   : 'NYU/IT',
 	NOTY : 'NYU/Notice',
 	NYC  : 'NYU/NYC',
 	STUD : 'NYU/Student',
+	TODY : 'NYU/Today',
 	WORK : 'NYU/Workshop'
 };
 
@@ -164,11 +167,9 @@ function libNotyWatcher() {
   }
 }
 
-
-/* --------------------------- run daily ----------------------- */
-/* libAll.gs */
+/* libAllSort.gs */
 // take care of messages to lib-all mailing list
-// run daily at noon 12:00-1:00PM
+// run every 8 hours
 function libAllSort() {
 	// lib-all invitations --> discard all except workshops
 	// another way to detect invitations: subject:+invitation: has:attachment 
@@ -199,8 +200,19 @@ function libAllSort() {
   preClean(NYU.NYC, libRestThreads);
 }
 
+/* NYUSH Messages Sort */
+function nyushSort() {
+	batchClean(`from:${NYUSH.HRG} OR from:${NYUSH.HRH}`, NYU.NOTY);
+	batchClean(`from:${NYUSH.PUB} OR from:${NYUSH.FIN}`, NYU.NOTY);
+	batchClean(`from:${NYUSH.FAC} OR from:${NYUSH.HEL}`, NYU.NOTY);
+	batchClean(`from:${NYUSH.ATH} OR from:${NYUSH.ELE}`, NYU.STUD);
+	batchClean(`from:${NYUSH.CGA} OR from:${NYUSH.AAF} OR from:${NYUSH.ARC}`, NYU.STUD);
+	batchClean(`from:${NYUSH.CGA}`, NYU.ITS);
+	batchClean(`from:${NYUSH.DEV}`, NYU.DEV);
+}
 
 
+/* --------------------------- run daily ----------------------- */
 /* notify@google and ares class reprot */
 /* notify google */
 // deal with ares class report and notify google
@@ -269,6 +281,8 @@ function aresMergedClasses() {
   forceClean(aresSHReadThreads);
 }
 
+/* invitation cleaner */
+// get rid of RSVP notifications which will go calendar
 function invitationCleaner() {
 	// if read, trash
 	var inviteAttch = '(invite.ics OR invite.vcs)';
@@ -289,6 +303,10 @@ function invitationCleaner() {
 	label('RSVP?').addToThreads(inviteTBDThreads);
 }
 
+// 
+function nyuToday() {
+
+}
 
 /* --------------------------- run weekly ----------------------- */
 
@@ -353,6 +371,16 @@ function forceClean(threads) {
 	GmailApp.markThreadsUnimportant(threads);
 	GmailApp.markThreadsRead(threads);
 	GmailApp.moveThreadsToTrash(threads);
+}
+
+/* batch clean */
+// pretty much the same the other cleaners 
+// except label used to find target thds
+function batchClean(filterString, labelString) {
+	var threads = find(filterString);
+	GmailApp.markThreadsUnimportant(threads);
+	label(labelString).addToThreads(threads);
+	GmailApp.moveThreadsToArchive(threads);
 }
 
 function collectFromHeads(labelString, threads) {
