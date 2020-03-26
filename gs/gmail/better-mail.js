@@ -197,7 +197,7 @@ function libAllSort() {
   GmailApp.markThreadsUnimportant(find(`to:${CONTACTS.ALL}) subject:workshop`));
 
   // handle the rest
-  var libRestFilters = `to:${CONTACTS.ALL} or to:${CONTACTS.COM} label:inbox`;
+  var libRestFilters = `to:${CONTACTS.ALL} OR to:${CONTACTS.COM} label:inbox`;
   var libRestThreads = find(libRestFilters);
   preClean(NYU.NYC, libRestThreads);
 }
@@ -209,7 +209,7 @@ function nyushSort() {
 	batchClean(`from:${NYUSH.FAC} OR from:${NYUSH.HEL} label:inbox`, NYU.NOTY);
 	batchClean(`from:${NYUSH.ATH} OR from:${NYUSH.ELE} label:inbox`, NYU.STUD);
 	batchClean(`from:${NYUSH.CGA} OR from:${NYUSH.AAF} OR from:${NYUSH.ARC} label:inbox`, NYU.STUD);
-	batchClean(`from:${NYUSH.CGA} label:inbox`, NYU.ITS);
+	batchClean(`from:${NYUSH.ITS} label:inbox`, NYU.IT);
 	batchClean(`from:${NYUSH.DEV} label:inbox`, NYU.DEV);
 }
 
