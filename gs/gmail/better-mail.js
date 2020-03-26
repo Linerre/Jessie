@@ -95,7 +95,8 @@ const NEWS = {
 	DAY : 'digest-noreply@quora.com',
 	FLAV: 'flavio@mail.flaviocopes.com',
 	OREA: 'reply@oreilly.com', 
-	CANV: 'start@engage.canva.com'
+	CANV: 'start@engage.canva.com',
+	ZOOM: 'webinars@zoom.us'
 };
 
 
