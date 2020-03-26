@@ -89,6 +89,16 @@ const HEADS = {
 	'Xiaojing Zu'        : 'xiaojing.zu@nyu.edu'
 };
 
+// Quora and other subscribed newsletters
+const NEWS = {
+	WEEK: 'spaces-digest-noreply@quora.com',
+	DAY : 'digest-noreply@quora.com',
+	FLAV: 'flavio@mail.flaviocopes.com',
+	OREA: 'reply@oreilly.com', 
+	CANV: 'start@engage.canva.com'
+};
+
+
 // any empty reports or notificationRead
 const TO_CAST_SUB = [
   'NO Shanghai Paging Requests to Report',
@@ -309,6 +319,15 @@ function nyuToday() {
 	batchClean(`from:${NYUSH.TODY[0]} OR from:${NYUSH.TODY[1]} label:inbox`, NYU.TODY);
 }
 
+/* Clear Quora weekly digest */
+// run daily
+function clearNewsLetters() {
+	for (const sender of Object.keys(NEWS)) {
+		var filters = `from:${NEWS[sender]} lable:inbox older_than:1d`;
+		forceClean(find(filters));
+	}
+}
+
 /* --------------------------- run weekly ----------------------- */
 // run every week on Fri 1-2am
 // change label to discard for notification previously labelled 'keep'
@@ -337,6 +356,7 @@ function libNotyCleaner() {
 
 
 /* --------------------------- run monthly----------------------- */
+
 
 
 /* ------------------------ customized funcs --------------------- */
