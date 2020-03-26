@@ -7,6 +7,7 @@ const CONTACTS = {
 	// lib-related reports: holds, paging request, etc.
 	LIB : "lib-dba@nyu.edu",
 	ALL : "lib-all@nyu.edu",
+	COM : "lib-community@nyu.edu",
 	// group study room reservation report, discard
 	EMS : "DoNotReply_EMS_Notification@nyu.edu",
 	RES : "shanghai.reserves@nyu.edu",
@@ -46,6 +47,8 @@ const NYUSH = {
 
 // Direcotr, Dean, Provost, Librarian
 const HEADS = {
+	// Office of President
+	'Andrew Hamilton'    : 'office.president@nyu.edu',
 	// Interim Co-Head of  Bern Dibner Library
 	'Ana Torres'         : 'ana.torres@nyu.edu', 
 	//Director of Scholarly Communications and Information Policy
@@ -129,7 +132,7 @@ const NYU = {
 	HEADS: 'NYU/Heads',
 	IT   : 'NYU/IT',
 	NOTY : 'NYU/Notice',
-	NYC  : 'NYU/NYC',
+	NYC  : 'NYU/Groups',
 	STUD : 'NYU/Student',
 	TODY : 'NYU/Today',
 	WORK : 'NYU/Workshop'
@@ -194,7 +197,7 @@ function libAllSort() {
   GmailApp.markThreadsUnimportant(find(`to:${CONTACTS.ALL}) subject:workshop`));
 
   // handle the rest
-  var libRestFilters = `to:${CONTACTS.ALL} label:inbox`;
+  var libRestFilters = `to:${CONTACTS.ALL} or to:${CONTACTS.COM} label:inbox`;
   var libRestThreads = find(libRestFilters);
   preClean(NYU.NYC, libRestThreads);
 }
