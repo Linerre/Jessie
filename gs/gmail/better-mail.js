@@ -96,7 +96,8 @@ const NEWS = {
 	FLAV: 'flavio@mail.flaviocopes.com',
 	OREA: 'reply@oreilly.com', 
 	CANV: 'start@engage.canva.com',
-	ZOOM: 'webinars@zoom.us'
+	ZOOM: 'webinars@zoom.us',
+	CHAV: 'newsletter@ch-aviation.com'
 };
 
 
@@ -324,7 +325,7 @@ function nyuToday() {
 // run daily
 function clearNewsLetters() {
 	for (const sender of Object.keys(NEWS)) {
-		var filters = `from:${NEWS[sender]} lable:inbox older_than:1d`;
+		var filters = `from:${NEWS[sender]} label:inbox older_than:1d`;
 		forceClean(find(filters));
 	}
 }
@@ -440,9 +441,9 @@ function label(name) {
 }
 
 /* label swapper */
-function labelSwap(oldLabel, newLable, threads) {
+function labelSwap(oldLabel, newLabel, threads) {
 	label(oldLabel).removeFromThreads(threads);
-	label(newLable).addToThreads(threads);
+	label(newLabel).addToThreads(threads);
 }
 
 
