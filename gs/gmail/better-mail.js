@@ -225,6 +225,28 @@ function nyushSort() {
 	batchClean(`from:${NYUSH.DEV} label:inbox`, NYU.DEV);
 }
 
+/* invitation cleaner */
+// run every 2 hours
+// get rid of RSVP notifications which will go calendar
+function invitationCleaner() {
+	var inviteAttch = '(invite.ics OR invite.vcs)';
+	// if read, trash
+	var inviteReadFilters = `to:me ${inviteAttch} has:attachment label:inbox is:read`;
+	var inviteReadThreads = find(inviteReadFilters);
+	label('RSVP?').removeFromThreads(inviteReadThreads);
+	forceClean(inviteReadThreads);
+
+	// if unread for over one day, trash
+	var inviteUnreadLongFilters = `to:me ${inviteAttch} has:attachment label:inbox is:unread older_than:1d`;
+	var inviteUnreadLongThreads = find(inviteUnreadLongFilters);
+	label('RSVP?').removeFromThreads(inviteUnreadLongThreads);
+	forceClean(inviteUnreadLongThreads);
+
+	// if unread within one day (To Be Decided), label RSVP? and remain unread
+	var inviteTBDFilters = `to:me ${inviteAttch} label:inbox has:attachment is:unread newer_than:1d`;
+	var inviteTBDThreads = find(inviteTBDFilters);
+	label('RSVP?').addToThreads(inviteTBDThreads);
+}
 
 /* --------------------------- run daily ----------------------- */
 /* notify@google and ares class reprot */
@@ -293,27 +315,7 @@ function aresMergedClasses() {
   forceClean(aresSHReadThreads);
 }
 
-/* invitation cleaner */
-// get rid of RSVP notifications which will go calendar
-function invitationCleaner() {
-	var inviteAttch = '(invite.ics OR invite.vcs)';
-	// if read, trash
-	var inviteReadFilters = `to:me ${inviteAttch} has:attachment label:inbox is:read`;
-	var inviteReadThreads = find(inviteReadFilters);
-	label('RSVP?').removeFromThreads(inviteReadThreads);
-	forceClean(inviteReadThreads);
 
-	// if unread for over one day, trash
-	var inviteUnreadLongFilters = `to:me ${inviteAttch} has:attachment label:inbox is:unread older_than:1d`;
-	var inviteUnreadLongThreads = find(inviteUnreadLongFilters);
-	label('RSVP?').removeFromThreads(inviteUnreadLongThreads);
-	forceClean(inviteUnreadLongThreads);
-
-	// if unread within one day (To Be Decided), label RSVP? and remain unread
-	var inviteTBDFilters = `to:me ${inviteAttch} label:inbox has:attachment is:unread newer_than:1d`;
-	var inviteTBDThreads = find(inviteTBDFilters);
-	label('RSVP?').addToThreads(inviteTBDThreads);
-}
 
 /* NYU Today summary */
 // document the history, never clean
@@ -410,10 +412,10 @@ function batchClean(filterString, labelString) {
 function collectFromHeads(labelString, threads) {
   GmailApp.markThreadsImportant(threads);
   label(labelString).addToThreads(threads);
-  var msgs = GmailApp.getMessagesForThreads(threads);
-  for (var i=0; i<msgs.length; i++) {
-    GmailApp.starMessages(msgs[i]);
-  }
+  // var msgs = GmailApp.getMessagesForThreads(threads);
+  // for (var i=0; i<msgs.length; i++) {
+  //   GmailApp.starMessages(msgs[i]);
+  // }
   GmailApp.moveThreadsToArchive(threads);
 }
 
