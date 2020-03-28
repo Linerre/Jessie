@@ -44,9 +44,9 @@ function changeTurns() {
   		sheet.appendRow([patronName, STATUS.bookB, patronStat]);
   	} 
   	// else if status is waiting + book_b (last round), then book_a
-		else if (patronStat == STATUS.wait && patronLast == STATUS.bookB) {
-			sheet.appendRow([patronName, STATUS.bookA, patronStat]);
+	else if (patronStat == STATUS.wait && patronLast == STATUS.bookB) {
+		sheet.appendRow([patronName, STATUS.bookA, patronStat]);
   	}
-	}
+    }
 }
 
