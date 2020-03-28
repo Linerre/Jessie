@@ -15,37 +15,38 @@ const PATRONS = {
 const STATUS = {
   bookA: 'See Yourself Sensing',
   bookB: 'See Yourself X',
-  wait : 'Waiting'
-};
-
-// coordinates
-const COOR = {
-	row: 7, // starting point, ever-changing
-	col: 3 //  fixed, unless further adjustment
+  wait : 'waiting'
 };
 
 // algorithm
-function test() {
+function changeTurns() {
   // default way of getting the active (woriking) sheet [ATM, subject to change]
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheets()[0];
   sheet.appendRow(['Patron', 'Status', 'Last Round']);
-  
-  for (var i = COOR.row; i < COOR.row + 4; i++) {
-  	var patronInfo = sheet.getRange(`A${i}:C${i}`).getValues();
+
+  // get the newly added and set font and bg color to it
+  var last = sheet.getLastRow();
+  sheet.getRange(`A${last}:C${last}`).setFontColor('#EBCB8B');
+  sheet.getRange(`A${last}:C${last}`).setBackgroundColor('#2E3440');
+
+  for (var i = last + 1; i < last + 5; i++) {
+  	var patronInfo = sheet.getRange(`A${i-5}:C${i-5}`).getValues();
   	var patronName = patronInfo[0][0];
   	var patronStat = patronInfo[0][1];
   	var patronLast = patronInfo[0][2];
   	// if status is book a or book b, then waiting
   	if (patronStat == STATUS.bookA || patronStat == STATUS.bookB) {
-  		sheet.appendRow([patronName, 'waiting', patronStat]);
-  	} else continue;
+  		sheet.appendRow([patronName, STATUS.wait, patronStat]);
+  	} 
+		// else if status is waiting + book_a (last round), then book_b
+  	else if (patronStat == STATUS.wait && patronLast == STATUS.bookA) { 
+  		sheet.appendRow([patronName, STATUS.bookB, patronStat]);
+  	} 
+  	// else if status is waiting + book_b (last round), then book_a
+		else if (patronStat == STATUS.wait && patronLast == STATUS.bookB) {
+			sheet.appendRow([patronName, STATUS.bookA, patronStat]);
+  	}
 	}
-  // else if status is waiting + book_a (last round), then book_b
-
-  // else if status is waiting + book_b (last round), then book_a
-
-  // rowN += 4, colN remains the same
-
 }
 
