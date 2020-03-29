@@ -39,10 +39,11 @@ const NYUSH = {
 	// NYU/IT
 	ITS: 'nyush.itsm@nyu.edu',
 	// NYU/Dev
-	DEV : 'shanghai.learning.development@nyu.edu',
+	DEV: 'shanghai.learning.development@nyu.edu',
 	// NYU/Today
-	TODY : ['shanghai.allowposting.student@nyu.edu ', 
-					'all_public_services-group@nyu.edu']
+	TODY: ['shanghai.allowposting.student@nyu.edu ', 
+					'all_public_services-group@nyu.edu'],
+	GAZ: 'shanghai.gazette@nyu.edu'
 };
 
 // Direcotr, Dean, Provost, Librarian
@@ -223,6 +224,7 @@ function nyushSort() {
 	batchClean(`from:${NYUSH.CGA} OR from:${NYUSH.AAF} OR from:${NYUSH.ARC} label:inbox`, NYU.STUD);
 	batchClean(`from:${NYUSH.ITS} label:inbox`, NYU.IT);
 	batchClean(`from:${NYUSH.DEV} label:inbox`, NYU.DEV);
+	batchClean(`from:${NYUSH.GAZ} label:inbox`, NYU.STUD);
 }
 
 /* invitation cleaner */
