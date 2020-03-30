@@ -329,7 +329,7 @@ function nyuToday() {
 // run daily
 function clearNewsLetters() {
 	for (const sender of Object.keys(NEWS)) {
-		var filters = `from:${NEWS[sender]} label:inbox older_than:1d`;
+		var filters = `from:${NEWS[sender]} label:inbox (is:read OR older_than:1d)`;
 		forceClean(find(filters));
 	}
 }
