@@ -98,7 +98,9 @@ const NEWS = {
 	OREA: 'reply@oreilly.com', 
 	CANV: 'start@engage.canva.com',
 	ZOOM: 'webinars@zoom.us',
-	CHAV: 'newsletter@ch-aviation.com'
+	CHAV: 'newsletter@ch-aviation.com',
+	CPEN: 'support@codepen.io',
+	GRAM: 'info@send.grammarly.com'
 };
 
 
