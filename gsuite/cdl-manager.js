@@ -1,7 +1,8 @@
 /* mange CDL */
 
 var folderId = '1SAJvyGFo6tkhJC2w2-qYDirscHdAwVUS';
-var spreadSheetId = '1hLAlvRtzIgDYjOdrbUZGSqWmVsPPEkddMqZkjLWaKIc';
+var availability = '1hLAlvRtzIgDYjOdrbUZGSqWmVsPPEkddMqZkjLWaKIc';
+var circulation = '1ujtfzGHXrU_AY-ABTFHhIfoOS10Yao5a8z8NQu_4Ykg';
 var row = 2, colBarcode = 1, colTitle = 2;
 
 // 1 sec = 1000 millseconds
@@ -9,21 +10,59 @@ var row = 2, colBarcode = 1, colTitle = 2;
 var loanPeriod = 14400000;
 
 function selfCheckout(useremail) {
+	// atm, use barcode to locate a file
 	var folder = DriveApp.getFolderById(folderId);
 	var files = folder.getFiles();
 	files.next().addViewer(useremail);
+	// if the item is available
+	selfCheckout(useremail);
+	var sheet = SpreadsheetApp.openById(circulation).getSheetByName('circ-log');
+}
+
+
+/* getFileId.gs */
+function getFile(){
+
+}
+
+// get the identifer for locating a file
+// atm, useing the barcode
+function getIdentifer(useremail){
+	var sheet = SpreadsheetApp.openById(circulation).getSheetByName('circ-log');
+	var barcode = sheet.getRange(4,4).getValue().toString();
+	var file = DriveApp.searchFiles(`title contains ${barcode}`).next();
+	// check out
+	file.addViewer(useremail);
+
+	// record the loan time
+	var loanTime = new Date();
+	// MM/DD/YYYY same as that in Aleph
+	var loanDate = (loanTime.getMonth()+1).toString() +
+	'/' +
+	loanTime.getDate().toString() +
+	'/' +
+	loanTime.getFullYear().toString();
+	// HH:MM similar to that in Alpeh, without AM or PM, 24-hour schedule
+	var loanHour = loanTime.getHours().toString() +
+	':' +
+	loanTime.getMinutes().toString();
+
+	sheet.getRange(6,6).setValue(loanDate);
+	sheet.getRange(6,7).setValue(loanHour);
+
+	// set due time
+	var dueTime = new Date(loanTime.getTime() + loanPeriod);
+	sheet.getRange(6,8).setValue(dueTime);
 }
 
 function loanPeriodChecker(loanTime, useremail){
-	// if the item is available
-	selfCheckout(useremail);
-	SpreadsheetApp.openById
+	
 }
 
 function test() {
 	var folder = DriveApp.getFolderById(folderId);
 	var files = folder.getFiles();
-	var sheet = SpreadsheetApp.openById(spreadSheetId).getSheetByName('reserves');
+	var sheet = SpreadsheetApp.openById(availability).getSheetByName('reserves');
 	while (files.hasNext()) {
 		var filename = files.next().getName();
 		var barcodeCell = sheet.getRange(row, colBarcode);
