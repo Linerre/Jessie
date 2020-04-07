@@ -1,36 +1,54 @@
 /* mange CDL */
 
 var folderId = '1SAJvyGFo6tkhJC2w2-qYDirscHdAwVUS';
-var availability = '1hLAlvRtzIgDYjOdrbUZGSqWmVsPPEkddMqZkjLWaKIc';
-var circulation = '1ujtfzGHXrU_AY-ABTFHhIfoOS10Yao5a8z8NQu_4Ykg';
-var row = 2, colBarcode = 1, colTitle = 2;
+var availSs = '1hLAlvRtzIgDYjOdrbUZGSqWmVsPPEkddMqZkjLWaKIc';
+var circSs = '1ujtfzGHXrU_AY-ABTFHhIfoOS10Yao5a8z8NQu_4Ykg';
+var circSt = 'circ-log';
+const COL = {
+	ID: 1, // patron netid
+	BC: 4, // barcode
+	LD: 6, // loan date
+	LH: 7, // loan hour
+	DD: 8, // due date
+	DH: 9  // due hour
+};
+
+
+
+// 2:30 -- > trigger at 6:30 --> remove viewer and sucide
+// 3:58 -- > trigger at 7:58
 
 // 1 sec = 1000 millseconds
 // 4 hours = 4 * 60 * 60 * 1000 = 14400000
 var loanPeriod = 14400000;
 
-function selfCheckout(useremail) {
-	// atm, use barcode to locate a file
-	var folder = DriveApp.getFolderById(folderId);
-	var files = folder.getFiles();
-	files.next().addViewer(useremail);
-	// if the item is available
-	selfCheckout(useremail);
-	var sheet = SpreadsheetApp.openById(circulation).getSheetByName('circ-log');
-}
-
-
-/* getFileId.gs */
-function getFile(){
-
-}
-
 // get the identifer for locating a file
-// atm, useing the barcode
-function getIdentifer(){
+// atm, useing
+
+/* self check out */
+function onEdit() {
+	// check out to the patron
+	var sheet = openSheet(circSs, circSt);
+
+	// get the request details: row, patron id, requested barcode
+	var row = sheet.getLastRow();
+	var barcode = '"'+ sheet.getRange(row,COL.BC).getValue().toString() + '"';
+	var patron = sheet.getRange(row,COL.ID).getValue();
+
+	checkOut();
+
+	// record the loan COL
+	timeStamp(row, sheet);
+}
 
 
-	// record the loan time
+/* ---------------------- tools ---------------------- */
+// open a sheet
+function openSheet(ssId, stName) {
+	return SpreadsheetApp.openById(ssId).getSheetByName(stName);
+}
+
+function timeStamp(row, sheet){
 	var loanTime = new Date();
 	// MM/DD/YYYY same as that in Aleph
 	var loanDate = (loanTime.getMonth()+1).toString() + '/' +
@@ -39,33 +57,39 @@ function getIdentifer(){
 	// HH:MM similar to that in Alpeh, without AM or PM, 24-hour schedule
 	var loanHour = loanTime.getHours().toString() + ':' +
 	loanTime.getMinutes().toString();
+	// write to the spreadsheet
+	sheet.getRange(row,COL.LD).setValue(loanDate);
+	sheet.getRange(row,COL.LH).setValue(loanHour);
 
-	sheet.getRange(6,6).setValue(loanDate);
-	sheet.getRange(6,7).setValue(loanHour);
-
-	// set due time
+	// set due COL
 	var dueTime = new Date(loanTime.getTime() + loanPeriod);
-	sheet.getRange(6,8).setValue(dueTime);
+	var dueDate = (dueTime.getMonth()+1).toString() + '/' +
+	dueTime.getDate().toString() +	'/' +
+	dueTime.getFullYear().toString();
+	var dueHour = dueTime.getHours().toString() + ':' +
+	dueTime.getMinutes().toString();
+
+	sheet.getRange(row,COL.DD).setValue(dueDate);
+	sheet.getRange(row,COL.DH).setValue(dueHour);
 }
 
 
-function checkOut(useremail) {
-	var sheet = SpreadsheetApp.openById(circulation).getSheetByName('circ-log');
-	var barcode = '"'+ sheet.getRange(4,4).getValue().toString() + '"';
+function checkOut() {
 	var file = DriveApp.searchFiles('title contains ' + barcode).next();
 	// check out
-	file.addViewer(useremail);	
+	file.addViewer(patron+'@nyu.edu');	
 }
 
-function checkIn(useremail) {
-	var sheet = SpreadsheetApp.openById(circulation).getSheetByName('circ-log');
-	var barcode = '"'+ sheet.getRange(4,4).getValue().toString() + '"';
+function checkIn(useremail, row, col) {
+	var sheet = SpreadsheetApp.openById(circSheet).getSheetByName('circ-log');
+
 	var file = DriveApp.searchFiles('title contains ' + barcode).next();
 	// check out
 	file.removeViewer(useremail);
 }
-// 2:30 -- > trigger at 6:30 --> remove viewer and sucide
-// 3:58 -- > trigger at 7:58
+
+
+
 
 
 function test() {
