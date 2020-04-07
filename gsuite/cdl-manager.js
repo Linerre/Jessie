@@ -29,8 +29,9 @@ function getFile(){
 // atm, useing the barcode
 function getIdentifer(useremail){
 	var sheet = SpreadsheetApp.openById(circulation).getSheetByName('circ-log');
-	var barcode = sheet.getRange(4,4).getValue().toString();
-	var file = DriveApp.searchFiles(`title contains ${barcode}`).next();
+	var barcode = '"'+ sheet.getRange(4,4).getValue().toString() + '"';
+  var file = DriveApp.searchFiles('title contains ' + barcode).next();
+
 	// check out
 	file.addViewer(useremail);
 
