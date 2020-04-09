@@ -13,8 +13,9 @@ const COL = {
 	DH: 9  // due hour
 };
 
-// 
-var file;
+// circulation log records each time a patron checks out an item
+var circLog = PropertiesService.getScriptProperties();
+
 
 
 // 2:30 -- > trigger at 6:30 --> remove viewer and sucide
@@ -45,7 +46,6 @@ function selfCheckout() {
 
 	// next, create a trigger that will run at the due time
 	// and anther trigger that will delete the last trigger after it runs
-
 }
 
 
@@ -59,6 +59,7 @@ function openSheet(ssId, stName) {
 // creating a trigger
 function timeStamp(row, sheet){
 	var loanTime = new Date();
+	circLog.setProperty(loanTime.getTime().toString(), row.toString());
 	// MM/DD/YYYY same as that in Aleph
 	var loanDate = (loanTime.getMonth()+1).toString() + '/' +
 	loanTime.getDate().toString() +	'/' +
@@ -81,10 +82,13 @@ function timeStamp(row, sheet){
 	sheet.getRange(row,COL.DD).setValue(dueDate);
 	sheet.getRange(row,COL.DH).setValue(dueHour);
 
+	// set the return time upon which check-in will run
 	ScriptApp.newTrigger('checkIn')
 	.timeBased()
-	.after(10*60*1000)
+	.after(2*60*1000)
 	.create();
+
+
 }
 
 // check out
@@ -98,8 +102,9 @@ function checkOut(patron, barcode) {
 // deleting the trigger created by timestamp
 /* need to deal with row num and file url */
 function checkIn() {
+	var now = new Date();
 	var sheet = openSheet(circSs, circSt);
-	var row = sheet.getLastRow();
+	var row = Number(circLog[(now.getTime()-loanPeriod).toString()]);
 	var barcode = '"'+ sheet.getRange(row,COL.BC).getValue().toString() + '"';
 	var file = DriveApp.searchFiles('title contains ' + barcode).next();
 	var patron = sheet.getRange(row,COL.ID).getValue();
@@ -111,9 +116,17 @@ function checkIn() {
 	// the zero trigger will always be the onEdit
 	// and each request will create a checkin trigger, starting with index 1
 	ScriptApp.deletTrigger(triggers[1]);
+
 }
 
+/* store the data for trigger to use later */
+function test() {
 
+  var st = openSheet(circSs, circSt);
+  var range = st.getRange('B2');
+  Logger.log(range.getRow());
+  
+}
 
 
 
