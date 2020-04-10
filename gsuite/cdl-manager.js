@@ -104,7 +104,7 @@ function checkOut(patron, barcode) {
 function checkIn() {
 	var now = new Date();
 	var sheet = openSheet(circSs, circSt);
-	var row = Number(circLog[(now.getTime()-loanPeriod).toString()]);
+	var row = Number(circLog.getProperty((now.getTime()-loanPeriod).toString()));
 	var barcode = '"'+ sheet.getRange(row,COL.BC).getValue().toString() + '"';
 	var file = DriveApp.searchFiles('title contains ' + barcode).next();
 	var patron = sheet.getRange(row,COL.ID).getValue();
