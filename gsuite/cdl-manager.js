@@ -7,10 +7,8 @@ var circSt = 'circ-log';
 const COL = {
 	ID: 1, // patron netid
 	BC: 4, // barcode
-	LD: 6, // loan date
-	LH: 7, // loan hour
-	DD: 8, // due date
-	DH: 9  // due hour
+	LT: 6, // loan date
+	DT: 7, // loan hour
 };
 
 // circulation log records each time a patron checks out an item
@@ -59,36 +57,18 @@ function openSheet(ssId, stName) {
 // creating a trigger
 function timeStamp(row, sheet){
 	var loanTime = new Date();
-	circLog.setProperty(loanTime.getTime().toString(), row.toString());
-	// MM/DD/YYYY same as that in Aleph
-	var loanDate = (loanTime.getMonth()+1).toString() + '/' +
-	loanTime.getDate().toString() +	'/' +
-	loanTime.getFullYear().toString();
-	// HH:MM similar to that in Alpeh, without AM or PM, 24-hour schedule
-	var loanHour = loanTime.getHours().toString() + ':' +
-	loanTime.getMinutes().toString();
-	// write to the spreadsheet
-	sheet.getRange(row,COL.LD).setValue(loanDate);
-	sheet.getRange(row,COL.LH).setValue(loanHour);
 
+	// write to the spreadsheet
+	sheet.getRange(row,COL.LT).setValue(loanTime);
 	// set due COL
 	var dueTime = new Date(loanTime.getTime() + loanPeriod);
-	var dueDate = (dueTime.getMonth()+1).toString() + '/' +
-	dueTime.getDate().toString() +	'/' +
-	dueTime.getFullYear().toString();
-	var dueHour = dueTime.getHours().toString() + ':' +
-	dueTime.getMinutes().toString();
-
-	sheet.getRange(row,COL.DD).setValue(dueDate);
-	sheet.getRange(row,COL.DH).setValue(dueHour);
+	sheet.getRange(row,COL.DT).setValue(dueTime);
 
 	// set the return time upon which check-in will run
 	ScriptApp.newTrigger('checkIn')
 	.timeBased()
 	.after(2*60*1000)
 	.create();
-
-
 }
 
 // check out
