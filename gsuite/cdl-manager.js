@@ -119,14 +119,6 @@ function checkIn() {
 
 }
 
-/* store the data for trigger to use later */
-function test() {
-
-  var st = openSheet(circSs, circSt);
-  var range = st.getRange('B2');
-  Logger.log(range.getRow());
-  
-}
 
 
 
