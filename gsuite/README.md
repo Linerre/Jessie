@@ -1,1 +1,2 @@
 Some Google Apps Scripts to provide solutions to daily work.
+Some scripts have been depracted.
