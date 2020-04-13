@@ -11,3 +11,6 @@ The `bash` dir contains all the `.sh` scripts that can automate some boring and 
 
 ## The `highlighters` dir
 This directory contains syntax highlighters for various programming languages. They are, however, not the dynamic highlighters which work like a parser. Instead, they are written in JavaScript and rely solely on the `.replace()` method to statically match and replace the lexes.  
+
+## The `gsuite` dir
+Google Apps Scripts
