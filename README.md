@@ -14,3 +14,4 @@ This directory contains syntax highlighters for various programming languages. T
 
 ## The `gsuite` dir
 Some Google Apps Scripts useful for my daily work.
+There will also be a web app.
