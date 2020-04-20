@@ -16,3 +16,5 @@ The approach does not work well with Anki. Deprecated.
 ## The `gsuite` dir
 Some Google Apps Scripts useful for my daily work.
 There will also be a web app for checking out some ebooks.
+The scripts here are just working, meaning they are far from perfect and I may
+not have enough time to refine them either.
