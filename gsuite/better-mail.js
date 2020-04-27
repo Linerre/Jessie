@@ -100,7 +100,11 @@ const NEWS = {
 	ZOOM: 'webinars@zoom.us',
 	CHAV: 'newsletter@ch-aviation.com',
 	CPEN: 'support@codepen.io',
-	GRAM: 'info@send.grammarly.com'
+	GRAM: 'info@send.grammarly.com',
+	ADOB: 'demand@mail.adobe.com',
+  BLOO: 'noreply@mail.bloombergbusiness.com',
+  FA  : 'news@foreignaffairs.com',
+  PLUR: 'tech-skills@pluralsight.com'
 };
 
 
