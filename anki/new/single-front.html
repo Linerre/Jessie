@@ -1,0 +1,26 @@
+<div id="tag">&nbsp;{{Tags}}</div>
+
+<div id="que">{{question}}</div>
+
+<hr id=answer>
+
+  <div class="options"> <span class="optionNum">A</span> <span class="options-content">{{optionA}}</span></div>
+  <div class="options"> <span class="optionNum">B</span> <span class="options-content">{{optionB}}</span></div>
+  <div class="options"> <span class="optionNum">C</span> <span class="options-content">{{optionC}}</span></div>
+  <div class="options"> <span class="optionNum">D</span> <span class="options-content">{{optionD}}</span></div>
+
+<script>
+
+keywords = [
+	'不正确',
+	'错误的',
+	'不属于'
+];
+
+var question = document.getElementById("que");
+
+for (var kw of keywords) {
+	question.innerHTML = question.innerHTML.replace(kw, `<b class="choice">${kw}</b>`);
+}
+
+</script>

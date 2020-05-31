@@ -1,0 +1,110 @@
+.card {
+    font-family: arial;
+    font-size: 20px;
+    text-align: left;
+    color: black;
+    background-color: white;
+}
+
+/* ------ Front Side ------ */
+
+#tag::before {
+    content: '多选';
+    font-family: sans-serif;
+    font-weight: normal;
+    background-color: #6699CC;
+    color: #fff;
+    padding: 0.2em;
+}
+
+#tag {
+    font-family: sans-serif;
+    font-weight: bold;
+    background-color:#f7f9fc;
+    max-width: fit-content;
+    color: #6699CC;
+    padding: 0.2em;
+    margin-bottom: 1em;
+}
+
+
+.options {
+    margin: 1em 0;
+    padding: 0.2em, 0;
+    font-size: 13pt;
+}
+
+#que {
+    margin-top: 0.2em;
+    font-size: 14pt;
+}
+
+#ans::before{
+    content: '答案';
+    background-color: #C594C5;
+    color: #fff;
+    padding: 0.1em;
+    margin: 0.2em;
+}
+
+
+/* ---- Back Side ---- */
+
+#ans {
+    margin-bottom: 0.5em;
+}
+
+.ana::before{
+    content: '解析';
+    background-color: #5FB3B3;
+    color: #fff;
+    padding: 0.1em;
+    margin: 0.2em 0.5em 0.2em 0;
+}
+
+.ana {
+    margin-bottom: 0.5em;
+    font-size: 12pt;
+}
+
+.page::before {
+    content: '索引';
+    background-color: #99C794;
+    color: #fff;
+    padding: 0.1em;
+    margin: 0.2em 0.5em 0.2em 0;
+}
+
+.page {
+    font-size: 12pt;
+}
+
+#oa, #ob, #oc, #od {
+    margin-bottom: 0.5em;
+}
+
+
+.hide {
+    display: none;
+}
+
+.choice {
+    max-width:  fit-content;
+    background-color: #C594C5;
+    color: #fff;
+    margin-left: 02.em;
+    padding: 0.1em;
+    border-radius: 0.2em;
+/* background-color:#FAC863; */
+}
+
+.choice-letter {
+    color: #EC5f67;
+}
+
+.wrong {
+        color: #A7ADBA;
+    -webkit-text-decoration-line: line-through;
+    text-decoration: line-through;
+    text-decoration-color: #AB7967;
+}
