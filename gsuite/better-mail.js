@@ -115,6 +115,7 @@ const TO_CAST_SUB = [
   'There were NO Shanghai Expired Holds to Report',
   'Return Receipt',
   'NYU Shanghai Group Study Room Schedule'
+  'NO Shanghai Offsite Item requests to Report'
 ];
 
 // any non-empty or with-attachments reports exclude nightly overdue
