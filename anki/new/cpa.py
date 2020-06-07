@@ -8,7 +8,9 @@ from bs4 import SoupStrainer as strainer
 import pprint
 
 # open and retrieve the whole page
-with urlopen('http://www.zgcjpx.com/cpa/tiku/lianxi/kj/129401.html') as response:
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/kj/129121.html'
+url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/kj/129401.html'
+with urlopen(url) as response:
     html = response.read()
 
 page = soup(html, 'html.parser')
@@ -22,7 +24,10 @@ def drills_para(tag):
 
 test = page.find_all(drills_para)
 
-len(test)
+# remove unwanted elements
+del test[0]
+del test[-1]
+
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(test)
 
