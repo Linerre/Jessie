@@ -46,6 +46,16 @@ for i in range(len(drills)):
 for i in unwanted:
     drills.remove(i)
 
+# change print() to write()
+n = 0
+for element in drills:
+    if n > 0 and n % 5 == 4:
+        print(element)
+        n += 1
+    else:
+        print(element, end=',')
+        n += 1
+
 # ----------- cleaning ----------- #
 
 pp = pprint.PrettyPrinter(indent=2)
