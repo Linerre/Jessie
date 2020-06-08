@@ -4,7 +4,7 @@
 
 from urllib.request import urlopen
 from bs4 import BeautifulSoup as soup
-from bs4 import SoupStrainer as strainer
+# from bs4 import SoupStrainer as strainer
 import pprint
 
 # open and retrieve the whole page
@@ -28,9 +28,25 @@ del drills[0]
 del drills[-1]
 
 
-# figure out how to clean the data
+# ----------- cleaning ----------- #
+# to catch strange options which do not start with any of the below prefix
+prefix = ('A', 'B', 'C', 'D', '1', '2', '3', '4', '5')
+unwanted = []
 
-# ---------- cleaning -----------
+# remove <p></p> and replace \u3000 with whitespaces
+# also locate all the strange options
+for i in range(len(drills)):
+    drills[i] = drills[i].get_text().replace('\u3000', ' ')
+    if not drills[i].startswith(prefix):
+        drills[i] = drills[i-1] + '\n' + drills[i]
+        unwanted.append(drills[i-1])
+
+
+# remove the strange options (already turned into empyt string by magic!)
+for i in unwanted:
+    drills.remove(i)
+
+# ----------- cleaning ----------- #
 
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(drills)
