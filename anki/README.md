@@ -48,7 +48,7 @@
 
 ![fields](https://github.com/Linerre/Jessie/blob/master/anki/images/Fields.png)
 
-9.  在弹出的界面里，利用右侧的 **Add** 按钮，不断添加新的 Filed，直到和下图完全一致。**注意**，Field 的名字请和图片中保持一致（包括大小写）。添加完成后可以点击 Close
+9.  在弹出的界面里，利用右侧的 **Add** 按钮，不断添加新的 Field，直到和下图完全一致。**注意**，Field 的名字请和图片中保持一致（包括大小写）。添加完成后可以点击 Close
   
 ![add fields](https://github.com/Linerre/Jessie/blob/master/anki/images/add%20field.png)
 
