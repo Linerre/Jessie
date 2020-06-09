@@ -53,10 +53,20 @@ for i in unwanted:
 que_type_pattern = re.compile('[\(【][单多]选题?[\)】]')
 chp_info_pattern = re.compile('\(第.+?章.*?\)')
 questions_index = (0, 5, 10, 15, 20)
+que_type = []
+chp_info = []
 
 for i in questions_index:
+    # record question type
+    que_type.append(que_type_pattern.search(drills[i]).group(0))
+    
+    # record chp info
+    chp_info.append(chp_info_pattern.search(drills[i]).group(0))
+    
     drills[i] = re.sub(que_type_pattern, '', drills[i])
     drills[i] = re.sub(chp_info_pattern, '', drills[i])
+
+print(set(que_type), set(chp_info), sep='\n')
 
 # change print() to write()
 n = 0
