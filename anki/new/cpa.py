@@ -51,7 +51,7 @@ for i in unwanted:
 # extract (单选题) or (多选题) and chapter info like (第六章.风险与风险管理)
 # this is necessary since later they will get in the way of processing questiona-and-options
 que_type_pattern = re.compile('[\(【][单多]选题?[\)】]')
-chp_info_pattern = re.compile('\(第.?章.*?\)')
+chp_info_pattern = re.compile('\(第.+?章.*?\)')
 questions_index = (0, 5, 10, 15, 20)
 
 for i in questions_index:
