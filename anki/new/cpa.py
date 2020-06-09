@@ -5,6 +5,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup as soup
 # from bs4 import SoupStrainer as strainer
+import re
 import pprint
 
 # open and retrieve the whole page
@@ -45,6 +46,17 @@ for i in range(len(drills)):
 # remove the strange options (already turned into empyt string by magic!)
 for i in unwanted:
     drills.remove(i)
+
+# patterns for use in regular expressions
+# extract (单选题) or (多选题) and chapter info like (第六章.风险与风险管理)
+# this is necessary since later they will get in the way of processing questiona-and-options
+que_type_pattern = re.compile('[\(【][单多]选题?[\)】]')
+chp_info_pattern = re.compile('\(第.?章.*?\)')
+questions_index = (0, 5, 10, 15, 20)
+
+for i in questions_index:
+    drills[i] = re.sub(que_type_pattern, '', drills[i])
+    drills[i] = re.sub(chp_info_pattern, '', drills[i])
 
 # change print() to write()
 n = 0
