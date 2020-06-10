@@ -28,6 +28,12 @@ drills = page.find_all(drills_para)
 del drills[0]
 del drills[-1]
 
+# functon to remove duplicates
+def unique_list(a_list):
+    for item in a_list:
+        while a_list.count(item) > 1:
+            a_list.remove(item)
+    return a_list 
 
 # ----------- cleaning ----------- #
 # to catch strange options which do not start with any of the below prefix
@@ -66,7 +72,8 @@ for i in questions_index:
     drills[i] = re.sub(que_type_pattern, '', drills[i])
     drills[i] = re.sub(chp_info_pattern, '', drills[i])
 
-print(set(que_type), set(chp_info), sep='\n')
+unique_list(que_type)
+unique_list(chp_info)
 
 # change print() to write()
 n = 0
