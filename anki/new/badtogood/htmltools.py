@@ -1,8 +1,8 @@
 #! /bin/env python
 
 # functions/methods for getting html pages by string url
-# need to import bs4 and urllib.request in the main .py
-
+from urllib.request import urlopen
+from bs4 import BeautifulSoup as soup
 
 # return a parsed Q html obj via the question page url
 def get_html(a_url):
