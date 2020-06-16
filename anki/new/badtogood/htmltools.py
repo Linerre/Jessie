@@ -34,3 +34,23 @@ def get_answer_html(a_url):
     
     a_html = get_html(anwser_url)
     return a_html
+
+
+# filter out unwanted tags
+def filter_tags(tag):
+    '''
+    return the needed p tags; used with target_tags function
+    '''
+    return tag.name == 'p' and len(tag.contents) == 1 and isinstance(tag.contents[0], str)
+
+def target_tags(filters, html):
+    '''use filters function to filter out unwanted tags from the parsed html
+       return the filtered result as a list.
+    '''
+    tags = html.find_all(filters) # get a list of tags; 
+    del tags[0]
+    del tags[-1]
+    for i in range(len(tags)):
+       tags[i] = tags[i].get_text().replace('\u3000', ' ') # turn the tags to texts 
+
+    return tags
