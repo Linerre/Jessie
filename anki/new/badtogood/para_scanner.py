@@ -36,6 +36,37 @@ def normal(list_a, list_b, a_file):
     
     return 'Normal page rendering done!'
 
+def normal_h2(list_a, list_b, q_string, a_file):
+    '''
+    Append question type (in a <h2> tag) to each Q;
+    Output organized lines suitable for csv files
+    '''
+    answer = r'[1-5\.]+[【参考答案】:：]+(?P<opt>[A-D]+)[。【题目详解析:：】]+(?P<aly>.*)'
+    question = r'[1-5\.]+(?P<que>.*)\((?P<chp>第.+?章.*?)\)'
+    for i in range(len(list_b)):
+        # match the needed parts
+        a_match = re.search(answer, list_b[i])
+        # combine them into a csv and assign to the ith element
+        list_b[i] = a_match.group('opt') + ',' + a_match.group('aly')
+        # insert it to q_list
+        list_a.insert((i+1)*5+1, list_b[i])
 
+    for i in (0,6,12,18,24):
+        # split the questions by matching the needed parts
+        try:
+            q_match = re.search(question, list_a[i])
+
+        # combine into a csv and assign to ith question
+            list_a[i] = q_match.group('que') + ',' + q_match.group('chp')
+
+        # write to a csv file
+            a_file.write(list_a[i] + ',' + \
+                    list_a[i+1] + ',' + \
+                    list_a[i+2] + ',' + \
+                    list_a[i+3] + ',' + \
+                    list_a[i+4] + ',' + \
+                    list_a[i+5] + '\n')
+        except:
+            print(q_match)
 
 
