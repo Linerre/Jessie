@@ -11,6 +11,7 @@ question  = r'[1-5\.\(【]+(?P<type>[单多项选择题]+)[\)】](?P<que>.*?)\((
 question_h2 = r'[1-5\.]+(?P<que>.*)\((?P<chp>第.+?章.*?)\)'
 h2_tag = r'<h2>(?P<type>.*?)</h2>'
 
+# handle len(q_list) == 25
 def normal_question(list_q, h2):
     '''
     raw input --> organized outpt for csv files:
@@ -92,3 +93,40 @@ def normal(list_a, list_b, h2, a_file):
             print(q_match)
 
 
+# handle len(q_list) != 25
+def abnormal_question(list_q, h2):
+    pass
+
+def terminator(a_list, q_op):
+    '''
+    turn a list into a dict where 
+    key = Q and value = a list of Opts
+    '''
+    ex_num = ('1','2','3','4','5')
+    # string ex index, human-readable
+    ex_ind = []
+    # abnormal docker
+
+
+    for i in a_list:
+        if i.startswith(ex_num):
+            q_op[i] = []
+            n = a_list.index(i)
+            while not a_list[n+1].startswith(ex_num):
+                q_op[i].append(a_list[n+1])
+                n += 1
+                if n == len(a_list) - 1:
+                     q_op[i].append(a_list[n])
+                     break
+        else:
+            continue
+
+    # for i in ex_ind:
+    #     if not (a_list[i+1].startswith('A') and \
+    #             a_list[i+2].startswith('B') and \
+    #             a_list[i+3].startswith('C') and \
+    #             a_list[i+4].startswith('D')):
+    #         # print('Exception found: ', a_list[i], sep='\n')
+    #         abnormal.append(i)
+
+    return q_op
