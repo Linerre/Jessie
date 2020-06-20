@@ -130,3 +130,23 @@ def terminator(a_list, q_op):
     #         abnormal.append(i)
 
     return q_op
+
+
+def a_func(a_dict):
+    for q in a_dict.keys():
+        if len(a_dict[q]) < 4:
+            n = len(a_dict[q])
+            while n < 4:
+                a_dict[q].append('|')
+                n += 1
+        elif len(a_dict[q]) > 4:
+            prefix = ('A', 'B', 'C', 'D')
+            # opt is of string type
+            # a_dict[q] is of list type
+            for opt in a_dict[q]:
+                if not opt.startswith(prefix):
+                    m = a_dict[q].index(opt)
+                    # combine it into previous option
+                    a_dict[q][m] = a_dict[q][m-1] + a_dict[q][m]
+        else:
+            continue
