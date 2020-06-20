@@ -97,6 +97,9 @@ def normal(list_a, list_b, h2, a_file):
 def abnormal_question(list_q, h2):
     pass
 
+
+
+# ------------- not very useful ---------------
 def terminator(a_list, q_op):
     '''
     turn a list into a dict where 
@@ -132,7 +135,7 @@ def terminator(a_list, q_op):
     return q_op
 
 
-def a_func(a_dict):
+def standard_25(a_dict):
     for q in a_dict.keys():
         if len(a_dict[q]) < 4:
             n = len(a_dict[q])
@@ -141,12 +144,18 @@ def a_func(a_dict):
                 n += 1
         elif len(a_dict[q]) > 4:
             prefix = ('A', 'B', 'C', 'D')
+            unwanted = []
             # opt is of string type
             # a_dict[q] is of list type
             for opt in a_dict[q]:
                 if not opt.startswith(prefix):
                     m = a_dict[q].index(opt)
                     # combine it into previous option
-                    a_dict[q][m] = a_dict[q][m-1] + a_dict[q][m]
+                    a_dict[q][m] = a_dict[q][m-1] + '\n' + a_dict[q][m]
+                    unwanted.append(a_dict[q][m-1])
+            for i in unwanted:
+                a_dict[q].remove(i)
         else:
             continue
+
+    return a_dict
