@@ -32,7 +32,22 @@ def normal_question(list_q, h2):
 
     return list_q
 
+# handle len(a_list) == 10
+def answer_10(list_a, list_b):
+    # combine answer with analysis
+    for i in (1,3,5,7,9):
+        list_b[i] = list_b[i-1] + list_b[i]
+        a_match = re.search(answer, list_b[i])
+        list_b[i] = a_match.group('opt') + ',' + \
+        a_match.group('aly')
 
+        # insert combined line to list_q
+        list_a.insert(3*i+2, list_b[i])
+
+    return list_a
+
+
+# handle len(q_list) == 25 and len(a_list) = 5
 def normal(list_a, list_b, h2, a_file):
     '''
     Append question type (in a <h2> tag) to each Q;
