@@ -1,4 +1,7 @@
 #! Abnormal options handling module
+# -*- coding: utf-8 -*-
+
+import pprint
 
 ex_num = ('1','2','3','4','5')
 
@@ -68,6 +71,7 @@ def abnormal_finder(a_list):
     return abnormal 
 
 def abnormal_handler(a_list_of_index, a_list, ex_num = ('1','2','3','4','5')):
+    # capture the abnormal(s)
     abnormal_que = {}
     for i in a_list_of_index:
         abnormal_que[a_list[i]] = [] # put the ab que into a dict as key
@@ -80,10 +84,24 @@ def abnormal_handler(a_list_of_index, a_list, ex_num = ('1','2','3','4','5')):
             # force to break when reaching the list end
             if n == len(a_list) - 1: 
                 abnormal_que[a_list[i]].append(a_list[n])
+                # break out the while loop
                 break
+    
+    # delete the abnormals from the original
+    for q in abnormal_que.keys():
+        for i in abnormal_que[q]:
+            a_list.remove(i)
+        a_list.remove(q)
 
 
-    print('Abnormal question(s) found: ', abnormal_que, sep='\n')
+    # output the abnormals; handle manually for now?
+    print('Abnormal question(s) found: ')
+    pp = pprint.PrettyPrinter(indent=2, width=70)
+    pp.pprint(abnormal_que)
+
+    return a_list
+
+
 
 
 
