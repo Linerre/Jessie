@@ -1,6 +1,6 @@
 #! Abnormal options handling module
 
-
+ex_num = ('1','2','3','4','5')
 
 def abnormal_to_normal(a_list):
     '''
@@ -41,6 +41,54 @@ def abnormal_to_normal(a_list):
         a_list.remove(i)
 
     return a_list
+
+def abnormal_finder(a_list):
+    '''
+    return a list containing the indexes of
+    abnormal ex
+    '''
+    ex_num = ('1','2','3','4','5')
+    # string ex index, human-readable
+    ex_ind = []
+    # abnormal docker
+    abnormal = []
+
+    for i in a_list:
+        if i.startswith(ex_num):
+            ex_ind.append(a_list.index(i))
+
+    for i in ex_ind:
+        if not (a_list[i+1].startswith('A') and \
+                a_list[i+2].startswith('B') and \
+                a_list[i+3].startswith('C') and \
+                a_list[i+4].startswith('D')):
+            # print('Exception found: ', a_list[i], sep='\n')
+            abnormal.append(i)
+
+    return abnormal 
+
+def abnormal_handler(a_list_of_index, a_list, ex_num = ('1','2','3','4','5')):
+    abnormal_que = {}
+    for i in a_list_of_index:
+        abnormal_que[a_list[i]] = [] # put the ab que into a dict as key
+        n = i
+        # if a line is not a question, add it to the dict 
+        # as the corresponding key's value: key(Q)-value(Opts)
+        while not a_list[n+1].startswith(ex_num):
+            abnormal_que[a_list[i]].append(a_list[n+1])
+            n += 1
+            # force to break when reaching the list end
+            if n == len(a_list) - 1: 
+                abnormal_que[a_list[i]].append(a_list[n])
+                break
+
+
+    print('Abnormal question(s) found: ', abnormal_que, sep='\n')
+
+
+
+
+
 
 if __name__ == '__main__':
     import sys
