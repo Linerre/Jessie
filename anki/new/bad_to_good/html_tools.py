@@ -3,6 +3,7 @@
 # functions/methods for getting html pages by string url
 from urllib.request import urlopen
 from bs4 import BeautifulSoup as soup
+import re
 
 # return a parsed Q html obj via the question page url
 def get_html(a_url):
@@ -54,3 +55,20 @@ def target_tags(filters, html):
        tags[i] = tags[i].get_text().replace('\u3000', ' ') # turn the tags to texts 
 
     return tags
+
+def filename_getter(html_obj):
+    subject_pat = re.compile('《(?P<sub>.*?)》')
+    time_stamp = re.compile('(?P<date>\d-\d)')
+    try:
+        subject_tag = str(html_obj.find('div', attrs={'class': 'biaoti'}))
+        subject = re.search(subject_pat, subject_tag).group('sub')
+        date = re.search(time_stamp, subject_tag).group('date')
+        filename = subject.ljust(4,'-') + date.rjust(6,'-')
+    except Exception as e:
+        raise e
+    else:
+        pass
+    finally:
+        return filename
+     
+
