@@ -27,4 +27,4 @@ Code.js
 .jshintrc
 
 # ignore ipynb files
-*.ipynb
+*.ipynb*
