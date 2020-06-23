@@ -48,7 +48,7 @@ def abnormal_to_normal(a_list):
 def abnormal_finder(a_list):
     '''
     return a list containing the indexes of
-    abnormal ex
+    abnormal options (exceptions)
     '''
     ex_num = ('1','2','3','4','5')
     # string ex index, human-readable
@@ -98,7 +98,7 @@ def abnormal_handler(a_list_of_index, a_list, ex_num = ('1','2','3','4','5')):
     print('Abnormal question(s) found: ')
     pp = pprint.PrettyPrinter(indent=2, width=70)
     pp.pprint(abnormal_que)
-
+    
     return a_list
 
 
