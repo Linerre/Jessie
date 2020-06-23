@@ -28,3 +28,6 @@ Code.js
 
 # ignore ipynb files
 *.ipynb*
+
+# ignore csv files
+*.csv
