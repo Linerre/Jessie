@@ -26,3 +26,5 @@ Code.js
 # ignore jshint file
 .jshintrc
 
+# ignore ipynb files
+*.ipynb
