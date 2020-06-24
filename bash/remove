@@ -14,25 +14,20 @@ rm -rf $DIR/*/*/.DS_Store $DIR/*/.DS_Store
 # total holds the total num of the students
 total=$(ls -l $DIR | grep -c -e "^d")
 # load holds the num of those who sub-ed sth
-load=$(find $DIR/*/"$SUB" -mindepth 0 -maxdepth 0 \! -empty | wc -l)
+# Note now it is the FED dir that should be checked
+# otherwise the submission number would be doubled
+doubled=$(find $DIR/*/ -mindepth 1  -maxdepth 1 -type d \! -empty | wc -l)
+load=$((doubled/2))
 
 bar="############################################################" # 60
-# barlen=${#bar}
 count=1
 
 remove() {
   for item in *; do
     # check if the item is a dir
     if [ -d "$item" ]; then
-      # count as one student if item is a directory
-      # total+=("$item")
-
-      # check if empty, i.e nothing there (but, perhaps, .DS_Store)
-      if [[ $(ls "$item"/"$SUB" | wc -l) -eq 0 ]]; then
-      # ==================== old and bad ======================
-      # if [[ "$(ls -A "$item"/"$SUB" | wc -l)" -eq 0 \
-      #   || "$(ls -A "$item"/"$SUB")" == ".DS_Store" ]]; then
-      # =======================================================
+      # check if empty, i.e nothing visible there
+      if [[ $(ls "$item"/"$FED" | wc -l) -eq 0 ]]; then
       # if empty
       # empty array to hold students who submit nothing   
         empty+=("$item")
