@@ -20,7 +20,7 @@ doubled=$(find $DIR/*/ -mindepth 1  -maxdepth 1 -type d \! -empty | wc -l)
 load=$((doubled/2))
 
 bar="############################################################" # 60
-count=1
+count=0
 
 remove() {
   for item in *; do
@@ -34,9 +34,10 @@ remove() {
       # if not empty  
       else
         rm -rf "$item"/"$FED"/*
-        # load+=("$item")
+        count=$((count+1))
         pro=$((count*100/load))
-        printf "\r[%-${load}s] %3d%%" "${bar:0:++count}" $pro
+        ot=$((40*count/load))
+        printf "\r[%-40s] %3d%%" "${bar:0:ot}" $pro
         sleep 0.1
       fi
     else
@@ -75,5 +76,6 @@ for ((i = 0; i < ${#name[@]}; ++i)); do
    printf "%-10s\t%-35s\n" "${netid[i]}" "${name[i]}"
 done
 
+echo
 # delete useless vars
 unset empty load total count name netid pro

@@ -20,7 +20,7 @@ load=$(find $DIR/*/ -mindepth 1 -maxdepth 1 -type d \! -empty | wc -l)
 
 bar="############################################################" # 60
 # barlen=${#bar}
-count=1
+count=0
 
 
 delivery() {
@@ -34,8 +34,10 @@ delivery() {
       # if not empty  
       else
         cp -R "$item"/"$SUB"/* "$item"/"$FED"/
+        count=$((count+1))
         pro=$((count*100/load))
-        printf "\r[%-40s]  %3d%%" "${bar:0:++count}" $pro
+        ot=$((40*count/load))
+        printf "\r[%-40s]  %3d%%" "${bar:0:ot}" $pro
         sleep 0.1
 
         # check .zip and .rar files
