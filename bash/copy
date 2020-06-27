@@ -35,7 +35,7 @@ delivery() {
       else
         cp -R "$item"/"$SUB"/* "$item"/"$FED"/
         pro=$((count*100/load))
-        printf "\r[%-${load}s] %3d%%" "${bar:0:++count}" $pro
+        printf "\r[%-40s]  %3d%%" "${bar:0:++count}" $pro
         sleep 0.1
 
         # check .zip and .rar files
@@ -87,6 +87,6 @@ printf "\e[0;34m%-10s\e[0m\t\e[0;34m%-40s\e[0m\n" "NetID" "Student Name"
 for ((i = 0; i < ${#name[@]}; ++i)); do
    printf "%-10s\t%-35s\n" "${netid[i]}" "${name[i]}"
 done
-
+echo
 # delet the arrays to avoid duplicate counts
 unset empty load total count name netid pro
