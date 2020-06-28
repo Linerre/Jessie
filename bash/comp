@@ -35,27 +35,24 @@ clean() {
 }
 
 pack() {
+  m=0
 
-  while [ $(ls | grep -c "${folder}.zip") -lt 1 ];
-  do
-    # send it to background
-    zip -rq -9 ${folder}.zip $folder &
+  # compressing in the background
+  zip -rq -9 ${folder}.zip $folder &
 
-    # meanwhile print the status bar
-    for s in / - \\ \|; do 
-      printf "\r$s"
-      # compressing in the background
-      # packPro=$((m*100/40))
-      # printf "\r[%-40s] %3d%%" "${bar:0:++m}" $packPro
-      # sleep 0.2s
-    done
-
-  done
-      
   # delete all .DS_Store and __MACOSX
   # send stdout and stderror to null if either of them not found
   zip -dq "${folder}.zip" "*.DS_Store" &> /dev/null &
   zip -dq "${folder}.zip" "*__MACOSX*" &> /dev/null &
+
+  while ((m<load)); do
+    m=$((m + 1))
+    packPro=$((m*100/load))
+    ot=$((40*m/load))
+    printf "\r[%-40s] %3d%%" "${bar:0:ot}" $packPro
+    sleep 0.2
+  done
+      
   echo
 }
 
