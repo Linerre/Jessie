@@ -17,12 +17,14 @@ load=$( ls -l $DIR | grep -c -e "^d" )
 bar="############################################################" # 60
 
 clean() {
-  n=1
+  count=0
   for item in *; do
     if [ -d "$item" ]; then
         rm -rf "$item"/"$SUB"/*
-        cleanPro=$((n*100/load))
-        printf "\r[%-${load}s] %3d%%" "${bar:0:++n}" $cleanPro
+        count=$((count+1))
+        cleanPro=$((count*100/load))
+        ot=$((40*count/load))
+        printf "\r[%-40s] %3d%%" "${bar:0:ot}" $cleanPro
         sleep 0.1
     else
       # if not a dir, do nothing
@@ -33,24 +35,27 @@ clean() {
 }
 
 pack() {
-  # compressing in the background
-  zip -rq -9 "${folder}.zip" $folder &
-  
+
+  while [ $(ls | grep -c "${folder}.zip") -lt 1 ];
+  do
+    # send it to background
+    zip -rq -9 ${folder}.zip $folder &
+
+    # meanwhile print the status bar
+    for s in / - \\ \|; do 
+      printf "\r$s"
+      # compressing in the background
+      # packPro=$((m*100/40))
+      # printf "\r[%-40s] %3d%%" "${bar:0:++m}" $packPro
+      # sleep 0.2s
+    done
+
+  done
+      
   # delete all .DS_Store and __MACOSX
   # send stdout and stderror to null if either of them not found
   zip -dq "${folder}.zip" "*.DS_Store" &> /dev/null &
   zip -dq "${folder}.zip" "*__MACOSX*" &> /dev/null &
-
-  # meanwhile wait 15s with a progress bar doing the countdown
-  # 15s might be slightly shorter or longer than necessary
-  # in a test for 118MB zip (which takes around 7.5s), it is far more than enough
-  m=1
-  while ((m<=50))
-  do
-    packPro=$((m*100/50))
-    printf "\r[%-51s] %3d%%" "${bar:0:++m}" $packPro
-    sleep 0.3
-  done
   echo
 }
 
@@ -68,6 +73,7 @@ cd $HOME/Desktop
 printf "\e[0;33m%s\e[0m\n" "Start Compressing ..."
 pack
 printf "\e[0;32m%s\e[0m\n" "Compressing DONE!"
+echo
 
 # dispose of useless vars
 unset empty load m n cleanPro packPro
