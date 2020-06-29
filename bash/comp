@@ -73,5 +73,5 @@ printf "\e[0;32m%s\e[0m\n" "Compressing DONE!"
 echo
 
 # dispose of useless vars
-unset empty load m n cleanPro packPro
+unset empty load m count cleanPro packPro
 

@@ -78,4 +78,4 @@ done
 
 echo
 # delete useless vars
-unset empty load total count name netid pro
+unset empty load total name netid pro doubled
