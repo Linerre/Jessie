@@ -19,11 +19,10 @@ total=$(ls -l $DIR | grep -c -e "^d")
 load=$(find $DIR/*/ -mindepth 1 -maxdepth 1 -type d \! -empty | wc -l)
 
 bar="############################################################" # 60
-# barlen=${#bar}
-count=0
 
 
 delivery() {
+  local count=0
   for item in *; do
     if [ -d "$item" ]; then
 
@@ -35,8 +34,8 @@ delivery() {
       else
         cp -R "$item"/"$SUB"/* "$item"/"$FED"/
         count=$((count+1))
-        pro=$((count*100/load))
-        ot=$((40*count/load))
+        local pro=$((count*100/load))
+        local ot=$((40*count/load))
         printf "\r[%-40s]  %3d%%" "${bar:0:ot}" $pro
         sleep 0.1
 
@@ -91,4 +90,4 @@ for ((i = 0; i < ${#name[@]}; ++i)); do
 done
 echo
 # delet the arrays to avoid duplicate counts
-unset empty load total count name netid pro
+unset empty load total name netid pro
