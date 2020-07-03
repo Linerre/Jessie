@@ -17,13 +17,19 @@ load=$( ls -l $DIR | grep -c -e "^d" )
 bar="############################################################" # 60
 
 clean() {
-  local count=0
+  local count
+  count=0
+  
+  
+
   for item in *; do
     if [ -d "$item" ]; then
         rm -rf "$item"/"$SUB"/*
         count=$((count+1))
-        local cleanPro=$((count*100/load))
-        local ot=$((40*count/load))
+        local cleanPro
+        cleanPro=$((count*100/load))
+        local ot
+        ot=$((40*count/load))
         printf "\r[%-40s] %3d%%" "${bar:0:ot}" $cleanPro
         sleep 0.1
     else
@@ -35,7 +41,8 @@ clean() {
 }
 
 pack() {
-  local m=0
+  local m
+  m=0
 
   # compressing in the background
   zip -rq -9 ${folder}.zip $folder &
@@ -47,8 +54,10 @@ pack() {
 
   while ((m<load)); do
     m=$((m + 1))
-    local packPro=$((m*100/load))
-    local ot=$((40*m/load))
+    local packPro
+    packPro=$((m*100/load))
+    local ot
+    ot=$((40*m/load))
     printf "\r[%-40s] %3d%%" "${bar:0:ot}" $packPro
     sleep 0.15
   done

@@ -22,7 +22,9 @@ load=$((doubled/2))
 bar="############################################################" # 60
 
 remove() {
-  local count=0
+  local count
+  count=0
+
   for item in *; do
     # check if the item is a dir
     if [ -d "$item" ]; then
@@ -35,8 +37,10 @@ remove() {
       else
         rm -rf "$item"/"$FED"/*
         count=$((count+1))
-        local pro=$((count*100/load))
-        local ot=$((40*count/load))
+        local pro
+        pro=$((count*100/load))
+        local ot
+        ot=$((40*count/load))
         printf "\r[%-40s] %3d%%" "${bar:0:ot}" $pro
         sleep 0.1
       fi
