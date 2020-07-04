@@ -48,7 +48,7 @@ ext = '.csv'
 
 # card_index = a tag with url inside it, telling where the question is from
 # tuple unpacking
-filename, card_ind = html_tools.filename_getter(q_html)
+filename, card_ind = html_tools.filename_getter(q_html, url)
 
 q_list = html_tools.target_tags(html_tools.filter_tags, q_html) # question list
 a_list = html_tools.target_tags(html_tools.filter_tags, a_html) # answer list
