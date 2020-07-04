@@ -27,8 +27,8 @@ def question25(list_q, h2):
             q_match = re.search(question, list_q[i])
             # combine into one line
             list_q[i] = q_match.group('type') + ',' + \
-            q_match.group('chp') + ',' + \
-            q_match.group('que')
+            q_match.group('que') + ',' + \
+            q_match.group('chp')
 
             # remove option's item style A, B, C, D
             # Anki card will provide it once imported
@@ -39,8 +39,8 @@ def question25(list_q, h2):
         else:
             q_match = re.search(question_h2, list_q[i])
             list_q[i] = re.sub(h2_tag, '\g<type>', str(h2)) + ',' + \
-            q_match.group('chp') + ',' + \
-            q_match.group('que')
+            q_match.group('que') + ',' + \
+            q_match.group('chp')
 
             list_q[i+1] = re.sub(item_style, '', list_q[i+1], count=1)
             list_q[i+2] = re.sub(item_style, '', list_q[i+2], count=1)
@@ -62,13 +62,13 @@ def question20(list_q, h2):
             q_match = re.search(question, list_q[i])
             # combine into one line
             list_q[i] = q_match.group('type') + ',' + \
-            q_match.group('chp') + ',' + \
-            q_match.group('que')
+            q_match.group('que') + ',' + \
+            q_match.group('chp')
         else:
             q_match = re.search(question_h2, list_q[i])
             list_q[i] = re.sub(h2_tag, '\g<type>', str(h2)) + ',' + \
-            q_match.group('chp') + ',' + \
-            q_match.group('que')
+            q_match.group('que') + ',' + \
+            q_match.group('chp')
 
     return list_q
 
@@ -120,15 +120,15 @@ def question25_and_answer5(list_a, list_b, h2, a_file):
 
             # combine into a csv and assign to ith question
                 list_a[i] = q_match.group('type') + ',' + \
-                q_match.group('chp') + ',' + \
-                q_match.group('que')
+                q_match.group('que') + ',' + \
+                q_match.group('chp')
             
             # h2 type 
             else:
                 q_match = re.search(question_h2, list_a[i])
                 list_a[i] = str(h2) + ',' + \
-                q_match.group('chp') + ',' + \
-                q_match.group('que')
+                q_match.group('que') + ',' + \
+                q_match.group('chp')
 
         # write to a csv file
             a_file.write(list_a[i] + ',' + \
