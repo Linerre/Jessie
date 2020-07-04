@@ -10,6 +10,7 @@ answer = r'[1-5\.【参考答案难度系数中等简单很难】:：]+(?P<opt>[
 question  = r'[1-5\.\(【]+(?P<type>[单多项选择题]+)[\)】](?P<que>.*?)\((?P<chp>第.+?章.*?)\)'
 question_h2 = r'[1-5\.]+(?P<que>.*)\((?P<chp>第.+?章.*?)\)'
 h2_tag = r'<h2>(?P<type>.*?)</h2>'
+item_style = r'[A-D\. ]+'
 
 # ------------------------------------------------------
 # handle len(q_list) == 25
@@ -20,17 +21,31 @@ def question25(list_q, h2):
     '''
     for i in (0,5,10,15,20):
         if h2 == None:
+
+            # may need unit testing for the below block
             # get a match
             q_match = re.search(question, list_q[i])
             # combine into one line
             list_q[i] = q_match.group('type') + ',' + \
-            q_match.group('que') + ',' + \
-            q_match.group('chp')
+            q_match.group('chp') + ',' + \
+            q_match.group('que')
+
+            # remove option's item style A, B, C, D
+            # Anki card will provide it once imported
+            list_q[i+1] = re.sub(item_style, '', list_q[i+1], count=1)
+            list_q[i+2] = re.sub(item_style, '', list_q[i+2], count=1)
+            list_q[i+3] = re.sub(item_style, '', list_q[i+3], count=1)
+            list_q[i+4] = re.sub(item_style, '', list_q[i+4], count=1)
         else:
             q_match = re.search(question_h2, list_q[i])
             list_q[i] = re.sub(h2_tag, '\g<type>', str(h2)) + ',' + \
-            q_match.group('que') + ',' + \
-            q_match.group('chp')
+            q_match.group('chp') + ',' + \
+            q_match.group('que')
+
+            list_q[i+1] = re.sub(item_style, '', list_q[i+1], count=1)
+            list_q[i+2] = re.sub(item_style, '', list_q[i+2], count=1)
+            list_q[i+3] = re.sub(item_style, '', list_q[i+3], count=1)
+            list_q[i+4] = re.sub(item_style, '', list_q[i+4], count=1)
 
     return list_q
 
@@ -47,13 +62,13 @@ def question20(list_q, h2):
             q_match = re.search(question, list_q[i])
             # combine into one line
             list_q[i] = q_match.group('type') + ',' + \
-            q_match.group('que') + ',' + \
-            q_match.group('chp')
+            q_match.group('chp') + ',' + \
+            q_match.group('que')
         else:
             q_match = re.search(question_h2, list_q[i])
             list_q[i] = re.sub(h2_tag, '\g<type>', str(h2)) + ',' + \
-            q_match.group('que') + ',' + \
-            q_match.group('chp')
+            q_match.group('chp') + ',' + \
+            q_match.group('que')
 
     return list_q
 
@@ -63,7 +78,8 @@ def answer10(list_a, list_b):
     # combine answer with analysis
     for i in (1,3,5,7,9):
         list_b[i] = list_b[i-1] + list_b[i]
-        if a_match = re.search(answer, list_b[i]):
+        a_match = re.search(answer, list_b[i])
+        if a_match:
             list_b[i] = a_match.group('opt') + ',' + \
             a_match.group('aly')
             # insert combined line to list_q
@@ -104,15 +120,15 @@ def question25_and_answer5(list_a, list_b, h2, a_file):
 
             # combine into a csv and assign to ith question
                 list_a[i] = q_match.group('type') + ',' + \
-                q_match.group('que') + ',' + \
-                q_match.group('chp')
+                q_match.group('chp') + ',' + \
+                q_match.group('que')
             
             # h2 type 
             else:
                 q_match = re.search(question_h2, list_a[i])
                 list_a[i] = str(h2) + ',' + \
-                q_match.group('que') + ',' + \
-                q_match.group('chp')
+                q_match.group('chp') + ',' + \
+                q_match.group('que')
 
         # write to a csv file
             a_file.write(list_a[i] + ',' + \
