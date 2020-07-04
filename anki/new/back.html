@@ -51,7 +51,7 @@ if (answer.length > 1)
   for (var op of ops) {
 	if (answer.indexOf(op.innerText) == -1) {
 		op.parentElement.classList.add("wrong");
-	} else continue;
+		} else continue;
   }
 } 
 else 
@@ -61,7 +61,7 @@ else
 			op.parentElement.classList.add("choice");
       question.innerHTML = question.innerHTML.replace(/\( ?\)/, 
 			"(" + `<span class="choice-letter">${answer.toUpperCase()}</span>` + ")");
-	} else continue;
+		} else continue;
 	}
 }
 
