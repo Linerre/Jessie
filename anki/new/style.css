@@ -8,13 +8,13 @@
 
 /* ------ Front Side ------ */
 
-#tag::before {
-    content: '多选';
+.tag-type {
     font-family: sans-serif;
     font-weight: normal;
     background-color: #6699CC;
     color: #fff;
     padding: 0.2em;
+    margin-left: -5px;
 }
 
 #tag {
@@ -54,6 +54,20 @@
     margin-bottom: 0.5em;
 }
 
+.chp::before {
+    content: '索引';
+    font-size: 11pt;
+    color: #fff;
+    background-color: #C594C5;
+    padding: 0.2em;
+    margin: 0.2em 0.5em 0.2em 0;
+}
+
+.chp {
+    margin-bottom: 0.5em;
+    font-size: 11pt;
+}
+
 .ana::before{
     content: '解析';
     background-color: #5FB3B3;
@@ -67,16 +81,17 @@
     font-size: 12pt;
 }
 
-.page::before {
-    content: '索引';
+.src::before {
+    content: '来源';
+    font-size: 11pt;
     background-color: #99C794;
     color: #fff;
     padding: 0.1em;
     margin: 0.2em 0.5em 0.2em 0;
 }
 
-.page {
-    font-size: 12pt;
+.src {
+    font-size: 11pt;
 }
 
 #oa, #ob, #oc, #od {
@@ -103,7 +118,7 @@
 }
 
 .wrong {
-        color: #A7ADBA;
+    color: #A7ADBA;
     -webkit-text-decoration-line: line-through;
     text-decoration: line-through;
     text-decoration-color: #AB7967;
