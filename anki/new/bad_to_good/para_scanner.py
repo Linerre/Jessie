@@ -6,7 +6,7 @@
 import re
 
 # patterns
-answer = r'[1-5\.【参考答案】:：]+(?P<opt>[A-D]+)[。【题目详解析:：】]+(?P<aly>.*)'
+answer = r'[1-5\.【参考答案难度系数中等简单很难】:：]+(?P<opt>[A-D]+)[。【题目详解析:：】]+(?P<aly>.*)'
 question  = r'[1-5\.\(【]+(?P<type>[单多项选择题]+)[\)】](?P<que>.*?)\((?P<chp>第.+?章.*?)\)'
 question_h2 = r'[1-5\.]+(?P<que>.*)\((?P<chp>第.+?章.*?)\)'
 h2_tag = r'<h2>(?P<type>.*?)</h2>'
@@ -63,13 +63,15 @@ def answer10(list_a, list_b):
     # combine answer with analysis
     for i in (1,3,5,7,9):
         list_b[i] = list_b[i-1] + list_b[i]
-        a_match = re.search(answer, list_b[i])
-        list_b[i] = a_match.group('opt') + ',' + \
-        a_match.group('aly')
-
-        # insert combined line to list_q
-        list_a.insert(3*i+2, list_b[i])
-
+        if a_match = re.search(answer, list_b[i]):
+            list_b[i] = a_match.group('opt') + ',' + \
+            a_match.group('aly')
+            # insert combined line to list_q
+            list_a.insert(3*i+2, list_b[i])
+        else:
+            print(f'Matched string NOT found at index {i}.')
+            print(f'Not match string: {list_b[i]}')
+            break  
     return list_a
 
 # handle len(a_list) != 10
