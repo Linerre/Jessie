@@ -7,7 +7,7 @@ import re
 
 # patterns
 answer = r'[1-5\.【参考答案难度系数中等简单很难】:：]+(?P<opt>[A-D]+)[。【题目详解析:：】]+(?P<aly>.*)'
-question  = r'[1-5\.\(【]+(?P<type>[单多项选择题]+)[\)】](?P<que>.*?)\((?P<chp>第.+?章.*?)\)'
+question  = r'[1-5\.\(【]+(?P<type1>[单多])项?(?P<type2>选)[择题\)】]+(?P<que>.*?)\((?P<chp>第.+?章.*?)\)'
 question_h2 = r'[1-5\.]+(?P<que>.*)\((?P<chp>第.+?章.*?)\)'
 h2_tag = r'<h2>(?P<type>.*?)</h2>'
 item_style = r'[A-D\. ]+'
@@ -30,7 +30,7 @@ def question25(list_q, h2):
             q_match = re.search(question, list_q[i])
             # combine into one line
             list_q[i] = q_match.group('que')
-            que_types.append(q_match.group('type'))
+            que_types.append(q_match.group('type1')+q_match.group('type2'))
 
             # remove option's item style A, B, C, D
             # Anki card will provide it once imported
