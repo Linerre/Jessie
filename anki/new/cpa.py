@@ -1,92 +1,117 @@
 #! /bin/env python
+#! *-* coding: uft-8 *-*
 
 # A web scrapper for CPA drills
+import sys
+sys.path.append('../../../office/anki/new/bad_to_good/')
 
-from urllib.request import urlopen
-from bs4 import BeautifulSoup as soup
-# from bs4 import SoupStrainer as strainer
-import re
+import data_cleaner
+import html_tools
+import para_scanner
 import pprint
 
-# open and retrieve the whole page
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/kj/129121.html'
-url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/kj/129401.html'
-with urlopen(url) as response:
-    html = response.read()
+# -------------------------- urls -------------------------- #
+# normal pages (q_list length = 25 and a_list length = 5 or = 10)
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/130097.html'
 
-# may consider using strainer to parse only the needed part
-page = soup(html, 'html.parser')
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/119377.html'
 
 
-# filter out annoying <p>s, and the rest would be the darling we love
-def drills_para(tag):
-    return tag.name == 'p' and len(tag.contents) <= 1 and isinstance(tag.contents[0], str)
+# q_list.length == 25 and a_list.length == 10
+url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135026.html'
 
-drills = page.find_all(drills_para)
+# h2 page
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/119625.html'
 
-# remove unwanted elements
-del drills[0]
-del drills[-1]
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/118642.html'
 
-# functon to remove duplicates
-def unique_list(a_list):
-    for item in a_list:
-        while a_list.count(item) > 1:
-            a_list.remove(item)
-    return a_list 
+# abnormal page 1: q_list length < 25
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/129721.html'
 
-# ----------- cleaning ----------- #
-# to catch strange options which do not start with any of the below prefix
-prefix = ('A', 'B', 'C', 'D', '1', '2', '3', '4', '5')
-unwanted = []
+# abnormal page 2: q_list length > 25
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/kj/129401.html'
 
-# remove <p></p> and replace \u3000 with whitespaces
-# also locate all the strange options
-for i in range(len(drills)):
-    drills[i] = drills[i].get_text().replace('\u3000', ' ')
-    if not drills[i].startswith(prefix):
-        drills[i] = drills[i-1] + '\n' + drills[i]
-        unwanted.append(drills[i-1])
+# q_list = 25 but a_list = 9
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/118903.html'
 
 
-# remove the strange options (already turned into empyt string by magic!)
-for i in unwanted:
-    drills.remove(i)
+# -------------------------- body -------------------------- #
+  
+# get the question page and anwser lists
+q_html = html_tools.get_html(url)
+a_html = html_tools.get_answer_html(url)
 
-# patterns for use in regular expressions
-# extract (单选题) or (多选题) and chapter info like (第六章.风险与风险管理)
-# this is necessary since later they will get in the way of processing questiona-and-options
-que_type_pattern = re.compile('[\(【][单多]选题?[\)】]')
-chp_info_pattern = re.compile('\(第.+?章.*?\)')
-questions_index = (0, 5, 10, 15, 20)
-que_type = []
-chp_info = []
+# two subjects to learn
+SUB_1 = '经济法'
+SUB_2 = '审计'
+ext = '.csv'
 
-for i in questions_index:
-    # record question type
-    que_type.append(que_type_pattern.search(drills[i]).group(0))
+# card_index = a tag with url inside it, telling where the question is from
+# tuple unpacking
+filename, card_ind = html_tools.filename_getter(q_html)
+
+q_list = html_tools.target_tags(html_tools.filter_tags, q_html) # question list
+a_list = html_tools.target_tags(html_tools.filter_tags, a_html) # answer list
+
+
+if len(q_list) == 25 and len(a_list) == 5:
+    with open(filename, 'a', encoding='utf-8') as file:
+        para_scanner.question25_and_answer5(q_list, a_list, q_html.h2, file)
+
+elif len(q_list) == 25 and len(a_list) == 10:
+    q_list, que_types = para_scanner.question25(q_list, q_html.h2)
+    para_scanner.answer10(q_list, a_list)
+
+
     
-    # record chp info
-    chp_info.append(chp_info_pattern.search(drills[i]).group(0))
+    if filename == SUB_1:
+    # 'a' means to update weekly with content of each day appended to that of the previous day
+    # 'w' means to update daily with content of each day replacing that of the previous day
+    # also possible: a separate file for each day/week, independent of the previous ones
+        with open(SUB_1+ext, 'w', encoding='utf-8') as file:
+            for i in (0,6,12,18,24):
+                file.write(q_list[i] + ',' + \
+                          q_list[i+1] + ',' + \
+                          q_list[i+2] + ',' + \
+                          q_list[i+3] + ',' + \
+                          q_list[i+4] + ',' + \
+                          q_list[i+5] + ',' + \
+                          card_ind    + ',' + \
+                          que_types[i//6] + '\n')
+                
+        # above order:  que, opA, opB, opC, opD, chp, answer, analysis, index(=url), tag1 tag2
+        #               1     2    3    4    5    6    7         8        9           10
     
-    drills[i] = re.sub(que_type_pattern, '', drills[i])
-    drills[i] = re.sub(chp_info_pattern, '', drills[i])
-
-unique_list(que_type)
-unique_list(chp_info)
-
-# change print() to write()
-n = 0
-for element in drills:
-    if n > 0 and n % 5 == 4:
-        print(element)
-        n += 1
+    elif filename == SUB_2:
+        pass
+    
     else:
-        print(element, end=',')
-        n += 1
+        print(f'Subject {filename} NOT defined.')
+    
+elif len(q_list) != 25:
+    
+    # find the abnormal option(s) and remove it(them)
+    abnormal = data_cleaner.abnormal_finder(q_list)
+    try:
+        data_cleaner.abnormal_handler(abnormal, q_list)
+    except Exception:
+        print(abnormal)
+    
+    # write normal qustions to the file
+    para_scanner.question20(q_list, q_html.h2)
+    try:
+        with open(filename, 'a', encoding='utf-8') as file:
+            for i in (0,5,10,15):
+                file.write(q_list[i] + ',' + \
+                      q_list[i+1] + ',' + \
+                      q_list[i+2] + ',' + \
+                      q_list[i+3] + ',' + \
+                      q_list[i+4] + '\n')
+    except Exception:
+        print(q_list)
 
-# ----------- cleaning ----------- #
+# -------------------------- body -------------------------- #
 
-pp = pprint.PrettyPrinter(indent=2)
-pp.pprint(drills)
-
+# pp = pprint.PrettyPrinter(indent=2)
+# pp.pprint(q_list)
+print(len(q_list))
