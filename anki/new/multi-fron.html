@@ -10,12 +10,24 @@
   <div class="options"> <span class="optionNum">D</span> <span class="options-content">{{optionD}}</span></div>
 
 <script>
+// handle tag style
+var tag_pat = /[单多]选/gm;
+var type = document.getElementById('tag');
+type.innerHTML = type.innerHTML.replace(tag_pat, '<span class="tag-type">' + '$&' + '</span>');
 
-keywords = [
-	'正确的有',
+
+// handle keywords in the question text
+const keywords = [
+	/不?正确的[有是]/,
+	/不?属于/,
+	/不?构成/
 ];
-var question = document.getElementById("que");
+
+var ops = document.getElementsByClassName('optionNum');
+var question = document.getElementById('que');
+
 for (var kw of keywords) {
-	question.innerHTML = question.innerHTML.replace(kw, `<b class="choice">${kw}</b>`);
+	question.innerHTML = question.innerHTML.replace(kw, `<b class="choice-letter">$&</b>`);
 }
+
 </script>

@@ -10,26 +10,59 @@
 <hr id=answer>
 <div id="ans" class="hide">{{answer}}</div>
 <div class="ana">{{analysis}}</div>
-<div class="page">{{page}}</div>
+<div class="chp">{{chapter}}</div>
+<div class="src">{{index}}</div>
 
 <script>
-keywords = [
-	'正确的有',
+
+var ops = document.getElementsByClassName('optionNum');
+var question = document.getElementById('que');
+var answer = document.getElementById('ans').innerText;
+var tag_pat = /[单多]选/gm;
+var type = document.getElementById('tag');
+
+
+const keywords = [
+	/不?正确的[有是]/,
+	/不?属于/,
+	/不?构成/
 ];
 
-var ops = document.getElementsByClassName("optionNum");
-var answer = document.getElementById("ans").innerText;
-var question = document.getElementById("que");
+// handle tag style
+type.innerHTML = type.innerHTML.replace(tag_pat, '<span class="tag-type">' + '$&' + '</span>');
+
+
+
+
+// replace keywords first
 for (var kw of keywords) {
-	question.innerHTML = question.innerHTML.replace(kw, `<b class="choice">${kw}</b>`);
+	question.innerHTML = question.innerHTML.replace(kw, `<b class="choice-letter">$&</b>`);
 }
 
+// insert correct answer(s)
 question.innerHTML = question.innerHTML.replace('( )', "(" + `<span class="choice-letter">${answer.toUpperCase()}</span>` + ")");
 
-for (var op of ops) {
+
+/* multi options */
+
+
+if (answer.length > 1)
+{
+  for (var op of ops) {
 	if (answer.indexOf(op.innerText) == -1) {
 		op.parentElement.classList.add("wrong");
 	} else continue;
+  }
+} 
+else 
+{
+	for (var op of ops) {
+		if (op.innerText == answer.toUpperCase()) {
+			op.parentElement.classList.add("choice");
+      question.innerHTML = question.innerHTML.replace(/\( ?\)/, 
+			"(" + `<span class="choice-letter">${answer.toUpperCase()}</span>` + ")");
+	} else continue;
+	}
 }
 
 </script>
