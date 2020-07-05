@@ -120,7 +120,7 @@ def abnormal():
     #         q_match.group('chp')
 
 # handle len(a_list) == 10
-def answer10(list_a, list_b):
+def answer10(list_b):
     # combine answer with analysis
     for i in (1,3,5,7,9):
         list_b[i] = list_b[i-1] + list_b[i]
@@ -128,16 +128,15 @@ def answer10(list_a, list_b):
         if a_match:
             list_b[i] = a_match.group('opt') + ',' + \
             a_match.group('aly')
-            # insert combined line to list_q
-            list_a.insert(3*i+2, list_b[i])
         else:
             print(f'Match failed at index {i}.')
             print(f'Match failed at string: {list_b[i]}')
             break
-    return list_a, list_b
+    
+    return [i for i in list_b if list_b.index(i) % 2 != 0]
 
 # handle len(a_list) == 5
-def answer5(list_a, list_b):
+def answer5(list_b):
     '''
     Process normal answer type
     Output: correct_op, aly
@@ -149,13 +148,11 @@ def answer5(list_a, list_b):
         if a_match:
             # combine them into a csv and assign to the ith element
             list_b[i] = a_match.group('opt') + ',' + a_match.group('aly')
-            # insert it to q_list
-            list_a.insert((i+1)*5+i, list_b[i])
         else:
             print(f'Match failed at index {i}.')
             print(f'Match failed at string: {list_b[i]}')
             break
-    return list_a, list_b
+    return list_b
 
 
 
