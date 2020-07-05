@@ -54,7 +54,7 @@ def question25(list_q, h2):
 
 
 # handle len(q_list) != 25
-def question20(list_q, h2):
+def question_ab(list_q, h2):
     '''
     raw input --> organized outpt for csv files:
     type,Q,chapter_info,optionA,...,A,analysis
@@ -88,15 +88,37 @@ def answer10(list_a, list_b):
             # insert combined line to list_q
             list_a.insert(3*i+2, list_b[i])
         else:
-            print(f'Matched string NOT found at index {i}.')
-            print(f'Not match string: {list_b[i]}')
-            break  
-    return list_a
+            print(f'Match failed at index {i}.')
+            print(f'Match failed at string: {list_b[i]}')
+            break
+    return list_a, list_b
 
-# handle len(a_list) != 10
-def answer8(list_a, list_b):
+# handle len(a_list) == 5
+def answer5(list_a, list_b):
+    '''
+    Process normal answer type
+    Output: correct_op, aly
+    '''
+
+    for i in range(len(list_b)):
+        # match the needed parts
+        a_match = re.search(answer, list_b[i])
+        if a_match:
+            # combine them into a csv and assign to the ith element
+            list_b[i] = a_match.group('opt') + ',' + a_match.group('aly')
+            # insert it to q_list
+            list_a.insert((i+1)*5+i, list_b[i])
+        else:
+            print(f'Match failed at index {i}.')
+            print(f'Match failed at string: {list_b[i]}')
+            break
+    return list_a, list_b
+
+
+
+# handle len(a_list) != 5 and != 10
+def answer_ab(a_list):
     pass
-
 
 # ------------------------------------------------------
 # handle len(q_list) == 25 and len(a_list) = 5
@@ -106,13 +128,6 @@ def question25_and_answer5(list_a, list_b, h2, a_file):
     Output organized lines suitable for csv files
     '''
 
-    for i in range(len(list_b)):
-        # match the needed parts
-        a_match = re.search(answer, list_b[i])
-        # combine them into a csv and assign to the ith element
-        list_b[i] = a_match.group('opt') + ',' + a_match.group('aly')
-        # insert it to q_list
-        list_a.insert((i+1)*5+i, list_b[i])
 
     for i in (0,6,12,18,24):
         # split the questions by matching the needed parts
