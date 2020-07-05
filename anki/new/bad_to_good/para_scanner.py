@@ -28,17 +28,22 @@ def question25(list_q, h2):
             # may need unit testing for the below block
             # get a match
             q_match = re.search(question, list_q[i])
-            # combine into one line
-            list_q[i] = q_match.group('que')
-            que_types.append(q_match.group('type1')+q_match.group('type2'))
+            if q_match:
+                # combine into one line
+                list_q[i] = q_match.group('que')
+                que_types.append(q_match.group('type1')+q_match.group('type2'))
 
-            # remove option's item style A, B, C, D
-            # Anki card will provide it once imported
-            list_q[i+1] = re.sub(item_style, '', list_q[i+1], count=1)
-            list_q[i+2] = re.sub(item_style, '', list_q[i+2], count=1)
-            list_q[i+3] = re.sub(item_style, '', list_q[i+3], count=1)
-            list_q[i+4] = re.sub(item_style, '', list_q[i+4], count=1) + \
-                ',' + q_match.group('chp')
+                # remove option's item style A, B, C, D
+                # Anki card will provide it once imported
+                list_q[i+1] = re.sub(item_style, '', list_q[i+1], count=1)
+                list_q[i+2] = re.sub(item_style, '', list_q[i+2], count=1)
+                list_q[i+3] = re.sub(item_style, '', list_q[i+3], count=1)
+                list_q[i+4] = re.sub(item_style, '', list_q[i+4], count=1) + \
+                    ',' + q_match.group('chp')
+            else:
+                print(f'Match failed at index {i}.')
+                print(f'Match failed at string {list_q[i]}.')
+                break
         else:
             q_match = re.search(question_h2, list_q[i])
             list_q[i] = re.sub(h2_tag, '\g<type>', str(h2)) + ',' + \
@@ -50,6 +55,7 @@ def question25(list_q, h2):
             list_q[i+4] = re.sub(item_style, '', list_q[i+4], count=1) + \
                 ',' + q_match.group('chp')
 
+    # if failed to match, list_q remains untouched, que_types == []
     return list_q, que_types
 
 
