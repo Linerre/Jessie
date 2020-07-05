@@ -83,7 +83,25 @@ def question_ab(list_q):
 
     que_op = terminator(list_q)
 
-    return que_op
+    que_types = []
+    new_qlist = []
+
+    for q in que_op.keys():
+        q_match = re.search(question, q)
+        try:
+            new_qlist.append(q_match.group('que') + ',' + \
+                re.sub(item_style, '', que_op[q][0], count=1) + ',' + \
+                re.sub(item_style, '', que_op[q][1], count=1) + ',' + \
+                re.sub(item_style, '', que_op[q][2], count=1) + ',' + \
+                re.sub(item_style, '', que_op[q][3], count=1) + ',' + \
+                q_match.group('chp'))
+
+            que_types.append(q_match.group('type1') + q_match.group('type2'))
+        except Exception as e:
+            print(e)
+            print(f'Match failed at question {str(q)}.')
+
+    return new_qlist, que_types
 
 
 def abnormal():
@@ -192,13 +210,14 @@ def terminator(a_list):
     key = Q and value = a list of Opts
     '''
     ex_num = ('1','2','3','4','5')
-    # string ex index, human-readable
+
     que_op = {}
 
     for i in a_list:
         if i.startswith(ex_num): # loop over only Qs
             # add Q as a key
             que_op[i] = []
+
             # record its position
             n = a_list.index(i)
             # add ops as the value for Q key
@@ -207,7 +226,6 @@ def terminator(a_list):
                 n += 1
                 # if n reaches the end
                 if n == len(a_list) - 1:
-                    que_op[i].append(a_list[n])
                     break
         else:
             continue # skip over ops
