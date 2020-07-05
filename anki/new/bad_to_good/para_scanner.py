@@ -9,7 +9,7 @@ import re
 answer = r'[1-5\.【参考答案难度系数中等简单很难】:：]+(?P<opt>[A-D]+)[。【题目详解析:：】]+(?P<aly>.*)'
 question  = r'[1-5\.\(【]+(?P<type1>[单多])项?(?P<type2>选)[择题\)】]+(?P<que>.*?)\((?P<chp>第.+?章.*?)\)'
 question_h2 = r'[1-5\.]+(?P<que>.*)\((?P<chp>第.+?章.*?)\)'
-h2_tag = r'<h2>(?P<type>.*?)</h2>'
+h2_tag = r'<h2>(?P<type1>[单多])项?(?P<type2>选)[择题\)】]+</h2>'
 item_style = r'[A-D\. ]+'
 
 # ------------------------------------------------------
@@ -24,7 +24,6 @@ def question25(list_q, h2):
 
     for i in (0,5,10,15,20):
         if h2 == None:
-
             # may need unit testing for the below block
             # get a match
             q_match = re.search(question, list_q[i])
@@ -46,14 +45,22 @@ def question25(list_q, h2):
                 break
         else:
             q_match = re.search(question_h2, list_q[i])
-            list_q[i] = re.sub(h2_tag, '\g<type>', str(h2)) + ',' + \
-            q_match.group('que')
+            # use try-except simply for learning purposes
+            # it should work exactly the same as if-else
+            try:
+                list_q[i] = q_match.group('que')
+                que_types.append(re.sub(h2_tag, '\g<type1>'+'\g<type2>', str(h2)))
 
-            list_q[i+1] = re.sub(item_style, '', list_q[i+1], count=1)
-            list_q[i+2] = re.sub(item_style, '', list_q[i+2], count=1)
-            list_q[i+3] = re.sub(item_style, '', list_q[i+3], count=1)
-            list_q[i+4] = re.sub(item_style, '', list_q[i+4], count=1) + \
-                ',' + q_match.group('chp')
+                list_q[i+1] = re.sub(item_style, '', list_q[i+1], count=1)
+                list_q[i+2] = re.sub(item_style, '', list_q[i+2], count=1)
+                list_q[i+3] = re.sub(item_style, '', list_q[i+3], count=1)
+                list_q[i+4] = re.sub(item_style, '', list_q[i+4], count=1) + \
+                    ',' + q_match.group('chp')
+            except Exception as e:
+                print(e)
+                print(f'Match failed at index {i}.')
+                print(f'Match failed at string {list_q[i]}.')
+                break
 
     # if failed to match, list_q remains untouched, que_types == []
     return list_q, que_types
