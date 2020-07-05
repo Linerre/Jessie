@@ -16,8 +16,9 @@ item_style = r'[A-D\. ]+'
 # handle len(q_list) == 25
 def question25(list_q, h2):
     '''
-    raw input --> organized outpt for csv files:
-    type,Q,chapter_info,optionA,...,A,analysis
+    raw input --> re-organized q_list with each item being:
+    Q,A,B,C,D,chp
+    question types list: [type1, type2, ...]
     '''
     # store que types
     que_types = []
@@ -67,27 +68,38 @@ def question25(list_q, h2):
 
 
 # handle len(q_list) != 25
-def question_ab(list_q, h2):
+def question_ab(list_q):
     '''
-    raw input --> organized outpt for csv files:
-    type,Q,chapter_info,optionA,...,A,analysis
+    Output 2 types of info:
+    1. Abnormal items position
+    2. A dict with Q-4ops structure
+    The abnormal item is Q-'' structure however.
     '''
+    # first find the abnormal Q
     for i in (0,5,10,15):
-        if h2 == None:
-            # get a match
-            q_match = re.search(question, list_q[i])
-            # combine into one line
-            list_q[i] = q_match.group('type') + ',' + \
-            q_match.group('que') + ',' + \
-            q_match.group('chp')
-        else:
-            q_match = re.search(question_h2, list_q[i])
-            list_q[i] = re.sub(h2_tag, '\g<type>', str(h2)) + ',' + \
-            q_match.group('que') + ',' + \
-            q_match.group('chp')
+        if not list_q[i].startswith(('1', '2', '3', '4', '5')):
+            print(f'Abnormal Q at {i//5}.')
+            break
 
-    return list_q
+    que_op = terminator(list_q)
 
+    return que_op
+
+
+def abnormal():
+    pass
+    # if h2 == None:
+    #         # get a match
+    #         q_match = re.search(question, list_q[i])
+    #         # combine into one line
+    #         list_q[i] = q_match.group('type') + ',' + \
+    #         q_match.group('que') + ',' + \
+    #         q_match.group('chp')
+    # else:
+    #         q_match = re.search(question_h2, list_q[i])
+    #         list_q[i] = re.sub(h2_tag, '\g<type>', str(h2)) + ',' + \
+    #         q_match.group('que') + ',' + \
+    #         q_match.group('chp')
 
 # handle len(a_list) == 10
 def answer10(list_a, list_b):
@@ -174,28 +186,39 @@ def question25_and_answer5(list_a, list_b, h2, a_file):
 
 
 # ------------- not very useful ---------------
-def terminator(a_list, q_op):
+def terminator(a_list):
     '''
     turn a list into a dict where 
     key = Q and value = a list of Opts
     '''
     ex_num = ('1','2','3','4','5')
     # string ex index, human-readable
-    ex_ind = []
+    que_op = {}
 
     for i in a_list:
-        if i.startswith(ex_num):
-            q_op[i] = []
+        if i.startswith(ex_num): # loop over only Qs
+            # add Q as a key
+            que_op[i] = []
+            # record its position
             n = a_list.index(i)
+            # add ops as the value for Q key
             while not a_list[n+1].startswith(ex_num):
-                q_op[i].append(a_list[n+1])
+                que_op[i].append(a_list[n+1])
                 n += 1
+                # if n reaches the end
                 if n == len(a_list) - 1:
-                     q_op[i].append(a_list[n])
-                     break
+                    que_op[i].append(a_list[n])
+                    break
         else:
-            continue
-    return q_op
+            continue # skip over ops
+
+    # mark the abnormal 
+    for q in que_op.keys():
+        if len(que_op[q]) != 4:
+            que_op[q] = ''
+    
+    return que_op
+
 
 def standard_25(a_dict):
     for q in a_dict.keys():
