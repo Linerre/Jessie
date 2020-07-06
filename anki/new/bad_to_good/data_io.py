@@ -14,7 +14,7 @@ def write_answer(fname, ext, list_a, card_ind, list_types):
                 '\n'
 
     with open(fname+ext, 'w', encoding='utf-8') as file:
-        for i in range(len(a_list)):
+        for i in range(len(list_a)):
             file.write(content[i])
 
     return content
