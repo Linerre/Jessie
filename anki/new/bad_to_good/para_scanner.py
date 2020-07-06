@@ -80,8 +80,10 @@ def question_ab(list_q):
         if not list_q[i].startswith(('1', '2', '3', '4', '5')):
             print(f'Abnormal Q at {i//5}.')
             break
+            # no need to loop over each abnormal Q 
+            # because if the 1st is ab, then all the reast will be too
 
-    que_op = terminator(list_q)
+    que_op = abq_cleaner(list_q)
 
     que_types = []
     new_qlist = []
@@ -103,21 +105,6 @@ def question_ab(list_q):
 
     return new_qlist, que_types
 
-
-def abnormal():
-    pass
-    # if h2 == None:
-    #         # get a match
-    #         q_match = re.search(question, list_q[i])
-    #         # combine into one line
-    #         list_q[i] = q_match.group('type') + ',' + \
-    #         q_match.group('que') + ',' + \
-    #         q_match.group('chp')
-    # else:
-    #         q_match = re.search(question_h2, list_q[i])
-    #         list_q[i] = re.sub(h2_tag, '\g<type>', str(h2)) + ',' + \
-    #         q_match.group('que') + ',' + \
-    #         q_match.group('chp')
 
 # handle len(a_list) == 10
 def answer10(list_b):
@@ -158,7 +145,43 @@ def answer5(list_b):
 
 # handle len(a_list) != 5 and != 10
 def answer_ab(a_list):
-    pass
+    ex_num = ('1','2','3','4','5')
+
+    ans_aly = {}
+
+    for i in a_list:
+        if i.startswith(ex_num): # loop over only Qs
+            # add correct answer as a key
+            ans_aly[i] = []
+            # record its position
+            n = a_list.index(i)
+            # add aly as the value for answer key
+            while not a_list[n+1].startswith(ex_num):
+                ans_aly[i].append(a_list[n+1])
+                n += 1
+                # if n reaches the end
+                if n == len(a_list) - 1:
+                    break
+        else:
+            continue # skip over ops
+
+    new_alist = []
+    for a in ans_aly.keys():
+        if len(ans_aly[a]) > 1:
+            # combine multi lines into one
+            ans_aly[a] = ' '.join(ans_aly[a])
+        elif len(ans_aly[a]) < 1:
+            # replace the empty list with empty str
+            ans_aly[a] = ' '
+        a_match = re.search(answer, a)
+        try:
+            new_alist.append(a_match.group('opt') + ',' + \
+                a_match.group('aly'))
+        except Exception as e:
+            print(e)
+            continue
+
+    return new_alist
 
 # ------------------------------------------------------
 # handle len(q_list) == 25 and len(a_list) = 5
@@ -201,7 +224,7 @@ def question25_and_answer5(list_a, list_b, h2, a_file):
 
 
 # ------------- not very useful ---------------
-def terminator(a_list):
+def abq_cleaner(a_list):
     '''
     turn a list into a dict where 
     key = Q and value = a list of Opts
