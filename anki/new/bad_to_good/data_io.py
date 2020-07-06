@@ -10,7 +10,7 @@ def write_answer(fname, ext, list_a, card_ind, list_types):
             content[i] = content[i].replace('\n', ',') + \
                 list_a[i] + ',' + \
                 card_ind  + ',' + \
-                que_types[i] + ' ' + fname + \
+                list_types[i] + ' ' + fname + \
                 '\n'
 
     with open(fname+ext, 'w', encoding='utf-8') as file:
