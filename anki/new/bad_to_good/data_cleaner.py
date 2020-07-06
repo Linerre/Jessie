@@ -3,47 +3,23 @@
 
 import pprint
 
-ex_num = ('1','2','3','4','5')
+def write_answer(fname, ext, list_a, card_ind, list_types):
+    with open(fname+ext, 'r', encoding='utf-8') as file:
+        content = file.readlines()
+        for i in range(len(list_a)):
+            content[i] = content[i].replace('\n', ',') + \
+                list_a[i] + ',' + \
+                card_ind  + ',' + \
+                que_types[i] + ' ' + fname + \
+                '\n'
 
-def abnormal_to_normal(a_list):
-    '''
-    dealing with abnormal options
-    combined type 'A. xxx B. yyy' (occasionally) --> 'A. xxx', 'B. yyy'
-    divided type 'A xxxx\nyyyy\nzzz' (sometimes) --> 'A. xxx yyy zzz'
-    '''
-    
-    prefix = ('A', 'B', 'C', 'D', '1', '2', '3', '4', '5')
-    unwanted = []
-    temps = []
-    points = []
+    with open(fname+ext, 'w', encoding='utf-8') as file:
+        for i in range(len(a_list)):
+            file.write(content[i])
 
-    # remove <p></p> and replace \u3000 with whitespaces
-    for i in range(len(a_list)):
-        a_list[i] = a_list[i].get_text().replace('\u3000', ' ')
-    
-        # locate all such strange options as divided into multiple lines
-        if not a_list[i].startswith(prefix):
-            a_list[i] = a_list[i-1] + '\n' + a_list[i]
-            unwanted.append(a_list[i-1])
-        
-        # or handle such options as combined into one line  
-        elif ('A' in a_list[i] and 'B' in a_list[i]) or ('C' in a_list[i] and 'D' in a_list[i]):   
-            broken = a_list[i].split()  # divide the option
-            temps += broken             # store in a temp list
-            points.append(i)            # record thier positions
-            unwanted.append(a_list[i])  # record them too
+    return content
 
-    # 'A. xxx B. yyy' --> 'A. xx', 'B. yy' 
-    a_list.insert(points[0]+1, temps[0])
-    a_list.insert(points[0]+2, temps[1])
-    a_list.insert(points[1]+3, temps[2])
-    a_list.insert(points[1]+4, temps[3])
 
-    # remove the strange options
-    for i in unwanted:
-        a_list.remove(i)
-
-    return a_list
 
 def abnormal_finder(a_list):
     '''
@@ -83,7 +59,7 @@ def abnormal_handler(a_list_of_index, a_list, ex_num = ('1','2','3','4','5')):
             n += 1
             # force to break when reaching the list end
             if n == len(a_list) - 1: 
-                abnormal_que[a_list[i]].append(a_list[n])
+                # abnormal_que[a_list[i]].append(a_list[n])
                 # break out the while loop
                 break
     
