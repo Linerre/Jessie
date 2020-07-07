@@ -1,7 +1,12 @@
 #! Abnormal options handling module
 # -*- coding: utf-8 -*-
 
-import pprint
+def merger(q_list, a_list):
+    q_and_a = [q + ',' + a for q in q_list for a in a_list]
+    return q_and_a 
+
+
+
 
 def write_answer(fname, ext, list_a, card_ind, list_types):
     with open(fname+ext, 'r', encoding='utf-8') as file:
