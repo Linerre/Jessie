@@ -22,7 +22,7 @@ def question25(list_q, h2):
     '''
     # store que types
     que_types = []
-
+    new_qlist = []
     for i in (0,5,10,15,20):
         if h2 == None:
             # may need unit testing for the below block
@@ -30,16 +30,17 @@ def question25(list_q, h2):
             q_match = re.search(question, list_q[i])
             if q_match:
                 # combine into one line
-                list_q[i] = q_match.group('que')
-                que_types.append(q_match.group('type1')+q_match.group('type2'))
-
                 # remove option's item style A, B, C, D
                 # Anki card will provide it once imported
-                list_q[i+1] = re.sub(item_style, '', list_q[i+1], count=1)
-                list_q[i+2] = re.sub(item_style, '', list_q[i+2], count=1)
-                list_q[i+3] = re.sub(item_style, '', list_q[i+3], count=1)
-                list_q[i+4] = re.sub(item_style, '', list_q[i+4], count=1) + \
-                    ',' + q_match.group('chp')
+                new_qlist.append(q_match.group('que') + ',' + \
+                    re.sub(item_style, '', list_q[i+1], count=1) + ',' + \
+                    re.sub(item_style, '', list_q[i+2], count=1) + ',' + \
+                    re.sub(item_style, '', list_q[i+3], count=1) + ',' + \
+                    re.sub(item_style, '', list_q[i+4], count=1) + ',' + \
+                    q_match.group('chp'))
+
+                que_types.append(q_match.group('type1')+q_match.group('type2'))
+   
             else:
                 print(f'Match failed at index {i}.')
                 print(f'Match failed at string {list_q[i]}.')
@@ -50,13 +51,14 @@ def question25(list_q, h2):
             # it should work exactly the same as if-else
             try:
                 list_q[i] = q_match.group('que')
+                new_qlist.append(q_match.group('que') + ',' + \
+                    re.sub(item_style, '', list_q[i+1], count=1) + ',' + \
+                    re.sub(item_style, '', list_q[i+2], count=1) + ',' + \
+                    re.sub(item_style, '', list_q[i+3], count=1) + ',' + \
+                    re.sub(item_style, '', list_q[i+4], count=1) + ',' + \
+                    q_match.group('chp'))
                 que_types.append(re.sub(h2_tag, '\g<type1>'+'\g<type2>', str(h2)))
 
-                list_q[i+1] = re.sub(item_style, '', list_q[i+1], count=1)
-                list_q[i+2] = re.sub(item_style, '', list_q[i+2], count=1)
-                list_q[i+3] = re.sub(item_style, '', list_q[i+3], count=1)
-                list_q[i+4] = re.sub(item_style, '', list_q[i+4], count=1) + \
-                    ',' + q_match.group('chp')
             except Exception as e:
                 print(e)
                 print(f'Match failed at index {i}.')
@@ -64,7 +66,7 @@ def question25(list_q, h2):
                 break
 
     # if failed to match, list_q remains untouched, que_types == []
-    return list_q, que_types
+    return new_qlist, que_types
 
 
 # handle len(q_list) != 25
