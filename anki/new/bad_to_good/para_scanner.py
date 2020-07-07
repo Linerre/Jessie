@@ -155,13 +155,19 @@ def answer_ab(a_list):
             # record its position
             n = m = a_list.index(i)
             # add aly as the value for answer key
-            while not a_list[n+1].startswith(ex_num):
-                a_list[m] = a_list[m] + a_list[n+1]
-                n += 1
-                # if n reaches the end
-                if n == len(a_list) - 1:
-                    break
+            if n < len(a_list) - 1:
+                while not a_list[n+1].startswith(ex_num):
+                    a_list[m] = a_list[m] + a_list[n+1]
+                    n += 1
+                    # if n reaches the end
+                    if n == len(a_list) - 1:
+                        break
+            # elif n reaches the last item
+            elif n == len(a_list) - 1:
+                a_list[n] = a_list[n] + '略'
+
             new_alist.append(a_list[m])
+
         else:
             continue # skip over ops
    
