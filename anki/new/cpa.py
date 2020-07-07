@@ -1,11 +1,11 @@
-#! /bin/env python
+#!/bin/env python 3
 #! *-* coding: uft-8 *-*
 
-# A web scrapper for CPA drills
 import sys
 sys.path.append('../../../office/anki/new/bad_to_good/')
+# sys.path.append('../Jessie/anki/new/bad_to_good/')
 
-import data_cleaner
+import data_io
 import html_tools
 import para_scanner
 import pprint
@@ -16,9 +16,17 @@ import pprint
 
 # url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/119377.html'
 
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135026.html'
+
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/127474.html'
 
 # q_list.length == 25 and a_list.length == 10
-url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135026.html'
+# but no chapter info
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/132929.html'
+
+# q_list.length == 25 and a_list.length != 10 or 5
+# no question type
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/gszl/130658.html'
 
 # h2 page
 # url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/119625.html'
@@ -28,11 +36,11 @@ url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135026.html'
 # abnormal page 1: q_list length < 25
 # url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/129721.html'
 
-# abnormal page 2: q_list length > 25
+# abnormal page 2: q_list length > 25 and a_list length > 10
 # url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/kj/129401.html'
 
 # q_list = 25 but a_list = 9
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/118903.html'
+url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/118903.html'
 
 
 # -------------------------- body -------------------------- #
@@ -54,64 +62,66 @@ q_list = html_tools.target_tags(html_tools.filter_tags, q_html) # question list
 a_list = html_tools.target_tags(html_tools.filter_tags, a_html) # answer list
 
 
-if len(q_list) == 25 and len(a_list) == 5:
-    with open(filename, 'a', encoding='utf-8') as file:
-        para_scanner.question25_and_answer5(q_list, a_list, q_html.h2, file)
-
-elif len(q_list) == 25 and len(a_list) == 10:
+if len(q_list) == 25:
+    print(f'q_list length is should be {len(q_list)} (==25)')
+    print()
     q_list, que_types = para_scanner.question25(q_list, q_html.h2)
-    para_scanner.answer10(q_list, a_list)
+    print(f'Now the q_list length becomes {len(q_list)}')
+    print()
+    print('Now the Q list looks like:', q_list, sep='\n')
+    print('Question types contatin: ', que_types, sep='\n')
+        
 
+# len(q_list) != 25:
+else:
+    print(f'The original q_list is {len(q_list)} (!=25)')
+    q_list, que_types = para_scanner.question_ab(q_list)
+    print(f'Now the q_list length becomes {len(q_list)}')
+    print()
+    print('Now the Q list looks like:', q_list, sep='\n')
+    print()
+    print('Question types contatin: ', que_types, sep='\n')
+        
 
+if len(a_list) == 5:
+    print(f'a_list length is {len(a_list)} (==5)')
+    a_list = para_scanner.answer5(a_list)
+    print(f'Now the a_list length becomes {len(a_list)}')
+    print()
+    print('Now the Q list looks like:', a_list, sep='\n')
     
-    if filename == SUB_1:
-    # 'a' means to update weekly with content of each day appended to that of the previous day
-    # 'w' means to update daily with content of each day replacing that of the previous day
-    # also possible: a separate file for each day/week, independent of the previous ones
-        with open(SUB_1+ext, 'w', encoding='utf-8') as file:
-            for i in (0,6,12,18,24):
-                file.write(q_list[i] + ',' + \
-                          q_list[i+1] + ',' + \
-                          q_list[i+2] + ',' + \
-                          q_list[i+3] + ',' + \
-                          q_list[i+4] + ',' + \
-                          q_list[i+5] + ',' + \
-                          card_ind    + ',' + \
-                          que_types[i//6] + '\n')
-                
-        # above order:  que, opA, opB, opC, opD, chp, answer, analysis, index(=url), tag1 tag2
-        #               1     2    3    4    5    6    7         8        9           10
+
+elif len(a_list) == 10:
+    print(f'a_list length is {len(a_list)} (==10)') #10
+    a_list = para_scanner.answer10(a_list)
+    print(f'Now the a_list length becomes {len(a_list)}') #5
+    print(a_list)
     
-    elif filename == SUB_2:
-        pass
-    
+    if filename == SUB_1 and que_types != []: 
+        data_io.write_answer(SUB_1, ext, a_list, card_ind, que_types)
+    elif filename == SUB_2 and que_types != []:
+        data_io.write_answer(SUB_2, ext, a_list, card_ind, que_types)
     else:
-        print(f'Subject {filename} NOT defined.')
-    
-elif len(q_list) != 25:
-    
-    # find the abnormal option(s) and remove it(them)
-    abnormal = data_cleaner.abnormal_finder(q_list)
-    try:
-        data_cleaner.abnormal_handler(abnormal, q_list)
-    except Exception:
-        print(abnormal)
-    
-    # write normal qustions to the file
-    para_scanner.question20(q_list, q_html.h2)
-    try:
-        with open(filename, 'a', encoding='utf-8') as file:
-            for i in (0,5,10,15):
-                file.write(q_list[i] + ',' + \
-                      q_list[i+1] + ',' + \
-                      q_list[i+2] + ',' + \
-                      q_list[i+3] + ',' + \
-                      q_list[i+4] + '\n')
-    except Exception:
-        print(q_list)
+        print(f'Sth wrong with filename: {filename} or Q types {que_types}')
 
-# -------------------------- body -------------------------- #
+# a_list length != 10 and != 5
+else:
+    print(f'a_list length is {len(a_list)} (!=10 and !=5)') 
+    a_list = para_scanner.answer_ab(a_list)
+    print(f'Now the a_list length becomes {len(a_list)}')
+    print('And it looks like:')
+    print(a_list)
+    
+    
+# -------------------------- data io -------------------------- #
+    
+q_and_a = data_io.merger(q_list, a_list)
 
-# pp = pprint.PrettyPrinter(indent=2)
-# pp.pprint(q_list)
-print(len(q_list))
+if filename == SUB_1 and que_types != []: 
+    data_io.write_answer(SUB_1, ext, q_and_a, card_ind, que_types)
+elif filename == SUB_2 and que_types != []:
+    data_io.write_answer(SUB_2, ext, q_and_a, card_ind, que_types)
+else:
+    print(f'Sth wrong with filename: {filename} or Q types {que_types}')
+
+
