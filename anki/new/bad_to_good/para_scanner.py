@@ -171,7 +171,8 @@ def answer_ab(a_list):
             new_alist[i] = a_match.group('opt') + ',' + \
                 a_match.group('aly')
         except Exception as e:
-            print(e)
+            print(f'Match failed at {new_alist[i]}')
+            print('Failure reason: ', e)
             continue
 
     return new_alist
