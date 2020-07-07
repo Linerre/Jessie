@@ -146,38 +146,37 @@ def answer5(list_b):
 # handle len(a_list) != 5 and != 10
 def answer_ab(a_list):
     ex_num = ('1','2','3','4','5')
-
-    # ans_aly = {}
+    new_alist = []
 
     for i in a_list:
         if i.startswith(ex_num): # loop over only Qs
             # add correct answer as a key
             # ans_aly[i] = []
             # record its position
-            n = a_list.index(i)
+            n = m = a_list.index(i)
             # add aly as the value for answer key
             while not a_list[n+1].startswith(ex_num):
-                a_list[n] = a_list[n] + a_list[n+1]
+                a_list[m] = a_list[m] + a_list[n+1]
                 # ans_aly[i].append(a_list[n+1])
                 n += 1
                 # if n reaches the end
                 if n == len(a_list) - 1:
                     break
+            new_alist.append(a_list[m])
         else:
             continue # skip over ops
-
-    new_alist = []
-    for a in a_list:
+   
+    for i in range(len(new_alist)):
         # if len(ans_aly[a]) > 1:
         #     # combine multi lines into one
         #     ans_aly[a] = ' '.join(ans_aly[a])
         # elif len(ans_aly[a]) < 1:
         #     # replace the empty list with empty str
         #     ans_aly[a] = ' '
-        a_match = re.search(answer, a)
+        a_match = re.search(answer, new_alist[i])
         try:
-            new_alist.append(a_match.group('opt') + ',' + \
-                a_match.group('aly'))
+            new_alist[i] = a_match.group('opt') + ',' + \
+                a_match.group('aly')
         except Exception as e:
             print(e)
             continue
