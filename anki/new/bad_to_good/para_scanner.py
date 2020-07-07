@@ -147,17 +147,18 @@ def answer5(list_b):
 def answer_ab(a_list):
     ex_num = ('1','2','3','4','5')
 
-    ans_aly = {}
+    # ans_aly = {}
 
     for i in a_list:
         if i.startswith(ex_num): # loop over only Qs
             # add correct answer as a key
-            ans_aly[i] = []
+            # ans_aly[i] = []
             # record its position
             n = a_list.index(i)
             # add aly as the value for answer key
             while not a_list[n+1].startswith(ex_num):
-                ans_aly[i].append(a_list[n+1])
+                a_list[n] = a_list[n] + a_list[n+1]
+                # ans_aly[i].append(a_list[n+1])
                 n += 1
                 # if n reaches the end
                 if n == len(a_list) - 1:
@@ -166,13 +167,13 @@ def answer_ab(a_list):
             continue # skip over ops
 
     new_alist = []
-    for a in ans_aly.keys():
-        if len(ans_aly[a]) > 1:
-            # combine multi lines into one
-            ans_aly[a] = ' '.join(ans_aly[a])
-        elif len(ans_aly[a]) < 1:
-            # replace the empty list with empty str
-            ans_aly[a] = ' '
+    for a in a_list:
+        # if len(ans_aly[a]) > 1:
+        #     # combine multi lines into one
+        #     ans_aly[a] = ' '.join(ans_aly[a])
+        # elif len(ans_aly[a]) < 1:
+        #     # replace the empty list with empty str
+        #     ans_aly[a] = ' '
         a_match = re.search(answer, a)
         try:
             new_alist.append(a_match.group('opt') + ',' + \
@@ -253,7 +254,8 @@ def abq_cleaner(a_list):
     # mark the abnormal 
     for q in que_op.keys():
         if len(que_op[q]) != 4:
-            que_op[q] = ''
+            # take up the positon
+            que_op[q] = ['\t','\t','\t','\t']
     
     return que_op
 
