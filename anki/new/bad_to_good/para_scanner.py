@@ -157,6 +157,7 @@ def answer_ab(a_list):
             # record its position
             n = m = a_list.index(i)
             # add aly as the value for answer key
+            # the case where any but not the last has no aly
             if n < len(a_list) - 1:
                 while not a_list[n+1].startswith(ex_num):
                     a_list[m] = a_list[m] + a_list[n+1]
@@ -165,6 +166,7 @@ def answer_ab(a_list):
                     if n == len(a_list) - 1:
                         break
             # elif n reaches the last item
+            # the case where the last ans has no aly
             elif n == len(a_list) - 1:
                 a_list[n] = a_list[n] + '略'
 
