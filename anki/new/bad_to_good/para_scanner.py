@@ -157,7 +157,6 @@ def answer_ab(a_list):
             # add aly as the value for answer key
             while not a_list[n+1].startswith(ex_num):
                 a_list[m] = a_list[m] + a_list[n+1]
-                # ans_aly[i].append(a_list[n+1])
                 n += 1
                 # if n reaches the end
                 if n == len(a_list) - 1:
@@ -167,12 +166,6 @@ def answer_ab(a_list):
             continue # skip over ops
    
     for i in range(len(new_alist)):
-        # if len(ans_aly[a]) > 1:
-        #     # combine multi lines into one
-        #     ans_aly[a] = ' '.join(ans_aly[a])
-        # elif len(ans_aly[a]) < 1:
-        #     # replace the empty list with empty str
-        #     ans_aly[a] = ' '
         a_match = re.search(answer, new_alist[i])
         try:
             new_alist[i] = a_match.group('opt') + ',' + \
@@ -183,47 +176,8 @@ def answer_ab(a_list):
 
     return new_alist
 
-# ------------------------------------------------------
-# handle len(q_list) == 25 and len(a_list) = 5
-def question25_and_answer5(list_a, list_b, h2, a_file):
-    '''
-    Append question type (in a <h2> tag) to each Q;
-    Output organized lines suitable for csv files
-    '''
 
-
-    for i in (0,6,12,18,24):
-        # split the questions by matching the needed parts
-        try:
-            # no h2
-            if h2 == None:
-                q_match = re.search(question, list_a[i])
-
-            # combine into a csv and assign to ith question
-                list_a[i] = q_match.group('type') + ',' + \
-                q_match.group('que') + ',' + \
-                q_match.group('chp')
-            
-            # h2 type 
-            else:
-                q_match = re.search(question_h2, list_a[i])
-                list_a[i] = str(h2) + ',' + \
-                q_match.group('que') + ',' + \
-                q_match.group('chp')
-
-        # write to a csv file
-            a_file.write(list_a[i] + ',' + \
-                    list_a[i+1] + ',' + \
-                    list_a[i+2] + ',' + \
-                    list_a[i+3] + ',' + \
-                    list_a[i+4] + ',' + \
-                    list_a[i+5] + '\n')
-        except Exception as e:
-            raise e
-            print(q_match)
-
-
-# ------------- not very useful ---------------
+# ------------- tools ---------------
 def abq_cleaner(a_list):
     '''
     turn a list into a dict where 
@@ -257,29 +211,3 @@ def abq_cleaner(a_list):
             que_op[q] = ['\t','\t','\t','\t']
     
     return que_op
-
-
-def standard_25(a_dict):
-    for q in a_dict.keys():
-        if len(a_dict[q]) < 4:
-            n = len(a_dict[q])
-            while n < 4:
-                a_dict[q].append('|')
-                n += 1
-        elif len(a_dict[q]) > 4:
-            prefix = ('A', 'B', 'C', 'D')
-            unwanted = []
-            # opt is of string type
-            # a_dict[q] is of list type
-            for opt in a_dict[q]:
-                if not opt.startswith(prefix):
-                    m = a_dict[q].index(opt)
-                    # combine it into previous option
-                    a_dict[q][m] = a_dict[q][m-1] + '\n' + a_dict[q][m]
-                    unwanted.append(a_dict[q][m-1])
-            for i in unwanted:
-                a_dict[q].remove(i)
-        else:
-            continue
-
-    return a_dict
