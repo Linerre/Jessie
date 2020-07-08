@@ -31,3 +31,6 @@ Code.js
 
 # ignore csv files
 *.csv
+
+# ignore old
+anki/old/
