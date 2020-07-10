@@ -68,3 +68,27 @@ function newsCleaner()
     GmailApp.moveThreadsToTrash(threadsUnread);
   }
 }
+
+
+/* invitation cleaner */
+// trash and label invitations sent to me (lunch&learn; meetings; events, etc)
+// rather than sent to a list which inludes me
+function invitationCleaner() {
+  // if read, trash
+  var inviteAttch = '(invite.ics OR invite.vcs)';
+  var inviteReadFilters = `to:me ${inviteAttch} label:inbox has:attachment is:read`;
+  var inviteReadThreads = find(inviteReadFilters);
+  label('RSVP?').removeFromThreads(inviteReadThreads);
+  forceClean(inviteReadThreads);
+
+  // if unread for over one day, trash
+  var inviteUnreadLongFilters = `to:me ${inviteAttch} label:inbox has:attachment is:unread older_than:1d`;
+  var inviteUnreadLongThreads = find(inviteUnreadLongFilters);
+  label('RSVP?').removeFromThreads(inviteUnreadLongThreads);
+  forceClean(inviteUnreadLongThreads);
+
+  // if unread within one day (To Be Decided), label RSVP? and remain unread
+  var inviteTBDFilters = `to:me ${inviteAttch} label:inbox has:attachment is:unread newer_than:1d`;
+  var inviteTBDThreads = find(inviteTBDFilters);
+  label('RSVP?').addToThreads(inviteTBDThreads);
+}
