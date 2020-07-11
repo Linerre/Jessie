@@ -29,8 +29,8 @@ Code.js
 # ignore ipynb files
 *.ipynb*
 
-# ignore csv files
-*.csv
+# ignore images
+anki/images/
 
 # ignore old
 anki/old/
