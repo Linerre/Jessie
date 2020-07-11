@@ -2,17 +2,22 @@
 # -*- coding: utf-8 -*-
 
 def merger(q_list, a_list):
-    q_and_a = [q + ',' + a for q in q_list for a in a_list]
-    return q_and_a 
+    if len(q_list) == 5 and len(a_list) == 5:
+        q_and_a = [q_list[i] + ',' + a_list[i] for i in range(len(q_list))]
+        return q_and_a 
+    else:
+        print('Q and A do not match.')
+        print(f'Q length: {len(q_list)}; A length {len(a_list)}')
 
 
 
 
-def write_answer(fname, ext, alist, card_ind, types_list):
-    with open(fname+ext, 'w', encoding='utf-8') as file:
+
+def write_answer(time, fname, ext, alist, card_ind, types_list):
+    with open(time+fname+ext, 'a', encoding='utf-8') as file:
         try:
             for i in range(len(alist)):
-                file.write(alist[i] + \
+                file.write(alist[i] + ',' + \
                     card_ind  + ',' + \
                     types_list[i] + ' ' + fname + \
                     '\n')
