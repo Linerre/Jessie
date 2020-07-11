@@ -9,27 +9,8 @@ from datetime import date
 import data_io
 import html_tools
 import para_scanner
-import pprint
 
 # -------------------------- urls -------------------------- #
-# normal pages (q_list length = 25 and a_list length = 5 or = 10)
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/130097.html'
-
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/119377.html'
-
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135026.html'
-
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/127474.html'
-
-# 7-10
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/136629.html'
-# 7-9
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/136356.html'
-# 7-8
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135991.html'
-# 7-7
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135748.html'
-# 7-6
 url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135325.html'
 
 
@@ -41,8 +22,8 @@ q_html = html_tools.get_html(url)
 a_html = html_tools.get_answer_html(url)
 
 # two subjects to learn
-SUB_1 = '经济法'
-SUB_2 = '审计'
+#subjects 
+subs = ('经济法', '税法', '审计', '会计', '公司战略与风险管理', '财务成本管理')
 ext = '.csv'
 current = str(date.today()) + '-'
 
@@ -106,13 +87,10 @@ else:
     
     
 # -------------------------- data io -------------------------- #
-    
 q_and_a = data_io.merger(q_list, a_list)
 
-if filename == SUB_1 and que_types != []: 
-    data_io.write_answer(current, SUB_1, ext, q_and_a, card_ind, que_types)
-elif filename == SUB_2 and que_types != []:
-    data_io.write_answer(current, SUB_2, ext, q_and_a, card_ind, que_types)
+if filename in subs and que_types != []: 
+    data_io.write_answer(current, filename, ext, q_and_a, card_ind, que_types)
 else:
     print(f'Sth wrong with filename: {filename} or Q types {que_types}')
 
