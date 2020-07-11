@@ -1,9 +1,10 @@
-#!/bin/env python 3
 #! *-* coding: uft-8 *-*
 
 import sys
 sys.path.append('../../../office/anki/new/bad_to_good/')
 # sys.path.append('../Jessie/anki/new/bad_to_good/')
+
+from datetime import date
 
 import data_io
 import html_tools
@@ -20,27 +21,17 @@ import pprint
 
 # url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/127474.html'
 
-# q_list.length == 25 and a_list.length == 10
-# but no chapter info
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/132929.html'
+# 7-10
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/136629.html'
+# 7-9
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/136356.html'
+# 7-8
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135991.html'
+# 7-7
+# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135748.html'
+# 7-6
+url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135325.html'
 
-# q_list.length == 25 and a_list.length != 10 or 5
-# no question type
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/gszl/130658.html'
-
-# h2 page
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/119625.html'
-
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/118642.html'
-
-# abnormal page 1: q_list length < 25
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/129721.html'
-
-# abnormal page 2: q_list length > 25 and a_list length > 10
-# url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/kj/129401.html'
-
-# q_list = 25 but a_list = 9
-url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/118903.html'
 
 
 # -------------------------- body -------------------------- #
@@ -53,6 +44,7 @@ a_html = html_tools.get_answer_html(url)
 SUB_1 = '经济法'
 SUB_2 = '审计'
 ext = '.csv'
+current = str(date.today()) + '-'
 
 # card_index = a tag with url inside it, telling where the question is from
 # tuple unpacking
@@ -97,18 +89,18 @@ elif len(a_list) == 10:
     print(f'Now the a_list length becomes {len(a_list)}') #5
     print(a_list)
     
-    if filename == SUB_1 and que_types != []: 
-        data_io.write_answer(SUB_1, ext, a_list, card_ind, que_types)
-    elif filename == SUB_2 and que_types != []:
-        data_io.write_answer(SUB_2, ext, a_list, card_ind, que_types)
-    else:
-        print(f'Sth wrong with filename: {filename} or Q types {que_types}')
+#     if filename == SUB_1 and que_types != []: 
+#         data_io.write_answer(current, SUB_1, ext, a_list, card_ind, que_types)
+#     elif filename == SUB_2 and que_types != []:
+#         data_io.write_answer(current, SUB_2, ext, a_list, card_ind, que_types)
+#     else:
+#         print(f'Sth wrong with filename: {current + filename} or Q types {que_types}')
 
 # a_list length != 10 and != 5
 else:
     print(f'a_list length is {len(a_list)} (!=10 and !=5)') 
     a_list = para_scanner.answer_ab(a_list)
-    print(f'Now the a_list length becomes {len(a_list)}')
+    print(f'Now the a_list length becomes {len(a_list)} (expected: 5)') # 5
     print('And it looks like:')
     print(a_list)
     
@@ -118,9 +110,9 @@ else:
 q_and_a = data_io.merger(q_list, a_list)
 
 if filename == SUB_1 and que_types != []: 
-    data_io.write_answer(SUB_1, ext, q_and_a, card_ind, que_types)
+    data_io.write_answer(current, SUB_1, ext, q_and_a, card_ind, que_types)
 elif filename == SUB_2 and que_types != []:
-    data_io.write_answer(SUB_2, ext, q_and_a, card_ind, que_types)
+    data_io.write_answer(current, SUB_2, ext, q_and_a, card_ind, que_types)
 else:
     print(f'Sth wrong with filename: {filename} or Q types {que_types}')
 

@@ -121,7 +121,8 @@ def answer10(list_b):
             print(f'Match failed at index {i}.')
             print(f'Match failed at string: {list_b[i]}')
             break
-    
+        
+    # a new a_list: opt+aly
     return [i for i in list_b if list_b.index(i) % 2 != 0]
 
 # handle len(a_list) == 5
