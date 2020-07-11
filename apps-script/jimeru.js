@@ -1,26 +1,7 @@
 // Gmail Cleaner
 
+
 /* ------------------- Tool 1 ------------------- */ 
-// check labeled threads in the inbox and archive them automatically
-function archiver()
-{
-  var threads = GmailApp.getInboxThreads();
-  for (var thread of threads)
-  {
-    // get user-created labels, so inbox will be excluded
-    labels = thread.getLabels();
-
-    if (labels.length > 0) 
-    {
-      thread.markUnimportant();
-      thread.moveToArchive();
-    }
-    else continue;
-  }
-}
-
-
-/* ------------------- Tool 2 ------------------- */ 
 // find and clean the "someone mentioned you in a comment" notifications from Google
 function commentsCleaner()
 {
@@ -28,7 +9,7 @@ function commentsCleaner()
   var filters = 'from:comments-noreply@docs.google.com label:inbox is:read';
   
   // get a list of such threads; there might also be none
-  var threads = GmailApp.search(filters);
+  var threads = GmailApp.find(filters);
   
   if (threads.length > 0) //if there is any
   {
@@ -38,7 +19,7 @@ function commentsCleaner()
   }
 }
 
-/* ------------------- Tool 3 ------------------- */ 
+/* ------------------- Tool 2 ------------------- */ 
 // create a list of newsletter sources
 const NEWS = [
   //newletter0,
@@ -58,10 +39,10 @@ function newsCleaner()
   for (var news of NEWS)
   {
     // find those alraedy read 
-    var threadsRead = GmailApp.search(`from:${news} is:read label:inbox`);
+    var threadsRead = GmailApp.find(`from:${news} is:read label:inbox`);
   
     // also those unread for one day
-    var threadsUnread = GmailApp.search(`from:${news} is:unread label:inbox older_than:1d`);
+    var threadsUnread = GmailApp.find(`from:${news} is:unread label:inbox older_than:1d`);
   
     // Trash them regardless of reading or not
     GmailApp.moveThreadsToTrash(threadsRead);
@@ -70,7 +51,7 @@ function newsCleaner()
 }
 
 
-/* invitation cleaner */
+/* ------------------- Tool 3 ------------------- */ 
 // trash and label invitations sent to me (lunch&learn; meetings; events, etc)
 // rather than sent to a list which inludes me
 function invitationCleaner() {
@@ -91,4 +72,37 @@ function invitationCleaner() {
   var inviteTBDFilters = `to:me ${inviteAttch} label:inbox has:attachment is:unread newer_than:1d`;
   var inviteTBDThreads = find(inviteTBDFilters);
   label('RSVP?').addToThreads(inviteTBDThreads);
+}
+
+
+/* -------------------------- auxiliary tools -------------------------- */
+// The Gmail Service won't make changes to more than 100 threads \
+// at a time, so batchLength defaults to 100.
+/* find */
+function find(searchString, shouldLimit, batchLength) {
+  // The Gmail Service won't make changes to more than 100 threads
+  // at a time, so batchLength defaults to 100.
+  shouldLimit = (typeof shouldLimit !== 'undefined') ?  shouldLimit : true;
+  batchLength = (typeof batchLength !== 'undefined') ?  batchLength : 100;
+  if (shouldLimit) {
+    return GmailApp.search(searchString, 0, batchLength);
+  } else {
+    return GmailApp.search(searchString);
+  }
+}
+
+
+/* label */
+function label(name) {
+  // This only works for user-defined labels,
+  // not system labels like "Spam."
+  return GmailApp.getUserLabelByName(name);
+}
+
+/* force clean */
+// {unimportant + read + trash} threads
+function forceClean(threads) {
+  GmailApp.markThreadsUnimportant(threads);
+  GmailApp.markThreadsRead(threads);
+  GmailApp.moveThreadsToTrash(threads);
 }
