@@ -23,6 +23,7 @@ def question25(list_q, h2):
     # store que types
     que_types = []
     new_qlist = []
+    odds = []
     for i in (0,5,10,15,20):
         if h2 == None:
             # may need unit testing for the below block
@@ -42,9 +43,10 @@ def question25(list_q, h2):
                 que_types.append(q_match.group('type1')+q_match.group('type2'))
    
             else:
-                print(f'Match failed at index {i}.')
+                print(f'Match failed at Q {i//5+1}.')
                 print(f'Match failed at string {list_q[i]}.')
-                break
+                odds.append(i//5+1)
+                continue
         else:
             q_match = re.search(question_h2, list_q[i])
             # use try-except simply for learning purposes
@@ -66,7 +68,7 @@ def question25(list_q, h2):
                 break
 
     # if failed to match, list_q remains untouched, que_types == []
-    return new_qlist, que_types
+    return new_qlist, que_types, odds
 
 
 # handle len(q_list) != 25
