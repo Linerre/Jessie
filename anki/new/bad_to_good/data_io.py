@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def merger(q_list, a_list):
-    if len(q_list) == 5 and len(a_list) == 5:
+    if len(q_list) == len(a_list):
         q_and_a = [q_list[i] + ',' + a_list[i] for i in range(len(q_list))]
         return q_and_a 
     else:
