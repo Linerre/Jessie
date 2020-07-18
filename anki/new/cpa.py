@@ -67,15 +67,17 @@ if len(a_list) == 5:
 elif len(a_list) == 10:
     print(f'a_list length is {len(a_list)} (==10)') #10
     a_list = para_scanner.answer10(a_list)
+
+    # TODO
+    # set a func to wrap these for other conditions too
+    if odds:
+        old_a_list = a_list.copy()
+        for i in odds:
+            a_list.remove(old_a_list[i])
+
     print(f'Now the a_list length becomes {len(a_list)}') #5
     print(a_list)
     
-#     if filename == SUB_1 and que_types != []: 
-#         data_io.write_answer(current, SUB_1, ext, a_list, card_ind, que_types)
-#     elif filename == SUB_2 and que_types != []:
-#         data_io.write_answer(current, SUB_2, ext, a_list, card_ind, que_types)
-#     else:
-#         print(f'Sth wrong with filename: {current + filename} or Q types {que_types}')
 
 # a_list length != 10 and != 5
 else:
