@@ -168,6 +168,7 @@ def answer_ab(a_list):
                     # if n reaches the end
                     if n == len(a_list) - 1:
                         break
+            # handle analysis missing in the middle
             elif n < len(a_list) - 1 and a_list[m+1].startswith(ex_num):
                 a_list[m] = a_list[m] + '题目详解:略'
             # elif n reaches the last item
