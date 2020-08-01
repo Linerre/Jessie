@@ -20,7 +20,10 @@ url = 'http://www.zgcjpx.com/cpa/tiku/lianxi/jjf/135325.html'
 # get the question page and anwser lists
 q_html = html_tools.get_html(url)
 a_html = html_tools.get_answer_html(url)
-
+if q_html.h2 != None: 
+    h2 = q_html.h2
+elif len(q_html.find_all('strong')) >= 2:
+    h2 = q_html.find_all('strong')[1].get_text()
 # two subjects to learn
 #subjects 
 subs = ('经济法', '税法', '审计', '会计', '公司战略与风险管理', '财务成本管理')
@@ -38,7 +41,7 @@ a_list = html_tools.target_tags(html_tools.filter_tags, a_html) # answer list
 if len(q_list) == 25:
     print(f'q_list length is should be {len(q_list)} (==25)')
     print()
-    q_list, que_types = para_scanner.question25(q_list, q_html.h2)
+    q_list, que_types = para_scanner.question25(q_list, h2)
     print(f'Now the q_list length becomes {len(q_list)}')
     print()
     print('Now the Q list looks like:', q_list, sep='\n')
@@ -59,8 +62,8 @@ else:
 if len(a_list) == 5:
     print(f'a_list length is {len(a_list)} (==5)')
     a_list = para_scanner.answer5(a_list)
-    print()
-    print('Now the a list looks like:', a_list, sep='\n')
+    print('Now a list looks like: ')
+    print(a_list)
     
 
 elif len(a_list) == 10:
