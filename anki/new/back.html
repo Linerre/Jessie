@@ -40,7 +40,7 @@ for (var kw of keywords) {
 }
 
 // insert correct answer(s)
-question.innerHTML = question.innerHTML.replace('( )', "(" + `<span class="choice-letter">${answer.toUpperCase()}</span>` + ")");
+question.innerHTML = question.innerHTML.replace(/\( ?\)/, "(" + `<span class="choice-letter">${answer.toUpperCase()}</span>` + ")");
 
 
 /* multi options */
