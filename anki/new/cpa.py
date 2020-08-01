@@ -59,9 +59,8 @@ else:
 if len(a_list) == 5:
     print(f'a_list length is {len(a_list)} (==5)')
     a_list = para_scanner.answer5(a_list)
-    print(f'Now the a_list length becomes {len(a_list)}')
     print()
-    print('Now the Q list looks like:', a_list, sep='\n')
+    print('Now the a list looks like:', a_list, sep='\n')
     
 
 elif len(a_list) == 10:
