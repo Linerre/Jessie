@@ -54,7 +54,8 @@ def target_tags(filters, html):
     del tags[0]
     del tags[-1]
     for i in range(len(tags)):
-       tags[i] = tags[i].get_text().replace('\u3000', ' ') # turn the tags to texts 
+       tags[i] = tags[i].get_text().replace('\u3000', ' ') # turn the tags to texts
+       tags[i] = tags[i].replace('\xa0', '') 
 
     return tags
 
