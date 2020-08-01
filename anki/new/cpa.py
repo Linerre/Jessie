@@ -24,6 +24,8 @@ if q_html.h2 != None:
     h2 = q_html.h2
 elif len(q_html.find_all('strong')) >= 2:
     h2 = '<h2>' + q_html.find_all('strong')[1].get_text() + '</h2>'
+else:
+    h2 = q_html.h2
 # two subjects to learn
 #subjects 
 subs = ('经济法', '税法', '审计', '会计', '公司战略与风险管理', '财务成本管理')
