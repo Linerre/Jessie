@@ -6,10 +6,10 @@
 import re
 
 # patterns
-answer = r'[1-5\.【参考答案难度系数中等简单很难】:：]+(?P<opt>[A-D]+)[。【题目详解析:：】]+(?P<aly>.*)'
+answer = r'[1-5\.【参考答案难度系数中等简单很难】:：]+(?P<opt>[A-D]+)[。【题目详解析:：】 ]+(?P<aly>.*)'
 question  = r'[1-5\.\(【（]+(?P<type1>[单多])项?(?P<type2>选)[择题\)）】]+(?P<que>.*?)[\(（](?P<chp>第.+?章.*?)[\)）]'
 question_h2 = r'[1-5\.]+(?P<que>.*)[\(（](?P<chp>第.+?章.*?)[\)）]'
-h2_tag = r'<h2>(?P<type1>[单多])项?(?P<type2>选)[择题\)】]+</h2>'
+h2_tag = r'<h2([\d\w;:\"=\- ]+)?>(?P<type1>[单多])项?(?P<type2>选)[择题\)】]+</h2>'
 item_style = r'[A-D\. ]+'
 
 # ------------------------------------------------------
@@ -63,7 +63,7 @@ def question25(list_q, h2):
 
             except Exception as e:
                 print(e)
-                print(f'Match failed at index {i}.')
+                print(f'Match failed at index {i/5}.')
                 print(f'Match failed at string {list_q[i]}.')
                 break
 
